@@ -46,13 +46,12 @@ const Layout = ({ children }) => {
   const { language } = useLanguage()
 
   const navigation = [
-    { name: t(language, 'nav.home'), href: '/', icon: Home },
-    { name: t(language, 'nav.about'), href: '/about', icon: User },
-    { name: 'Junior IT', href: '/junior-it', icon: GraduationCap },
-    { name: t(language, 'nav.tools'), href: '/tools', icon: Wrench },
-    { name: 'QuantumDrop', href: '/fileshare', icon: Share2 },
-    { name: 'Remote Desktop', href: '/remote-desktop', icon: Monitor },
-    { name: t(language, 'nav.settings'), href: '/settings', icon: SettingsIcon },
+    { name: t(language, 'nav.home'), href: '/' },
+    { name: t(language, 'nav.tools'), href: '/tools' },
+    { name: 'QuantumDrop', href: '/fileshare' },
+    { name: 'Remote', href: '/remote-desktop' },
+    { name: 'Junior IT', href: '/junior-it' },
+    { name: t(language, 'nav.about'), href: '/about' },
   ]
 
   const isActive = (path) => {
@@ -82,19 +81,17 @@ const Layout = ({ children }) => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex md:items-center md:space-x-1">
               {navigation.map((item) => {
-                const Icon = item.icon
                 return (
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2 ${
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                       isActive(item.href)
                         ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
                         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span>{item.name}</span>
+                    {item.name}
                   </Link>
                 )
               })}
@@ -193,20 +190,18 @@ const Layout = ({ children }) => {
           <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigation.map((item) => {
-                const Icon = item.icon
                 return (
                   <Link
                     key={item.name}
                     to={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-base font-medium ${
+                    className={`block px-3 py-2 rounded-lg text-base font-medium ${
                       isActive(item.href)
                         ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
                         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }`}
                   >
-                    <Icon className="w-5 h-5" />
-                    <span>{item.name}</span>
+                    {item.name}
                   </Link>
                 )
               })}
