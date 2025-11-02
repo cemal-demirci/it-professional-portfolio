@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Code, Shield, FileText, Palette, Network, Wrench, Monitor, Sparkles, Zap, Rocket, GraduationCap, BookOpen, MessageSquare } from 'lucide-react'
+import { ArrowRight, Code, Shield, FileText, Palette, Network, Wrench, Monitor, Sparkles, Zap, Rocket, GraduationCap, BookOpen, MessageSquare, Share2, Globe, Lock, Infinity } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { t } from '../translations'
@@ -122,6 +122,163 @@ const Home = () => {
       {/* Quick Speed Test Widget */}
       <div className={`transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <QuickSpeedTest />
+      </div>
+
+      {/* NEW FEATURES SECTION */}
+      <div className="space-y-6">
+        {/* QuantumDrop Section */}
+        <div className={`transition-all duration-1000 delay-850 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <Link
+            to="/fileshare"
+            className="group block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] relative overflow-hidden border border-white/20"
+          >
+            <div className="absolute top-4 right-4 px-3 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full shadow-lg animate-pulse">
+              NEW ✨
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+                    <Share2 className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold flex items-center gap-2">
+                      QuantumDrop
+                      <Zap className="w-6 h-6 animate-pulse" />
+                    </h2>
+                    <p className="text-white/90 mt-1 font-medium">
+                      {language === 'tr'
+                        ? 'Peer-to-Peer Dosya Paylaşımı - Sunucusuz, Sınırsız, Güvenli'
+                        : 'Peer-to-Peer File Sharing - Serverless, Unlimited, Secure'}
+                    </p>
+                  </div>
+                </div>
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 hover:bg-white/20 transition-all">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Globe className="w-5 h-5" />
+                    <h3 className="font-semibold">
+                      {language === 'tr' ? '🌍 Çevre Dostu' : '🌍 Eco-Friendly'}
+                    </h3>
+                  </div>
+                  <p className="text-xs text-white/90">
+                    {language === 'tr'
+                      ? 'Sunucu yok = Karbon ayak izi yok'
+                      : 'No servers = Zero carbon footprint'}
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 hover:bg-white/20 transition-all">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Lock className="w-5 h-5" />
+                    <h3 className="font-semibold">
+                      {language === 'tr' ? '🔒 Gizlilik' : '🔒 Privacy'}
+                    </h3>
+                  </div>
+                  <p className="text-xs text-white/90">
+                    {language === 'tr'
+                      ? 'Dosyalarınız sadece sizde kalır'
+                      : 'Your files stay with you only'}
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 hover:bg-white/20 transition-all">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Infinity className="w-5 h-5" />
+                    <h3 className="font-semibold">
+                      {language === 'tr' ? '∞ Sınırsız' : '∞ Unlimited'}
+                    </h3>
+                  </div>
+                  <p className="text-xs text-white/90">
+                    {language === 'tr'
+                      ? 'Dosya boyutu limiti yok'
+                      : 'No file size limits'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Remote Desktop Section */}
+        <div className={`transition-all duration-1000 delay-875 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <Link
+            to="/remote-desktop"
+            className="group block bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] relative overflow-hidden border border-white/20"
+          >
+            <div className="absolute top-4 right-4 px-3 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full shadow-lg animate-pulse">
+              NEW ✨
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+                    <Monitor className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold flex items-center gap-2">
+                      {language === 'tr' ? 'Uzak Masaüstü' : 'Remote Desktop'}
+                      <Sparkles className="w-6 h-6 animate-pulse" />
+                    </h2>
+                    <p className="text-white/90 mt-1 font-medium">
+                      {language === 'tr'
+                        ? 'Tarayıcı Tabanlı - Kurulum Gerektirmez - TeamViewer Alternatifi'
+                        : 'Browser-Based - No Installation - TeamViewer Alternative'}
+                    </p>
+                  </div>
+                </div>
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 hover:bg-white/20 transition-all">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Globe className="w-5 h-5" />
+                    <h3 className="font-semibold">
+                      {language === 'tr' ? '🌐 Web Tabanlı' : '🌐 Web-Based'}
+                    </h3>
+                  </div>
+                  <p className="text-xs text-white/90">
+                    {language === 'tr'
+                      ? 'Sadece tarayıcı, başka bir şey yok'
+                      : 'Just your browser, nothing else'}
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 hover:bg-white/20 transition-all">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Zap className="w-5 h-5" />
+                    <h3 className="font-semibold">
+                      {language === 'tr' ? '⚡ Anında Bağlan' : '⚡ Instant Connect'}
+                    </h3>
+                  </div>
+                  <p className="text-xs text-white/90">
+                    {language === 'tr'
+                      ? 'Kod gir, hemen başla'
+                      : 'Enter code, start instantly'}
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 hover:bg-white/20 transition-all">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Lock className="w-5 h-5" />
+                    <h3 className="font-semibold">
+                      {language === 'tr' ? '🔒 P2P Güvenli' : '🔒 P2P Secure'}
+                    </h3>
+                  </div>
+                  <p className="text-xs text-white/90">
+                    {language === 'tr'
+                      ? 'Doğrudan bağlantı, sunucu yok'
+                      : 'Direct connection, no servers'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
       </div>
 
       {/* Junior IT Section */}
