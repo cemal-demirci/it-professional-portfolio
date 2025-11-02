@@ -1,0 +1,40 @@
+{
+  "name": "it-professional-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Modern IT Professional Portfolio & Tools Collection with 30+ professional tools, AI chatbots, and multiple deployment options",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@vercel/kv": "^3.0.0",
+    "crypto-js": "^4.2.0",
+    "ioredis": "^5.8.2",
+    "ip-subnet-calculator": "^1.1.8",
+    "js-yaml": "^4.1.0",
+    "jspdf": "^2.5.2",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.446.0",
+    "markdown-it": "^14.1.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.4.296",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "tesseract.js": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "vite": "^5.4.9"
+  }
+}
