@@ -38,40 +38,76 @@ const FileDownload = () => {
         }
       })
 
+      // Set connection timeout
+      const connectionTimeout = setTimeout(() => {
+        if (!connected) {
+          setError('Connection timeout. The sender may be offline or the link is invalid.')
+          setConnecting(false)
+          if (newPeer) newPeer.destroy()
+        }
+      }, 30000) // 30 seconds timeout
+
       newPeer.on('open', (id) => {
         console.log('My peer ID:', id)
         console.log('Connecting to sender:', fileId)
 
-        // Connect to sender
-        const conn = newPeer.connect(fileId, { reliable: true })
+        // Small delay to ensure sender is ready
+        setTimeout(() => {
+          // Connect to sender
+          const conn = newPeer.connect(fileId, {
+            reliable: true,
+            serialization: 'json'
+          })
 
-        conn.on('open', () => {
-          console.log('Connected to sender!')
-          setConnected(true)
-          setConnecting(false)
-        })
-
-        conn.on('data', (data) => {
-          handleDataReceived(data)
-        })
-
-        conn.on('close', () => {
-          console.log('Connection closed')
-          if (!downloadComplete) {
-            setError('Connection lost before download completed')
+          if (!conn) {
+            clearTimeout(connectionTimeout)
+            setError('Failed to create connection. The sender may be offline.')
+            setConnecting(false)
+            return
           }
-        })
 
-        conn.on('error', (err) => {
-          console.error('Connection error:', err)
-          setError('Connection error: ' + err.message)
-          setConnecting(false)
-        })
+          conn.on('open', () => {
+            console.log('Connected to sender!')
+            clearTimeout(connectionTimeout)
+            setConnected(true)
+            setConnecting(false)
+          })
+
+          conn.on('data', (data) => {
+            handleDataReceived(data)
+          })
+
+          conn.on('close', () => {
+            console.log('Connection closed')
+            clearTimeout(connectionTimeout)
+            if (!downloadComplete) {
+              setError('Connection lost before download completed')
+            }
+          })
+
+          conn.on('error', (err) => {
+            console.error('Connection error:', err)
+            clearTimeout(connectionTimeout)
+            setError('Connection failed: ' + (err.message || 'Unknown error'))
+            setConnecting(false)
+          })
+        }, 1000) // Wait 1 second before connecting
       })
 
       newPeer.on('error', (err) => {
         console.error('Peer error:', err)
-        setError('Failed to connect: ' + err.message)
+        clearTimeout(connectionTimeout)
+        let errorMessage = 'Failed to connect'
+
+        if (err.type === 'peer-unavailable') {
+          errorMessage = 'Sender not found. They may have closed their browser or the link is invalid.'
+        } else if (err.type === 'network') {
+          errorMessage = 'Network error. Please check your internet connection.'
+        } else {
+          errorMessage = 'Connection error: ' + (err.message || err.type)
+        }
+
+        setError(errorMessage)
         setConnecting(false)
       })
 
@@ -95,7 +131,9 @@ const FileDownload = () => {
       chunksRef.current = new Array(data.chunks)
       setDownloading(true)
     } else if (data.type === 'chunk') {
-      chunksRef.current[data.index] = data.data
+      // Convert Array back to Uint8Array
+      const chunkArray = new Uint8Array(data.data)
+      chunksRef.current[data.index] = chunkArray
       const receivedChunks = chunksRef.current.filter(c => c !== undefined).length
       setDownloadProgress(Math.round((receivedChunks / totalChunksRef.current) * 100))
     } else if (data.type === 'complete') {
@@ -106,6 +144,12 @@ const FileDownload = () => {
 
   const assembleAndDownload = () => {
     try {
+      if (!fileMetadata) {
+        setError('File metadata is missing')
+        setDownloading(false)
+        return
+      }
+
       // Combine all chunks
       const totalSize = chunksRef.current.reduce((sum, chunk) => sum + chunk.byteLength, 0)
       const completeFile = new Uint8Array(totalSize)
@@ -117,11 +161,11 @@ const FileDownload = () => {
       }
 
       // Create blob and download
-      const blob = new Blob([completeFile], { type: fileMetadata.mimeType })
+      const blob = new Blob([completeFile], { type: fileMetadata.mimeType || 'application/octet-stream' })
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = fileMetadata.name
+      a.download = fileMetadata.name || 'download'
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
@@ -208,12 +252,16 @@ const FileDownload = () => {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               Download Complete!
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-2">
-              {fileMetadata.name}
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
-              {formatFileSize(fileMetadata.size)}
-            </p>
+            {fileMetadata && (
+              <>
+                <p className="text-gray-600 dark:text-gray-400 mb-2">
+                  {fileMetadata.name}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
+                  {formatFileSize(fileMetadata.size)}
+                </p>
+              </>
+            )}
             <a
               href="/fileshare"
               className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"

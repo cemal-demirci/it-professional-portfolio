@@ -150,10 +150,13 @@ const FileShare = () => {
         const end = Math.min(start + chunkSize, arrayBuffer.byteLength)
         const chunk = arrayBuffer.slice(start, end)
 
+        // Convert ArrayBuffer to Array for JSON serialization
+        const chunkArray = Array.from(new Uint8Array(chunk))
+
         conn.send({
           type: 'chunk',
           index: i,
-          data: chunk
+          data: chunkArray
         })
 
         setTransferProgress(Math.round(((i + 1) / chunks) * 100))
