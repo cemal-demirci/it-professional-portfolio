@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Home, User, Wrench, Moon, Sun, Settings as SettingsIcon, Zap, Infinity, GraduationCap, Share2 } from 'lucide-react'
+import { Menu, X, Home, User, Wrench, Moon, Sun, Settings as SettingsIcon, Zap, Infinity, GraduationCap, Share2, Monitor } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -50,7 +50,8 @@ const Layout = ({ children }) => {
     { name: t(language, 'nav.about'), href: '/about', icon: User },
     { name: 'Junior IT', href: '/junior-it', icon: GraduationCap },
     { name: t(language, 'nav.tools'), href: '/tools', icon: Wrench },
-    { name: 'File Share', href: '/fileshare', icon: Share2 },
+    { name: 'QuantumDrop', href: '/fileshare', icon: Share2 },
+    { name: 'Remote Desktop', href: '/remote-desktop', icon: Monitor },
     { name: t(language, 'nav.settings'), href: '/settings', icon: SettingsIcon },
   ]
 

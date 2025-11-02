@@ -118,6 +118,9 @@ import ITGlossary from './pages/ITGlossary'
 import FileShare from './pages/FileShare'
 import FileDownload from './pages/FileDownload'
 
+// Remote Desktop
+import RemoteDesktop from './pages/RemoteDesktop'
+
 function App() {
   return (
     <LanguageProvider>
@@ -138,6 +141,10 @@ function App() {
           {/* File Share */}
           <Route path="/fileshare" element={<FileShare />} />
           <Route path="/share/:fileId" element={<FileDownload />} />
+
+          {/* Remote Desktop */}
+          <Route path="/remote-desktop" element={<RemoteDesktop />} />
+          <Route path="/remote/:sessionId" element={<RemoteDesktop />} />
 
           {/* Zero Density Tools */}
           <Route path="/0d/evo2-events" element={<Evo2EventAnalyzer />} />
