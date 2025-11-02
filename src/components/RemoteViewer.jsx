@@ -1,15 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Monitor, ArrowLeft, MessageCircle, Send, Loader2 } from 'lucide-react'
+import { Monitor, ArrowLeft, MessageCircle, Send, Loader2, Lock } from 'lucide-react'
 import Peer from 'peerjs'
 
 const RemoteViewer = ({ onBack }) => {
   const [sessionCode, setSessionCode] = useState('')
+  const [password, setPassword] = useState('')
   const [connecting, setConnecting] = useState(false)
   const [connected, setConnected] = useState(false)
   const [stream, setStream] = useState(null)
   const [messages, setMessages] = useState([])
   const [messageText, setMessageText] = useState('')
   const [error, setError] = useState(null)
+  const [awaitingAuth, setAwaitingAuth] = useState(false)
 
   const peerRef = useRef(null)
   const connectionRef = useRef(null)
@@ -22,9 +24,10 @@ const RemoteViewer = ({ onBack }) => {
   }, [])
 
   const connectToHost = () => {
-    if (!sessionCode.trim()) return
+    if (!sessionCode.trim() || !password.trim()) return
     setConnecting(true)
     setError(null)
+    setAwaitingAuth(false)
 
     const peer = new Peer({
       config: {
@@ -36,22 +39,36 @@ const RemoteViewer = ({ onBack }) => {
     })
 
     peer.on('open', () => {
-      const conn = peer.connect(sessionCode)
+      const conn = peer.connect(sessionCode, {
+        reliable: true,
+        serialization: 'json'
+      })
       connectionRef.current = conn
 
       conn.on('open', () => {
-        setConnected(true)
-        setConnecting(false)
-
-        const call = peer.call(sessionCode, new MediaStream())
-        call.on('stream', (remoteStream) => {
-          setStream(remoteStream)
-          if (videoRef.current) videoRef.current.srcObject = remoteStream
-        })
+        // Send password for authentication
+        conn.send({ type: 'auth', password })
+        setAwaitingAuth(true)
       })
 
       conn.on('data', (data) => {
-        if (data.type === 'chat') {
+        if (data.type === 'auth_success') {
+          setConnected(true)
+          setConnecting(false)
+          setAwaitingAuth(false)
+
+          // Request screen stream after successful auth
+          const call = peer.call(sessionCode, new MediaStream())
+          call.on('stream', (remoteStream) => {
+            setStream(remoteStream)
+            if (videoRef.current) videoRef.current.srcObject = remoteStream
+          })
+        } else if (data.type === 'auth_failed') {
+          setError(data.message || 'Authentication failed. Incorrect password.')
+          setConnecting(false)
+          setAwaitingAuth(false)
+          conn.close()
+        } else if (data.type === 'chat') {
           setMessages(prev => [...prev, { from: 'host', text: data.message }])
         }
       })
@@ -59,12 +76,22 @@ const RemoteViewer = ({ onBack }) => {
       conn.on('error', (err) => {
         setError('Connection error: ' + err.message)
         setConnecting(false)
+        setAwaitingAuth(false)
+      })
+
+      conn.on('close', () => {
+        if (!connected) {
+          setError('Connection closed. The host may be offline.')
+          setConnecting(false)
+          setAwaitingAuth(false)
+        }
       })
     })
 
     peer.on('error', (err) => {
       setError('Failed to connect: ' + err.message)
       setConnecting(false)
+      setAwaitingAuth(false)
     })
 
     peerRef.current = peer
@@ -94,18 +121,46 @@ const RemoteViewer = ({ onBack }) => {
               <p className="text-gray-600 dark:text-gray-400">Enter the session code from the host</p>
             </div>
             <div className="space-y-4">
-              <input
-                type="text"
-                value={sessionCode}
-                onChange={(e) => setSessionCode(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && connectToHost()}
-                placeholder="Enter session code..."
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono"
-              />
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Session Code
+                </label>
+                <input
+                  type="text"
+                  value={sessionCode}
+                  onChange={(e) => setSessionCode(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && connectToHost()}
+                  placeholder="cml-XXXX"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                  <Lock className="w-4 h-4" />
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && connectToHost()}
+                  placeholder="6-digit password"
+                  maxLength={6}
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-lg tracking-wider text-center"
+                />
+              </div>
+
+              {error && (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                  <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                </div>
+              )}
+
               <button
                 onClick={connectToHost}
-                className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all font-semibold"
+                disabled={!sessionCode.trim() || !password.trim()}
+                className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Connect
               </button>
@@ -121,7 +176,14 @@ const RemoteViewer = ({ onBack }) => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Connecting to host...</p>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">
+            {awaitingAuth ? 'Authenticating...' : 'Connecting to host...'}
+          </p>
+          {awaitingAuth && (
+            <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+              Verifying password
+            </p>
+          )}
         </div>
       </div>
     )

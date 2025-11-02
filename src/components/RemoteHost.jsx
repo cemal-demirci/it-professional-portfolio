@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Monitor, Copy, Check, Users, Wifi, ArrowLeft, MessageCircle, Send } from 'lucide-react'
+import { Monitor, Copy, Check, Users, Wifi, ArrowLeft, MessageCircle, Send, Lock } from 'lucide-react'
 import Peer from 'peerjs'
 import QRCode from 'qrcode'
 
 const RemoteHost = ({ onBack }) => {
   const [peer, setPeer] = useState(null)
   const [sessionCode, setSessionCode] = useState(null)
+  const [sessionPassword, setSessionPassword] = useState('')
   const [qrCode, setQrCode] = useState(null)
   const [copied, setCopied] = useState(false)
   const [connected, setConnected] = useState(false)
@@ -25,8 +26,24 @@ const RemoteHost = ({ onBack }) => {
     }
   }, [])
 
+  const generateSimpleCode = () => {
+    // Generate simple code: cml-XXXX (4 random numbers)
+    const randomNum = Math.floor(1000 + Math.random() * 9000)
+    return `cml-${randomNum}`
+  }
+
+  const generatePassword = () => {
+    // Generate 6-digit password
+    return Math.floor(100000 + Math.random() * 900000).toString()
+  }
+
   const initializePeer = () => {
-    const newPeer = new Peer({
+    // Generate simple session code and password first
+    const simpleCode = generateSimpleCode()
+    const password = generatePassword()
+
+    // Use simple code as Peer ID
+    const newPeer = new Peer(simpleCode, {
       config: {
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
@@ -36,25 +53,40 @@ const RemoteHost = ({ onBack }) => {
     })
 
     newPeer.on('open', async (id) => {
-      setSessionCode(id)
       setPeer(newPeer)
-      const link = `${window.location.origin}/remote/${id}`
+      setSessionCode(id)
+      setSessionPassword(password)
+
+      const link = `${window.location.origin}/remote/${simpleCode}`
       const qr = await QRCode.toDataURL(link, { width: 200 })
       setQrCode(qr)
     })
 
     newPeer.on('connection', (conn) => {
-      connectionRef.current = conn
-      setConnected(true)
-
       conn.on('data', (data) => {
-        if (data.type === 'chat') {
+        // Check password first
+        if (data.type === 'auth') {
+          if (data.password === sessionPassword) {
+            conn.send({ type: 'auth_success' })
+            connectionRef.current = conn
+            setConnected(true)
+          } else {
+            conn.send({ type: 'auth_failed', message: 'Incorrect password' })
+            conn.close()
+          }
+        } else if (data.type === 'chat' && connected) {
           setMessages(prev => [...prev, { from: 'viewer', text: data.message }])
         }
       })
     })
 
     newPeer.on('call', async (call) => {
+      // Only accept calls from authenticated connections
+      if (!connected) {
+        call.close()
+        return
+      }
+
       try {
         const mediaStream = await navigator.mediaDevices.getDisplayMedia({
           video: { cursor: 'always' },
@@ -143,20 +175,43 @@ const RemoteHost = ({ onBack }) => {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Session Code */}
+            {/* Session Code & Password */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Session Code</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Connection Details</h3>
               <div className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <input
-                    value={sessionCode || 'Generating...'}
-                    readOnly
-                    className="flex-1 px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white font-mono text-sm"
-                  />
-                  <button onClick={copyCode} className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                  </button>
+                {/* Session Code */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Session Code
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      value={sessionCode || 'Generating...'}
+                      readOnly
+                      className="flex-1 px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white font-mono text-lg font-bold"
+                    />
+                    <button onClick={copyCode} className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                      {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                    </button>
+                  </div>
                 </div>
+
+                {/* Password */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                    <Lock className="w-4 h-4" />
+                    Password
+                  </label>
+                  <div className="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400 dark:border-yellow-600">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white text-center font-mono tracking-wider">
+                      {sessionPassword || '------'}
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    Share this password with the viewer to allow connection
+                  </p>
+                </div>
+
                 {qrCode && (
                   <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                     <img src={qrCode} alt="QR Code" className="mx-auto" />
