@@ -148,7 +148,7 @@ We offer **3 deployment versions** to match your needs:
 
 ### 🟢 Version 1: Beginner (Minimal Setup)
 **Perfect for**: Testing, personal use, no backend features
-**Time**: 5 minutes
+**Time**: 2-3 minutes
 **Features**: All client-side tools work, no AI features
 
 ```bash
@@ -173,7 +173,7 @@ npm run build
 
 ### 🟡 Version 2: Intermediate (With AI)
 **Perfect for**: Using AI features, small projects
-**Time**: 15 minutes
+**Time**: 10-15 minutes (5 min API key, 5 min deploy, 5 min testing)
 **Features**: AI chatbots + all tools
 
 ```bash
@@ -207,18 +207,23 @@ vercel
 
 ### 🔴 Version 3: Professional (Full Stack)
 **Perfect for**: Production, multiple users, full features
-**Time**: 30 minutes *(or 3+ hours if you read every line of code and customize everything - we don't judge! 😄)*
+**Time**: 1-2 hours *(realistically - Redis setup, env config, testing, debugging)*
 **Features**: Everything enabled
 
-> ⚠️ **Warning for Perfectionists**: This setup can easily turn into a 3+ hour deep-dive if you start:
-> - Reading through all 60+ tools
-> - Testing every AI feature
-> - Customizing colors, fonts, and animations
-> - Exploring the codebase architecture
-> - Setting up custom Redis configurations
-> - Deploying to multiple platforms for comparison
+> ⚠️ **Realistic Time Breakdown**:
+> - Redis Cloud setup & config: 15-20 min
+> - Environment variables setup: 10-15 min
+> - Vercel deployment & config: 10-15 min
+> - Testing all features: 15-20 min
+> - Debugging inevitable issues: 10-20 min
+> - **Total: 60-90 minutes** for a clean deployment
 >
-> We've been there. It's worth it though! 🚀
+> 📚 **If You're a Perfectionist** (like the author):
+> - Reading through 60+ tools code: +2 hours
+> - Customizing design & features: +3 hours
+> - Exploring architecture patterns: +1 hour
+> - Testing different Redis providers: +1 hour
+> - **We spent 100+ hours building this**, don't feel bad if setup takes longer! 😄
 
 ```bash
 # 1. Clone and install
@@ -269,7 +274,7 @@ railway up
 | AI Chatbots | ❌ | ✅ | ✅ |
 | Rate Limiting | ❌ | ❌ | ✅ |
 | Contact Form | ❌ | ❌ | ✅ |
-| Setup Time | 5 min | 15 min | 30 min |
+| Setup Time | 2-3 min | 10-15 min | 60-90 min |
 | Cost | Free | Free | Free* |
 
 *Railway/Vercel free tiers available
