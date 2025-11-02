@@ -148,8 +148,10 @@ We offer **3 deployment versions** to match your needs:
 
 ### 🟢 Version 1: Beginner (Minimal Setup)
 **Perfect for**: Testing, personal use, no backend features
-**Time**: 2-3 minutes
+**Time**: 15 minutes
 **Features**: All client-side tools work, no AI features
+
+> **Note**: Includes time for cloning repository, installing dependencies (~10 min on average internet), and initial setup. Actual coding/configuration: ~3 min.
 
 ```bash
 # 1. Clone and install
@@ -173,8 +175,17 @@ npm run build
 
 ### 🟡 Version 2: Intermediate (With AI)
 **Perfect for**: Using AI features, small projects
-**Time**: 10-15 minutes (5 min API key, 5 min deploy, 5 min testing)
+**Time**: 1-2 hours
 **Features**: AI chatbots + all tools
+
+> **Realistic Time Breakdown**:
+> - Repository setup & dependencies: 15 min
+> - Getting Gemini API key: 10-15 min (account creation, verification)
+> - Environment configuration: 10-15 min
+> - Vercel deployment setup: 15-20 min
+> - Testing AI features: 15-20 min
+> - Troubleshooting: 10-30 min (environment variables, API keys)
+> - **Total: 1-2 hours** for a working AI-powered deployment
 
 ```bash
 # 1. Clone and install
@@ -207,23 +218,29 @@ vercel
 
 ### 🔴 Version 3: Professional (Full Stack)
 **Perfect for**: Production, multiple users, full features
-**Time**: 1-2 hours *(realistically - Redis setup, env config, testing, debugging)*
+**Time**: 4-6 hours *(realistic estimate for complete production setup)*
 **Features**: Everything enabled
 
 > ⚠️ **Realistic Time Breakdown**:
-> - Redis Cloud setup & config: 15-20 min
-> - Environment variables setup: 10-15 min
-> - Vercel deployment & config: 10-15 min
-> - Testing all features: 15-20 min
-> - Debugging inevitable issues: 10-20 min
-> - **Total: 60-90 minutes** for a clean deployment
+> - Repository setup & dependencies: 15-20 min
+> - Redis Cloud account & configuration: 30-45 min (signup, region selection, connection string)
+> - Understanding environment variables: 20-30 min (reading docs, understanding each variable)
+> - Setting up all API keys (Gemini, Redis, passwords): 25-35 min
+> - Local development testing: 30-45 min
+> - Vercel deployment & configuration: 30-45 min
+> - Adding all environment variables to Vercel: 20-30 min
+> - Testing all 60+ tools in production: 45-60 min
+> - Debugging deployment issues: 30-60 min (CORS, API routes, Redis connection)
+> - Fine-tuning and optimization: 20-30 min
+> - **Total: 4-6 hours** for a complete, tested production deployment
 >
 > 📚 **If You're a Perfectionist** (like the author):
-> - Reading through 60+ tools code: +2 hours
-> - Customizing design & features: +3 hours
-> - Exploring architecture patterns: +1 hour
-> - Testing different Redis providers: +1 hour
-> - **We spent 100+ hours building this**, don't feel bad if setup takes longer! 😄
+> - Reading through all source code: +3-4 hours
+> - Understanding architecture & design patterns: +2-3 hours
+> - Customizing colors, fonts, content: +2-3 hours
+> - Testing different deployment providers: +1-2 hours
+> - Adding custom features: +3-5 hours
+> - **We spent months building this with 100+ hours of development**, so taking your time is completely normal! 😄
 
 ```bash
 # 1. Clone and install
@@ -274,7 +291,9 @@ railway up
 | AI Chatbots | ❌ | ✅ | ✅ |
 | Rate Limiting | ❌ | ❌ | ✅ |
 | Contact Form | ❌ | ❌ | ✅ |
-| Setup Time | 2-3 min | 10-15 min | 60-90 min |
+| Private Section | ❌ | ❌ | ✅ |
+| Credit System | ❌ | ❌ | ✅ |
+| Setup Time | ~15 min | 1-2 hours | 4-6 hours |
 | Cost | Free | Free | Free* |
 
 *Railway/Vercel free tiers available
@@ -528,11 +547,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Google Gemini AI for powering the AI features
 - Vercel for hosting and serverless infrastructure
 - Redis Cloud for fast data storage
 - The React and Vite communities
 - All open-source contributors
+- Everyone who uses and contributes to this project
 
 ## 🔐 Security
 
