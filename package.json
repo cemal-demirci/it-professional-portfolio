@@ -16,7 +16,7 @@
     "ioredis": "^5.8.2",
     "ip-subnet-calculator": "^1.1.8",
     "js-yaml": "^4.1.0",
-    "jspdf": "^2.5.2",
+    "jspdf": "^3.0.3",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.446.0",
     "markdown-it": "^14.1.0",
