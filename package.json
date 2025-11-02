@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@vercel/blob": "^2.0.0",
     "@vercel/kv": "^3.0.0",
     "crypto-js": "^4.2.0",
+    "formidable": "^3.5.4",
     "ioredis": "^5.8.2",
     "ip-subnet-calculator": "^1.1.8",
     "js-yaml": "^4.1.0",

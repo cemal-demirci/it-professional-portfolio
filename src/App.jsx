@@ -114,6 +114,10 @@ import MacOsAssistant from './tools/macos/MacOsAssistant'
 import JuniorIT from './pages/JuniorIT'
 import ITGlossary from './pages/ITGlossary'
 
+// File Share
+import FileShare from './pages/FileShare'
+import FileDownload from './pages/FileDownload'
+
 function App() {
   return (
     <LanguageProvider>
@@ -130,6 +134,10 @@ function App() {
           {/* Junior IT Pages */}
           <Route path="/junior-it" element={<JuniorIT />} />
           <Route path="/junior-it/glossary" element={<ITGlossary />} />
+
+          {/* File Share */}
+          <Route path="/fileshare" element={<FileShare />} />
+          <Route path="/share/:fileId" element={<FileDownload />} />
 
           {/* Zero Density Tools */}
           <Route path="/0d/evo2-events" element={<Evo2EventAnalyzer />} />
