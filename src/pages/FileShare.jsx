@@ -1,36 +1,32 @@
-import React, { useState, useRef } from 'react'
-import { Upload, Lock, Link2, Download, Clock, Shield, QrCode, Copy, Check, FileText, Image, File, X } from 'lucide-react'
+import React, { useState, useRef, useEffect } from 'react'
+import { Upload, Lock, Link2, Download, Shield, QrCode, Copy, Check, FileText, Image, File, X, Users, Wifi } from 'lucide-react'
 import QRCode from 'qrcode'
+import Peer from 'peerjs'
 
 const FileShare = () => {
   const [file, setFile] = useState(null)
-  const [uploading, setUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState(0)
-  const [uploadedLink, setUploadedLink] = useState(null)
+  const [peer, setPeer] = useState(null)
+  const [peerId, setPeerId] = useState(null)
+  const [shareLink, setShareLink] = useState(null)
   const [qrCode, setQrCode] = useState(null)
   const [copied, setCopied] = useState(false)
   const [dragActive, setDragActive] = useState(false)
-
-  // Settings
-  const [password, setPassword] = useState('')
-  const [expiryTime, setExpiryTime] = useState('24h') // 1h, 24h, 7d, 30d
-  const [downloadLimit, setDownloadLimit] = useState('unlimited') // 1, 5, 10, unlimited
+  const [peerConnected, setPeerConnected] = useState(false)
+  const [transferring, setTransferring] = useState(false)
+  const [transferProgress, setTransferProgress] = useState(0)
+  const [waiting, setWaiting] = useState(false)
 
   const fileInputRef = useRef(null)
+  const connectionRef = useRef(null)
 
-  const expiryOptions = [
-    { value: '1h', label: '1 Hour' },
-    { value: '24h', label: '24 Hours' },
-    { value: '7d', label: '7 Days' },
-    { value: '30d', label: '30 Days' }
-  ]
-
-  const downloadLimitOptions = [
-    { value: '1', label: '1 Download' },
-    { value: '5', label: '5 Downloads' },
-    { value: '10', label: '10 Downloads' },
-    { value: 'unlimited', label: 'Unlimited' }
-  ]
+  useEffect(() => {
+    // Cleanup peer on unmount
+    return () => {
+      if (peer) {
+        peer.destroy()
+      }
+    }
+  }, [peer])
 
   const handleDrag = (e) => {
     e.preventDefault()
@@ -53,16 +49,10 @@ const FileShare = () => {
   }
 
   const handleFileSelect = (selectedFile) => {
-    // Check file size (100MB limit for free tier)
-    const maxSize = 100 * 1024 * 1024 // 100MB
-    if (selectedFile.size > maxSize) {
-      alert('File size exceeds 100MB limit. Please use a smaller file.')
-      return
-    }
-
     setFile(selectedFile)
-    setUploadedLink(null)
+    setShareLink(null)
     setQrCode(null)
+    setPeerConnected(false)
   }
 
   const handleFileInputChange = (e) => {
@@ -71,135 +61,139 @@ const FileShare = () => {
     }
   }
 
-  const encryptFile = async (file, password) => {
-    // Read file as ArrayBuffer
-    const fileBuffer = await file.arrayBuffer()
-
-    // Generate encryption key from password or random key
-    const keyMaterial = password
-      ? await crypto.subtle.importKey(
-          'raw',
-          new TextEncoder().encode(password),
-          'PBKDF2',
-          false,
-          ['deriveKey']
-        )
-      : null
-
-    // Generate random encryption key
-    const key = keyMaterial
-      ? await crypto.subtle.deriveKey(
-          {
-            name: 'PBKDF2',
-            salt: new TextEncoder().encode('cemal-fileshare-salt'),
-            iterations: 100000,
-            hash: 'SHA-256'
-          },
-          keyMaterial,
-          { name: 'AES-GCM', length: 256 },
-          false,
-          ['encrypt']
-        )
-      : await crypto.subtle.generateKey(
-          { name: 'AES-GCM', length: 256 },
-          true,
-          ['encrypt', 'decrypt']
-        )
-
-    // Generate random IV
-    const iv = crypto.getRandomValues(new Uint8Array(12))
-
-    // Encrypt file
-    const encryptedData = await crypto.subtle.encrypt(
-      { name: 'AES-GCM', iv },
-      key,
-      fileBuffer
-    )
-
-    // Export key for storage
-    const exportedKey = await crypto.subtle.exportKey('raw', key)
-
-    return {
-      encryptedData,
-      iv: Array.from(iv),
-      key: Array.from(new Uint8Array(exportedKey)),
-      originalName: file.name,
-      originalSize: file.size,
-      mimeType: file.type
-    }
-  }
-
-  const handleUpload = async () => {
+  const createShareLink = async () => {
     if (!file) return
 
     try {
-      setUploading(true)
-      setUploadProgress(10)
+      setWaiting(true)
 
-      // Encrypt file
-      const encrypted = await encryptFile(file, password)
-      setUploadProgress(40)
-
-      // Create blob from encrypted data
-      const encryptedBlob = new Blob([encrypted.encryptedData])
-
-      // Prepare form data
-      const formData = new FormData()
-      formData.append('file', encryptedBlob)
-      formData.append('metadata', JSON.stringify({
-        originalName: encrypted.originalName,
-        originalSize: encrypted.originalSize,
-        mimeType: encrypted.mimeType,
-        iv: encrypted.iv,
-        key: encrypted.key,
-        hasPassword: !!password,
-        expiryTime,
-        downloadLimit
-      }))
-
-      setUploadProgress(60)
-
-      // Upload to server
-      const response = await fetch('/api/fileshare/upload', {
-        method: 'POST',
-        body: formData
+      // Create peer
+      const newPeer = new Peer({
+        config: {
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:global.stun.twilio.com:3478' }
+          ]
+        }
       })
 
-      const data = await response.json()
+      newPeer.on('open', async (id) => {
+        console.log('Peer ID:', id)
+        setPeerId(id)
+        setPeer(newPeer)
 
-      if (data.success) {
-        setUploadProgress(100)
-        const shareUrl = `${window.location.origin}/share/${data.fileId}`
-        setUploadedLink(shareUrl)
+        // Generate share link
+        const link = `${window.location.origin}/share/${id}`
+        setShareLink(link)
 
         // Generate QR code
-        const qr = await QRCode.toDataURL(shareUrl, { width: 200 })
+        const qr = await QRCode.toDataURL(link, { width: 200 })
         setQrCode(qr)
-      } else {
-        throw new Error(data.error || 'Upload failed')
-      }
+      })
+
+      newPeer.on('connection', (conn) => {
+        console.log('Peer connected!')
+        connectionRef.current = conn
+        setPeerConnected(true)
+        setWaiting(false)
+
+        conn.on('open', () => {
+          console.log('Connection opened, sending file...')
+          sendFile(conn)
+        })
+
+        conn.on('close', () => {
+          console.log('Connection closed')
+          setPeerConnected(false)
+        })
+
+        conn.on('error', (err) => {
+          console.error('Connection error:', err)
+          setPeerConnected(false)
+        })
+      })
+
+      newPeer.on('error', (err) => {
+        console.error('Peer error:', err)
+        alert('Failed to create peer connection: ' + err.message)
+        setWaiting(false)
+      })
     } catch (error) {
-      console.error('Upload error:', error)
-      alert('Upload failed: ' + error.message)
-    } finally {
-      setUploading(false)
-      setUploadProgress(0)
+      console.error('Share link creation error:', error)
+      alert('Failed to create share link: ' + error.message)
+      setWaiting(false)
+    }
+  }
+
+  const sendFile = async (conn) => {
+    try {
+      setTransferring(true)
+      setTransferProgress(0)
+
+      // Read file
+      const arrayBuffer = await file.arrayBuffer()
+      const chunkSize = 16 * 1024 // 16KB chunks
+      const chunks = Math.ceil(arrayBuffer.byteLength / chunkSize)
+
+      // Send metadata first
+      conn.send({
+        type: 'metadata',
+        name: file.name,
+        size: file.size,
+        mimeType: file.type,
+        chunks
+      })
+
+      // Send chunks
+      for (let i = 0; i < chunks; i++) {
+        const start = i * chunkSize
+        const end = Math.min(start + chunkSize, arrayBuffer.byteLength)
+        const chunk = arrayBuffer.slice(start, end)
+
+        conn.send({
+          type: 'chunk',
+          index: i,
+          data: chunk
+        })
+
+        setTransferProgress(Math.round(((i + 1) / chunks) * 100))
+
+        // Small delay to prevent overwhelming the connection
+        await new Promise(resolve => setTimeout(resolve, 10))
+      }
+
+      // Send completion signal
+      conn.send({ type: 'complete' })
+
+      console.log('File sent successfully!')
+      setTransferring(false)
+      setTransferProgress(100)
+    } catch (error) {
+      console.error('File send error:', error)
+      setTransferring(false)
+      alert('Failed to send file: ' + error.message)
     }
   }
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(uploadedLink)
+    navigator.clipboard.writeText(shareLink)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const resetUpload = () => {
+  const resetShare = () => {
+    if (peer) {
+      peer.destroy()
+    }
     setFile(null)
-    setUploadedLink(null)
+    setPeer(null)
+    setPeerId(null)
+    setShareLink(null)
     setQrCode(null)
-    setPassword('')
-    setExpiryTime('24h')
-    setDownloadLimit('unlimited')
+    setPeerConnected(false)
+    setTransferring(false)
+    setTransferProgress(0)
+    setWaiting(false)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -234,15 +228,15 @@ const FileShare = () => {
             <Shield className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            Secure File Share
+            P2P File Share
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            End-to-end encrypted file sharing with password protection
+            Peer-to-peer encrypted file sharing - Files never touch our servers
           </p>
         </div>
 
         {/* Upload Section */}
-        {!uploadedLink ? (
+        {!shareLink ? (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
             {/* Drag & Drop Area */}
             <div
@@ -263,7 +257,7 @@ const FileShare = () => {
                     Drop your file here
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    or click to browse (max 100MB)
+                    or click to browse (unlimited size with P2P!)
                   </p>
                   <input
                     ref={fileInputRef}
@@ -303,77 +297,21 @@ const FileShare = () => {
                     </button>
                   </div>
 
-                  {/* Settings */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                    {/* Password */}
-                    <div>
-                      <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        <Lock className="w-4 h-4 mr-2" />
-                        Password (Optional)
-                      </label>
-                      <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Leave empty for no password"
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-
-                    {/* Expiry Time */}
-                    <div>
-                      <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        <Clock className="w-4 h-4 mr-2" />
-                        Expires After
-                      </label>
-                      <select
-                        value={expiryTime}
-                        onChange={(e) => setExpiryTime(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        {expiryOptions.map(option => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* Download Limit */}
-                    <div>
-                      <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        <Download className="w-4 h-4 mr-2" />
-                        Download Limit
-                      </label>
-                      <select
-                        value={downloadLimit}
-                        onChange={(e) => setDownloadLimit(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        {downloadLimitOptions.map(option => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Upload Button */}
+                  {/* Create Share Link Button */}
                   <button
-                    onClick={handleUpload}
-                    disabled={uploading}
+                    onClick={createShareLink}
+                    disabled={waiting}
                     className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
                   >
-                    {uploading ? (
+                    {waiting ? (
                       <div className="flex items-center justify-center space-x-2">
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Encrypting & Uploading... {uploadProgress}%</span>
+                        <span>Creating Peer Connection...</span>
                       </div>
                     ) : (
                       <div className="flex items-center justify-center space-x-2">
-                        <Shield className="w-5 h-5" />
-                        <span>Encrypt & Upload</span>
+                        <Wifi className="w-5 h-5" />
+                        <span>Create Share Link (P2P)</span>
                       </div>
                     )}
                   </button>
@@ -382,18 +320,43 @@ const FileShare = () => {
             </div>
 
             {/* Security Info */}
-            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
               <div className="flex items-start space-x-3">
-                <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                <Shield className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-1">
-                    End-to-End Encrypted
+                  <h4 className="font-semibold text-green-900 dark:text-green-300 mb-1">
+                    True Peer-to-Peer
                   </h4>
-                  <p className="text-sm text-blue-800 dark:text-blue-400">
-                    Your file is encrypted in your browser before upload. We never see your unencrypted data.
-                    The decryption key is embedded in the share link.
+                  <p className="text-sm text-green-800 dark:text-green-400">
+                    Your file is transferred directly from your browser to the recipient's browser using WebRTC.
+                    It never touches our servers. Maximum privacy and unlimited file size!
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* Features Grid */}
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <div className="text-blue-600 dark:text-blue-400 mb-2">🌍</div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Eco-Friendly</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Zero server storage = Zero carbon footprint
+                </p>
+              </div>
+              <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <div className="text-purple-600 dark:text-purple-400 mb-2">🔒</div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Private & Secure</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Direct transfer, no middleman
+                </p>
+              </div>
+              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <div className="text-green-600 dark:text-green-400 mb-2">∞</div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Unlimited Size</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  No file size limits with P2P
+                </p>
               </div>
             </div>
           </div>
@@ -401,23 +364,51 @@ const FileShare = () => {
           /* Success Section */
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
             <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
-                <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
+                peerConnected ? 'bg-green-100 dark:bg-green-900/30' : 'bg-yellow-100 dark:bg-yellow-900/30'
+              }`}>
+                {peerConnected ? (
+                  <Users className="w-8 h-8 text-green-600 dark:text-green-400" />
+                ) : (
+                  <Wifi className="w-8 h-8 text-yellow-600 dark:text-yellow-400 animate-pulse" />
+                )}
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                File Uploaded Successfully!
+                {peerConnected ? 'Connected! Transferring...' : 'Waiting for Receiver...'}
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Share this link with anyone to let them download your file
+                {peerConnected
+                  ? 'File is being transferred peer-to-peer'
+                  : 'Share this link with the recipient to start transfer'}
               </p>
             </div>
+
+            {/* Transfer Progress */}
+            {transferring && (
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Transferring...
+                  </span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {transferProgress}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${transferProgress}%` }}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Share Link */}
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
                 <input
                   type="text"
-                  value={uploadedLink}
+                  value={shareLink}
                   readOnly
                   className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
@@ -452,17 +443,11 @@ const FileShare = () => {
               )}
 
               {/* File Info */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Expires</p>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {expiryOptions.find(o => o.value === expiryTime)?.label}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Downloads</p>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {downloadLimitOptions.find(o => o.value === downloadLimit)?.label}
+                  <p className="text-sm text-gray-600 dark:text-gray-400">File Name</p>
+                  <p className="font-medium text-gray-900 dark:text-white truncate">
+                    {file.name}
                   </p>
                 </div>
                 <div>
@@ -472,19 +457,25 @@ const FileShare = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Protected</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Status</p>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    {password ? 'Yes' : 'No'}
+                    {transferring ? 'Transferring...' : peerConnected ? 'Connected' : 'Waiting'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Method</p>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    P2P (WebRTC)
                   </p>
                 </div>
               </div>
 
               {/* Actions */}
               <button
-                onClick={resetUpload}
+                onClick={resetShare}
                 className="w-full px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
               >
-                Upload Another File
+                Share Another File
               </button>
             </div>
           </div>

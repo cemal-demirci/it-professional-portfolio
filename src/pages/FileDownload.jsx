@@ -1,127 +1,139 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-import { Download, Lock, Shield, FileText, Image, File, Loader2, AlertCircle, Check } from 'lucide-react'
+import { Download, Shield, FileText, Image, File, Loader2, AlertCircle, Check, Users, Wifi } from 'lucide-react'
+import Peer from 'peerjs'
 
 const FileDownload = () => {
   const { fileId } = useParams()
-  const [loading, setLoading] = useState(true)
-  const [fileInfo, setFileInfo] = useState(null)
-  const [password, setPassword] = useState('')
+  const [peer, setPeer] = useState(null)
+  const [connecting, setConnecting] = useState(true)
+  const [connected, setConnected] = useState(false)
+  const [fileMetadata, setFileMetadata] = useState(null)
   const [downloading, setDownloading] = useState(false)
   const [downloadProgress, setDownloadProgress] = useState(0)
   const [error, setError] = useState(null)
-  const [passwordRequired, setPasswordRequired] = useState(false)
+  const [downloadComplete, setDownloadComplete] = useState(false)
+
+  const chunksRef = useRef([])
+  const totalChunksRef = useRef(0)
 
   useEffect(() => {
-    fetchFileInfo()
+    connectToPeer()
+
+    return () => {
+      if (peer) {
+        peer.destroy()
+      }
+    }
   }, [fileId])
 
-  const fetchFileInfo = async () => {
+  const connectToPeer = () => {
     try {
-      setLoading(true)
-      const response = await fetch(`/api/fileshare/info/${fileId}`)
-      const data = await response.json()
-
-      if (data.success) {
-        setFileInfo(data.fileInfo)
-        setPasswordRequired(data.fileInfo.hasPassword)
-      } else {
-        setError(data.error || 'File not found or expired')
-      }
-    } catch (error) {
-      console.error('Error fetching file info:', error)
-      setError('Failed to load file information')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const decryptFile = async (encryptedData, key, iv) => {
-    // Import key
-    const cryptoKey = await crypto.subtle.importKey(
-      'raw',
-      new Uint8Array(key),
-      'AES-GCM',
-      false,
-      ['decrypt']
-    )
-
-    // Decrypt
-    const decryptedData = await crypto.subtle.decrypt(
-      {
-        name: 'AES-GCM',
-        iv: new Uint8Array(iv)
-      },
-      cryptoKey,
-      encryptedData
-    )
-
-    return decryptedData
-  }
-
-  const handleDownload = async () => {
-    if (passwordRequired && !password) {
-      alert('Please enter the password')
-      return
-    }
-
-    try {
-      setDownloading(true)
-      setDownloadProgress(10)
-      setError(null)
-
-      // Download encrypted file
-      const response = await fetch(`/api/fileshare/download/${fileId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ password: password || undefined })
+      const newPeer = new Peer({
+        config: {
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:global.stun.twilio.com:3478' }
+          ]
+        }
       })
 
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Download failed')
+      newPeer.on('open', (id) => {
+        console.log('My peer ID:', id)
+        console.log('Connecting to sender:', fileId)
+
+        // Connect to sender
+        const conn = newPeer.connect(fileId, { reliable: true })
+
+        conn.on('open', () => {
+          console.log('Connected to sender!')
+          setConnected(true)
+          setConnecting(false)
+        })
+
+        conn.on('data', (data) => {
+          handleDataReceived(data)
+        })
+
+        conn.on('close', () => {
+          console.log('Connection closed')
+          if (!downloadComplete) {
+            setError('Connection lost before download completed')
+          }
+        })
+
+        conn.on('error', (err) => {
+          console.error('Connection error:', err)
+          setError('Connection error: ' + err.message)
+          setConnecting(false)
+        })
+      })
+
+      newPeer.on('error', (err) => {
+        console.error('Peer error:', err)
+        setError('Failed to connect: ' + err.message)
+        setConnecting(false)
+      })
+
+      setPeer(newPeer)
+    } catch (error) {
+      console.error('Setup error:', error)
+      setError('Failed to initialize: ' + error.message)
+      setConnecting(false)
+    }
+  }
+
+  const handleDataReceived = (data) => {
+    if (data.type === 'metadata') {
+      console.log('Received metadata:', data)
+      setFileMetadata({
+        name: data.name,
+        size: data.size,
+        mimeType: data.mimeType
+      })
+      totalChunksRef.current = data.chunks
+      chunksRef.current = new Array(data.chunks)
+      setDownloading(true)
+    } else if (data.type === 'chunk') {
+      chunksRef.current[data.index] = data.data
+      const receivedChunks = chunksRef.current.filter(c => c !== undefined).length
+      setDownloadProgress(Math.round((receivedChunks / totalChunksRef.current) * 100))
+    } else if (data.type === 'complete') {
+      console.log('Transfer complete!')
+      assembleAndDownload()
+    }
+  }
+
+  const assembleAndDownload = () => {
+    try {
+      // Combine all chunks
+      const totalSize = chunksRef.current.reduce((sum, chunk) => sum + chunk.byteLength, 0)
+      const completeFile = new Uint8Array(totalSize)
+
+      let offset = 0
+      for (const chunk of chunksRef.current) {
+        completeFile.set(new Uint8Array(chunk), offset)
+        offset += chunk.byteLength
       }
 
-      const data = await response.json()
-      setDownloadProgress(40)
-
-      // Convert base64 to ArrayBuffer
-      const encryptedData = Uint8Array.from(atob(data.encryptedData), c => c.charCodeAt(0))
-      setDownloadProgress(60)
-
-      // Decrypt file
-      const decryptedData = await decryptFile(
-        encryptedData,
-        data.metadata.key,
-        data.metadata.iv
-      )
-      setDownloadProgress(80)
-
       // Create blob and download
-      const blob = new Blob([decryptedData], { type: data.metadata.mimeType })
+      const blob = new Blob([completeFile], { type: fileMetadata.mimeType })
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = data.metadata.originalName
+      a.download = fileMetadata.name
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
       window.URL.revokeObjectURL(url)
 
-      setDownloadProgress(100)
-
-      // Refresh file info to show updated download count
-      setTimeout(() => {
-        fetchFileInfo()
-      }, 1000)
-    } catch (error) {
-      console.error('Download error:', error)
-      setError(error.message)
-    } finally {
+      setDownloadComplete(true)
       setDownloading(false)
-      setDownloadProgress(0)
+      setDownloadProgress(100)
+    } catch (error) {
+      console.error('Assembly error:', error)
+      setError('Failed to download file: ' + error.message)
+      setDownloading(false)
     }
   }
 
@@ -145,27 +157,12 @@ const FileDownload = () => {
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
   }
 
-  const formatExpiryTime = (expiryTime) => {
-    const now = new Date().getTime()
-    const expiry = new Date(expiryTime).getTime()
-    const diff = expiry - now
-
-    if (diff <= 0) return 'Expired'
-
-    const hours = Math.floor(diff / (1000 * 60 * 60))
-    const days = Math.floor(hours / 24)
-
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''}`
-    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`
-    return 'Less than 1 hour'
-  }
-
-  if (loading) {
+  if (connecting) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading file information...</p>
+          <Wifi className="w-12 h-12 text-blue-600 animate-pulse mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">Connecting to sender...</p>
         </div>
       </div>
     )
@@ -180,16 +177,48 @@ const FileDownload = () => {
               <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              File Not Available
+              Connection Failed
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               {error}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
+              Make sure the sender is still online and hasn't closed their browser.
             </p>
             <a
               href="/fileshare"
               className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
             >
-              Upload New File
+              Share Your Own File
+            </a>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (downloadComplete) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
+              <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Download Complete!
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-2">
+              {fileMetadata.name}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
+              {formatFileSize(fileMetadata.size)}
+            </p>
+            <a
+              href="/fileshare"
+              className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            >
+              Share Your Own File
             </a>
           </div>
         </div>
@@ -203,79 +232,57 @@ const FileDownload = () => {
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
           {/* File Icon */}
           <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
-              {getFileIcon(fileInfo.mimeType)}
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {fileInfo.originalName}
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              {formatFileSize(fileInfo.originalSize)}
-            </p>
-          </div>
-
-          {/* File Info */}
-          <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-6">
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Expires In</p>
-              <p className="font-medium text-gray-900 dark:text-white">
-                {formatExpiryTime(fileInfo.expiryTime)}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Downloads</p>
-              <p className="font-medium text-gray-900 dark:text-white">
-                {fileInfo.downloadCount}/{fileInfo.downloadLimit === 'unlimited' ? '∞' : fileInfo.downloadLimit}
-              </p>
-            </div>
-          </div>
-
-          {/* Password Input */}
-          {passwordRequired && (
-            <div className="mb-6">
-              <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                <Lock className="w-4 h-4 mr-2" />
-                Password Required
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password to download"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                onKeyPress={(e) => e.key === 'Enter' && handleDownload()}
-              />
-            </div>
-          )}
-
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                <p className="text-sm text-red-800 dark:text-red-400">{error}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Download Button */}
-          <button
-            onClick={handleDownload}
-            disabled={downloading}
-            className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
-          >
-            {downloading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Downloading... {downloadProgress}%</span>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center space-x-2">
-                <Download className="w-5 h-5" />
-                <span>Download File</span>
-              </div>
+            {fileMetadata && (
+              <>
+                <div className="inline-flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
+                  {getFileIcon(fileMetadata.mimeType)}
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  {fileMetadata.name}
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {formatFileSize(fileMetadata.size)}
+                </p>
+              </>
             )}
-          </button>
+          </div>
+
+          {/* Connection Status */}
+          {connected && !downloading && (
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <Users className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <div>
+                  <p className="font-medium text-green-900 dark:text-green-300">
+                    Connected to sender
+                  </p>
+                  <p className="text-sm text-green-800 dark:text-green-400">
+                    Waiting for file transfer to begin...
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Download Progress */}
+          {downloading && (
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Downloading via P2P...
+                </span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {downloadProgress}%
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${downloadProgress}%` }}
+                />
+              </div>
+            </div>
+          )}
 
           {/* Security Info */}
           <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
@@ -283,10 +290,11 @@ const FileDownload = () => {
               <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
               <div>
                 <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-1">
-                  Secure Download
+                  Secure P2P Transfer
                 </h4>
                 <p className="text-sm text-blue-800 dark:text-blue-400">
-                  This file is encrypted end-to-end. Decryption happens in your browser for maximum security.
+                  This file is being transferred directly from the sender's browser to yours using WebRTC.
+                  No servers involved, maximum privacy!
                 </p>
               </div>
             </div>
