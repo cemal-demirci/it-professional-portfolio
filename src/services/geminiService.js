@@ -1,38 +1,14 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import storage from '../utils/storage'
+import { getUserCredits, deductCredits } from './creditService'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
-
-// Rate limiting - Server-side API with Vercel KV (works in incognito mode!)
-const RATE_LIMIT = 15 // requests per day for free tier
-const RATE_WINDOW = 86400000 // 24 hours in ms
-const API_BASE = import.meta.env.VITE_API_BASE || ''
-
-// Secret key for unlimited access
-const SECRET_KEY = 'unlimited2024'
-
-// Check if unlimited mode is enabled
-const isUnlimitedMode = () => {
-  const storedKey = localStorage.getItem('aiUnlimitedKey')
-  return storedKey === SECRET_KEY
-}
-
-// Get unlimited key for API header
-const getUnlimitedKey = () => {
-  return isUnlimitedMode() ? SECRET_KEY : null
-}
-
-// Get current rate limit based on mode
-const getCurrentRateLimit = () => {
-  return isUnlimitedMode() ? 999999 : RATE_LIMIT
-}
 
 // Character limits
 export const LIMITS = {
   MAX_INPUT_CHARS: 30000, // 30K characters per request
   MAX_OUTPUT_TOKENS: 2048,
-  RATE_LIMIT: RATE_LIMIT,
-  RATE_WINDOW_HOURS: RATE_WINDOW / 3600000 // 24 hours
+  RATE_LIMIT: 15 // Deprecated - kept for backwards compatibility with old tools
 }
 
 let genAI = null
@@ -51,20 +27,13 @@ export const initGemini = () => {
 
 // Sarcastic messages - Cemal style (TR/EN mix)
 const SARCASTIC_MESSAGES = {
-  rateLimitReached: (waitTime, limit) => {
-    const hours = Math.floor(waitTime / 3600)
-    const minutes = Math.floor((waitTime % 3600) / 60)
-    const timeStr = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`
-
-    return [
-      `Yavaş kardeşim! 🐢 Günlük limit: ${limit}/day. ${timeStr} bekle, acele etme!`,
-      `Whoa there, cowboy! 🤠 Daily limit: ${limit}. Come back in ${timeStr} ☕`,
-      `Easy tiger! 🐅 AI'ın da dinlenmesi lazım. Wait ${timeStr} bro.`,
-      `Sakin! 🏎️ Free tier = ${limit}/gün. Chill yap ${timeStr}.`,
-      `Houston, we have a problem! 🚀 Günlük ${limit} limit aştın. ${timeStr} sonra gel.`,
-      `Slow down amigo! ⚡ ${limit} request/day limit var. ${timeStr} bekle.`
-    ]
-  },
+  noCredits: (currentCredits) => [
+    `Kredi bitti aga! 💸 ${currentCredits} credit kaldı ama minimum 1 lazım. Settings'e git kod al!`,
+    `No credits left, bro! 🚫 You have ${currentCredits} but need at least 1. Redeem a code!`,
+    `Kredin yok kardeşim! ⚡ ${currentCredits} credit'in var ama yetmiyor. Kod kullan ya da iste!`,
+    `Out of juice! 🔋 ${currentCredits} credits remaining but you need 1. Hit up Settings!`,
+    `Para yok! 💰 ${currentCredits} credit ama bişey yapamam. Code redeem et!`
+  ],
   inputTooLong: (current, max) => [
     `Sen romana mı yazıyorsun? 📚 ${current.toLocaleString()} karakter var, max ${max.toLocaleString()}. Kısa tut!`,
     `That's a novel, not a query! 📖 ${current.toLocaleString()}/${max.toLocaleString()} chars. TLDR lütfen!`,
@@ -117,164 +86,21 @@ const getRandomMessage = (messageArrayOrFunc) => {
   return Array.isArray(messages) ? messages[Math.floor(Math.random() * messages.length)] : messages
 }
 
-// Check rate limit - Server-side API with Vercel KV (with localStorage fallback for dev)
-export const checkRateLimit = async () => {
-  try {
-    const headers = {}
-    const unlimitedKey = getUnlimitedKey()
-    if (unlimitedKey) {
-      headers['x-unlimited-key'] = unlimitedKey
-    }
+// Check if user has enough credits
+export const checkCredits = async () => {
+  const credits = await getUserCredits()
 
-    const response = await fetch(`${API_BASE}/api/ratelimit`, {
-      method: 'GET',
-      headers
-    })
-
-    const data = await response.json()
-
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || 'Rate limit check failed')
-    }
-
-    if (data.remaining <= 0) {
-      const currentLimit = data.limit
-      const waitTimeSeconds = data.waitTimeSeconds || 3600
-      const messages = SARCASTIC_MESSAGES.rateLimitReached(waitTimeSeconds, currentLimit)
-      throw new Error(getRandomMessage(messages))
-    }
-
-    return true
-  } catch (error) {
-    // Fallback to localStorage-based rate limiting for development
-    console.warn('Server API unavailable, using localStorage fallback:', error.message)
-    return checkRateLimitLocal()
-  }
-}
-
-// Local rate limiting fallback (for development)
-const checkRateLimitLocal = () => {
-  if (isUnlimitedMode()) {
-    return true
-  }
-
-  const storageKey = 'local_rate_limit'
-  const now = Date.now()
-
-  // Get existing requests
-  const data = localStorage.getItem(storageKey)
-  const requests = data ? JSON.parse(data) : []
-
-  // Filter recent requests (within 24 hours)
-  const recentRequests = requests.filter(time => now - time < RATE_WINDOW)
-
-  // Check if limit exceeded
-  if (recentRequests.length >= RATE_LIMIT) {
-    const oldestRequest = recentRequests[0]
-    const waitTimeSeconds = Math.ceil((RATE_WINDOW - (now - oldestRequest)) / 1000)
-    const messages = SARCASTIC_MESSAGES.rateLimitReached(waitTimeSeconds, RATE_LIMIT)
+  if (credits < 1) {
+    const messages = SARCASTIC_MESSAGES.noCredits(credits)
     throw new Error(getRandomMessage(messages))
   }
 
   return true
 }
 
-// Record request - Server-side API with Vercel KV (with localStorage fallback for dev)
-const recordRequest = async () => {
-  try {
-    const headers = {}
-    const unlimitedKey = getUnlimitedKey()
-    if (unlimitedKey) {
-      headers['x-unlimited-key'] = unlimitedKey
-    }
-
-    const response = await fetch(`${API_BASE}/api/ratelimit`, {
-      method: 'POST',
-      headers
-    })
-
-    const data = await response.json()
-
-    if (response.status === 429) {
-      // Rate limit exceeded after request was made
-      // This shouldn't happen if checkRateLimit works correctly
-      console.warn('Rate limit exceeded during recording')
-    }
-
-    return data.success
-  } catch (error) {
-    console.warn('Failed to record request, using localStorage fallback:', error.message)
-    recordRequestLocal()
-    return false
-  }
-}
-
-// Local request recording fallback (for development)
-const recordRequestLocal = () => {
-  if (isUnlimitedMode()) {
-    return
-  }
-
-  const storageKey = 'local_rate_limit'
-  const now = Date.now()
-
-  // Get existing requests
-  const data = localStorage.getItem(storageKey)
-  const requests = data ? JSON.parse(data) : []
-
-  // Add new request
-  requests.push(now)
-
-  // Filter recent requests and save
-  const recentRequests = requests.filter(time => now - time < RATE_WINDOW)
-  localStorage.setItem(storageKey, JSON.stringify(recentRequests))
-}
-
-// Get remaining requests - Server-side API with Vercel KV (with localStorage fallback for dev)
+// Get remaining credits (alias for getUserCredits for backwards compatibility)
 export const getRemainingRequests = async () => {
-  try {
-    const headers = {}
-    const unlimitedKey = getUnlimitedKey()
-    if (unlimitedKey) {
-      headers['x-unlimited-key'] = unlimitedKey
-    }
-
-    const response = await fetch(`${API_BASE}/api/ratelimit`, {
-      method: 'GET',
-      headers
-    })
-
-    const data = await response.json()
-
-    if (response.ok && data.success) {
-      return data.remaining
-    }
-
-    // Fallback
-    return getCurrentRateLimit()
-  } catch (error) {
-    console.warn('Failed to get remaining requests, using localStorage fallback')
-    return getRemainingRequestsLocal()
-  }
-}
-
-// Local remaining requests (for development)
-const getRemainingRequestsLocal = () => {
-  if (isUnlimitedMode()) {
-    return 999999
-  }
-
-  const storageKey = 'local_rate_limit'
-  const now = Date.now()
-
-  // Get existing requests
-  const data = localStorage.getItem(storageKey)
-  const requests = data ? JSON.parse(data) : []
-
-  // Filter recent requests
-  const recentRequests = requests.filter(time => now - time < RATE_WINDOW)
-
-  return Math.max(0, RATE_LIMIT - recentRequests.length)
+  return await getUserCredits()
 }
 
 export const analyzeWithGemini = async (prompt, systemInstruction = '', options = {}) => {
@@ -285,9 +111,9 @@ export const analyzeWithGemini = async (prompt, systemInstruction = '', options 
       throw new Error(getRandomMessage(SARCASTIC_MESSAGES.inputTooLong(totalInput.length, LIMITS.MAX_INPUT_CHARS)))
     }
 
-    // Check rate limit (IP-based)
-    if (!options.bypassRateLimit) {
-      await checkRateLimit()
+    // Check credits before making request
+    if (!options.bypassCreditCheck) {
+      await checkCredits()
     }
 
     const ai = initGemini()
@@ -305,9 +131,9 @@ export const analyzeWithGemini = async (prompt, systemInstruction = '', options 
     const result = await model.generateContent(prompt)
     const response = await result.response
 
-    // Record successful request (IP-based)
-    if (!options.bypassRateLimit) {
-      await recordRequest()
+    // Deduct credits after successful request
+    if (!options.bypassCreditCheck) {
+      await deductCredits(1)
     }
 
     return response.text()
@@ -336,8 +162,8 @@ export const streamAnalyzeWithGemini = async (prompt, systemInstruction = '', on
       throw new Error(`Input too long. Maximum ${LIMITS.MAX_INPUT_CHARS.toLocaleString()} characters allowed.`)
     }
 
-    // Check rate limit (IP-based)
-    await checkRateLimit()
+    // Check credits before making request
+    await checkCredits()
 
     const ai = initGemini()
     const model = ai.getGenerativeModel({
@@ -347,8 +173,8 @@ export const streamAnalyzeWithGemini = async (prompt, systemInstruction = '', on
 
     const result = await model.generateContentStream(prompt)
 
-    // Record request (IP-based)
-    await recordRequest()
+    // Deduct credits after successful request
+    await deductCredits(1)
 
     let fullText = ''
     for await (const chunk of result.stream) {

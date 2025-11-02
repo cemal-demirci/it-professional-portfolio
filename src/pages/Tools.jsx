@@ -7,16 +7,33 @@ import {
   FileJson, Binary, Regex, Minimize, FileOutput, Image, Key, Hash, Shield,
   Type, Diff, Droplet, Sparkles, Link as LinkIcon, Globe, Wifi,
   QrCode, Clock, Fingerprint, Settings, Zap, Trash2, Terminal, Database, Server, Mail, Brain,
-  Users, RefreshCw, LifeBuoy, Gauge, Eye, Activity, Rocket, Info, AlertTriangle
+  Users, RefreshCw, LifeBuoy, Gauge, Eye, Activity, Rocket, Info, AlertTriangle,
+  Star, Search, X, Filter
 } from 'lucide-react'
+import { getFavorites, toggleFavorite, isFavorite, addToRecent } from '../services/favoritesService'
 
 const Tools = () => {
   const [isVisible, setIsVisible] = useState(false)
+  const [favorites, setFavorites] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('all')
   const { language } = useLanguage()
 
   useEffect(() => {
     setIsVisible(true)
+    setFavorites(getFavorites())
   }, [])
+
+  const handleToggleFavorite = (toolPath, toolName, e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    toggleFavorite(toolPath)
+    setFavorites(getFavorites())
+  }
+
+  const handleToolClick = (toolPath, toolName) => {
+    addToRecent(toolPath, toolName)
+  }
 
   const toolCategories = [
     {
@@ -208,6 +225,30 @@ const Tools = () => {
     }
   ]
 
+  // Get all tools flat
+  const allTools = toolCategories.flatMap(cat =>
+    cat.tools.map(tool => ({ ...tool, category: cat.id, categoryName: cat.name, categoryColor: cat.color }))
+  )
+
+  // Get favorite tools
+  const favoriteTools = allTools.filter(tool => favorites.includes(tool.path))
+
+  // Filter tools by search and category
+  const filteredCategories = toolCategories.map(category => {
+    if (selectedCategory !== 'all' && selectedCategory !== category.id) return null
+
+    const filteredTools = category.tools.filter(tool => {
+      const matchesSearch = searchQuery === '' ||
+        tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+      return matchesSearch
+    })
+
+    if (filteredTools.length === 0) return null
+
+    return { ...category, tools: filteredTools }
+  }).filter(Boolean)
+
   return (
     <div className="space-y-8 relative overflow-hidden">
       {/* Animated Background Particles */}
@@ -239,8 +280,106 @@ const Tools = () => {
         </div>
       </div>
 
+      {/* Search & Filter Bar */}
+      <div className={`bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-lg space-y-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search tools... (e.g., 'password', 'json', 'network')"
+            className="w-full pl-10 pr-10 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900 dark:text-white"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
+
+        {/* Category Filter Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2">
+          <Filter className="w-4 h-4 text-gray-500 flex-shrink-0" />
+          <button
+            onClick={() => setSelectedCategory('all')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+              selectedCategory === 'all'
+                ? 'bg-primary-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }`}
+          >
+            All Tools
+          </button>
+          {toolCategories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                selectedCategory === cat.id
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Favorites Section */}
+      {favoriteTools.length > 0 && selectedCategory === 'all' && !searchQuery && (
+        <div className={`space-y-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
+              <Star className="w-6 h-6 text-white fill-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Favorites</h2>
+            <span className="text-sm text-gray-500 dark:text-gray-400">({favoriteTools.length})</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {favoriteTools.map((tool, index) => {
+              const ToolIcon = tool.icon
+              return (
+                <Link
+                  key={index}
+                  to={tool.path}
+                  onClick={() => handleToolClick(tool.path, tool.name)}
+                  className="tool-card group dark:bg-gray-800 dark:border-gray-700 dark:hover:border-primary-600 hover:scale-105 hover:-translate-y-2 hover:rotate-1 transition-all duration-300 hover:shadow-2xl relative overflow-hidden"
+                >
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${tool.categoryColor} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                      <ToolIcon className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                        {tool.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {tool.description}
+                      </p>
+                    </div>
+                    <button
+                      onClick={(e) => handleToggleFavorite(tool.path, tool.name, e)}
+                      className="flex-shrink-0 p-1.5 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors"
+                    >
+                      <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                    </button>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Disclaimer */}
-      <div className={`bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 transition-all duration-500 hover:shadow-lg ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
+      <div className={`bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 transition-all duration-500 hover:shadow-lg ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '300ms' }}>
         <div className="flex items-start gap-3">
           <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
           <p className="text-sm text-blue-800 dark:text-blue-300">
@@ -249,14 +388,23 @@ const Tools = () => {
         </div>
       </div>
 
-      {toolCategories.map((category, index) => {
+      {/* Tool Categories */}
+      {filteredCategories.length === 0 && (
+        <div className="text-center py-12">
+          <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No tools found</h3>
+          <p className="text-gray-600 dark:text-gray-400">Try adjusting your search or filters</p>
+        </div>
+      )}
+
+      {filteredCategories.map((category, index) => {
         const CategoryIcon = category.icon
         return (
           <div
             key={index}
             id={category.id}
             className={`space-y-4 scroll-mt-24 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-            style={{ transitionDelay: `${index * 100}ms` }}
+            style={{ transitionDelay: `${(index + 4) * 100}ms` }}
           >
             <div className="flex items-center space-x-3">
               <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center animate-gradient-rotate`}>
@@ -268,17 +416,19 @@ const Tools = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {category.tools.map((tool, toolIndex) => {
                 const ToolIcon = tool.icon
+                const isToolFavorite = isFavorite(tool.path)
                 return (
                   <Link
                     key={toolIndex}
                     to={tool.path}
+                    onClick={() => handleToolClick(tool.path, tool.name)}
                     className="tool-card group dark:bg-gray-800 dark:border-gray-700 dark:hover:border-primary-600 hover:scale-105 hover:-translate-y-2 hover:rotate-1 transition-all duration-300 hover:shadow-2xl relative overflow-hidden"
                   >
                     <div className="flex items-start space-x-3">
                       <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                         <ToolIcon className="w-5 h-5 text-white" />
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
                           {tool.name}
                         </h3>
@@ -286,6 +436,12 @@ const Tools = () => {
                           {tool.description}
                         </p>
                       </div>
+                      <button
+                        onClick={(e) => handleToggleFavorite(tool.path, tool.name, e)}
+                        className="flex-shrink-0 p-1.5 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors group/star"
+                      >
+                        <Star className={`w-5 h-5 transition-colors ${isToolFavorite ? 'text-yellow-500 fill-yellow-500' : 'text-gray-400 group-hover/star:text-yellow-500'}`} />
+                      </button>
                     </div>
                   </Link>
                 )

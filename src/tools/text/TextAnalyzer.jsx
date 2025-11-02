@@ -9,16 +9,16 @@ const TextAnalyzer = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [analyzing, setAnalyzing] = useState(false)
   const [error, setError] = useState(null)
-  const [remainingRequests, setRemainingRequests] = useState(null)
+  const [credits, setCredits] = useState(15)
 
   useEffect(() => {
     setIsVisible(true)
-    updateRemainingRequests()
+    updateCredits()
   }, [])
 
-  const updateRemainingRequests = async () => {
+  const updateCredits = async () => {
     const remaining = await getRemainingRequests()
-    setRemainingRequests(remaining)
+    setCredits(remaining)
   }
 
   const analyzeText = async () => {
@@ -173,7 +173,7 @@ IMPORTANT: Return ONLY valid JSON, no markdown formatting, no code blocks, no ex
         })
       }
 
-      await updateRemainingRequests()
+      await updateCredits()
     } catch (err) {
       setError(err.message)
     } finally {
@@ -207,9 +207,9 @@ Overall, the prospects are exciting and full of promise. With careful planning a
         <p className="text-gray-600 dark:text-gray-400">
           Advanced AI-powered text analysis with sentiment, quality assessment, and writing suggestions
         </p>
-        {remainingRequests !== null && (
+        {credits !== null && (
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            ⚡ {remainingRequests} AI analyses remaining today
+            ⚡ {credits} credits available
           </div>
         )}
       </div>

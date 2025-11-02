@@ -9,7 +9,7 @@ const LogAnalyzer = () => {
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
   const [charCount, setCharCount] = useState(0)
-  const [remainingRequests, setRemainingRequests] = useState(LIMITS.RATE_LIMIT)
+  const [credits, setCredits] = useState(15)
   const [analysisTime, setAnalysisTime] = useState(0)
 
   useEffect(() => {
@@ -17,11 +17,13 @@ const LogAnalyzer = () => {
   }, [logContent])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRemainingRequests(getRemainingRequests())
-    }, 1000)
-    return () => clearInterval(interval)
+    updateCredits()
   }, [])
+
+  const updateCredits = async () => {
+    const remaining = await getRemainingRequests()
+    setCredits(remaining)
+  }
 
   const logTypes = {
     windows: 'Windows Event Log',
@@ -64,7 +66,7 @@ Be specific with line numbers or timestamps when referencing log entries.`
         logType: logTypes[logType]
       })
 
-      setRemainingRequests(getRemainingRequests())
+      await updateCredits()
     } catch (err) {
       setError(err.message || 'Failed to analyze logs')
     } finally {
@@ -121,11 +123,11 @@ Be specific with line numbers or timestamps when referencing log entries.`
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
             <Zap className="w-4 h-4 text-green-600 dark:text-green-400" />
-            <span className="text-xs font-medium text-green-700 dark:text-green-300">Requests Left</span>
+            <span className="text-xs font-medium text-green-700 dark:text-green-300">Credits Available</span>
           </div>
           <div className="text-2xl font-bold text-green-900 dark:text-green-100">
-            {remainingRequests}
-            <span className="text-sm text-green-600 dark:text-green-400 ml-1">/ {LIMITS.RATE_LIMIT}</span>
+            {credits}
+            <span className="text-sm text-green-600 dark:text-green-400 ml-1">credits</span>
           </div>
         </div>
 

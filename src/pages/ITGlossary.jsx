@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, Search, Code, Network, Shield, Server, Cloud, Coffee, Zap, AlertTriangle } from 'lucide-react'
+import { BookOpen, Search, Code, Network, Shield, Server, Cloud, Zap, AlertTriangle } from 'lucide-react'
 
 const ITGlossary = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -509,7 +509,7 @@ const ITGlossary = () => {
       {/* Fun Warning */}
       <div className={`bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-l-4 border-orange-600 p-4 rounded-lg transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
         <div className="flex items-start gap-3">
-          <Coffee className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5 animate-bounce" />
+          <Zap className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5 animate-bounce" />
           <div className="text-sm text-orange-800 dark:text-orange-300">
             <strong>Dikkat:</strong> Bu sözlük eğlenceli ve Cemal tarzında yazılmıştır. Ciddi IT dökümanı arıyorsan Microsoft Docs'a git!
             Burası pratik bilgi için ideal.

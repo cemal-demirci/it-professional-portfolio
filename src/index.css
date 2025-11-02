@@ -137,4 +137,86 @@
   .animate-spin-slow {
     animation: spin-slow 8s linear infinite;
   }
+
+  /* Glassmorphism */
+  .glass {
+    @apply backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border border-white/20 dark:border-gray-700/20;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-md bg-white/60 dark:bg-gray-800/60 border border-white/20 dark:border-gray-700/30 shadow-xl;
+  }
+
+  /* Glow Effect */
+  .glow {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+  }
+
+  /* Scale on Hover */
+  .hover-scale {
+    transition: transform 0.3s ease;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+
+  /* Tilt on Hover */
+  .hover-tilt {
+    transition: transform 0.3s ease;
+  }
+
+  .hover-tilt:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) scale(1.02);
+  }
+
+  /* Slide Up Animation */
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out;
+  }
+
+  /* Shimmer Effect */
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Bounce Subtle */
+  @keyframes bounce-subtle {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
 }

@@ -34,7 +34,7 @@ export const LanguageProvider = ({ children }) => {
       // Home Page
       'home.title': { en: 'Cemal Demirci', tr: 'Cemal Demirci' },
       'home.subtitle': { en: 'IT Wizard & Security Ninja 🥷', tr: 'IT Sihirbazı & Güvenlik Ninjas 🥷' },
-      'home.desc': { en: 'Turning coffee into code and chaos into order since 2017 ☕', tr: 'Kahveyi koda, kaosu düzene çeviriyorum 2017\'den beri ☕' },
+      'home.desc': { en: 'Turning RedBull into code and chaos into order since 2017 ⚡', tr: 'RedBull\'u koda, kaosu düzene çeviriyorum 2017\'den beri ⚡' },
 
       // Sarcastic titles
       'tools.title': { en: '🎯 My Digital Playground', tr: '🎯 Dijital Oyun Alanım' },

@@ -10,7 +10,7 @@ export const translations = {
 
     // Home Page
     home: {
-      welcome: 'Welcome to my portfolio',
+      welcome: 'Welcome to My World',
       greeting: "Hello, I'm",
       name: 'Cemal Demirci',
       title: 'IT & Security Administrator | AI Lead Auditor',
@@ -21,7 +21,7 @@ export const translations = {
       allToolsFree: 'All tools are completely free and privacy-focused. Your data stays in your browser.',
       viewAllTools: 'View All Tools',
       poweredBy: 'Powered By',
-      poweredBySubtitle: '(way too much coffee & extra RedBull)',
+      poweredBySubtitle: '(Berry Hibiscus & way too much RedBull)',
       poweredByItems: [
         'Sheer Willpower',
         'Late Night Coding Sessions',
@@ -49,7 +49,7 @@ export const translations = {
       title: 'Tools',
       subtitle: 'IT & Security Administrator toolkit 🚀',
       professionalTools: '62+ Professional Tools',
-      disclaimer: 'These tools and services on the homepage are made up of tools I constantly need and have been developed by me for myself.',
+      disclaimer: 'All tools are completely free, privacy-focused, and built from real-world IT needs. No data leaves your browser.',
       categories: {
         aiPowered: '🤖 AI-Powered Tools',
         code: 'Code Tools',
@@ -67,9 +67,9 @@ export const translations = {
 
     // Settings Page
     settings: {
-      title: 'AI Settings',
-      subtitle: 'Manage AI rate limits and unlock unlimited access 🚀',
-      aiConfig: 'AI Configuration',
+      title: 'Settings',
+      subtitle: 'Manage intelligence features and unlock unlimited access 🚀',
+      aiConfig: 'Configuration',
       howItWorks: '🔐 How Unlimited Mode Works:',
       freeTier: 'Free Tier: 10 AI requests per day (24-hour reset period)',
       unlimitedMode: 'Unlimited Mode: Bypass all rate limits with secret key',
@@ -217,7 +217,7 @@ export const translations = {
 
     // Home Page
     home: {
-      welcome: 'Portfolyoma hoş geldiniz',
+      welcome: 'Dünyama Hoş Geldin',
       greeting: 'Merhaba, ben',
       name: 'Cemal Demirci',
       title: 'IT & Güvenlik Yöneticisi | AI Baş Denetçisi',
@@ -256,7 +256,7 @@ export const translations = {
       title: 'Araçlar',
       subtitle: 'IT & Güvenlik Yöneticisi araç seti 🚀',
       professionalTools: '62+ Profesyonel Araç',
-      disclaimer: 'Bu araçlar ve ana sayfadaki servisler sürekli ihtiyaç duyduğum araçlardan oluşmakta olup kendim için kendim tarafından geliştirilmiştir.',
+      disclaimer: 'Tüm araçlar tamamen ücretsiz, gizlilik odaklı ve gerçek IT ihtiyaçlarından yola çıkarak yapıldı. Verileriniz tarayıcınızdan çıkmaz.',
       categories: {
         aiPowered: '🤖 Yapay Zeka Destekli Araçlar',
         code: 'Kod Araçları',
@@ -274,9 +274,9 @@ export const translations = {
 
     // Settings Page
     settings: {
-      title: 'AI Ayarları',
-      subtitle: 'AI kullanım limitlerini yönetin ve sınırsız erişimin kilidini açın 🚀',
-      aiConfig: 'AI Yapılandırması',
+      title: 'Ayarlar',
+      subtitle: 'Akıllı özellikleri yönetin ve sınırsız erişimin kilidini açın 🚀',
+      aiConfig: 'Yapılandırma',
       howItWorks: '🔐 Sınırsız Mod Nasıl Çalışır:',
       freeTier: 'Ücretsiz Katman: Günde 10 AI isteği (24 saatlik sıfırlama süresi)',
       unlimitedMode: 'Sınırsız Mod: Gizli anahtar ile tüm limitleri aş',

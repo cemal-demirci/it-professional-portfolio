@@ -361,30 +361,28 @@ const About = () => {
 
           <button
             type="submit"
-            className="w-full group relative px-6 py-3 bg-gradient-to-r from-primary-600 to-purple-600 text-white rounded-lg hover:from-primary-700 hover:to-purple-700 transition-all duration-300 font-medium shadow-lg hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2"
+            className="w-full group relative px-6 py-3 bg-gradient-to-br from-slate-700 to-slate-600 text-white rounded-lg hover:from-slate-600 hover:to-slate-500 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 overflow-hidden"
           >
-            <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            {t(language, 'about.sendMessage')}
-            <div className="absolute inset-0 bg-white/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity blur"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
+            <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-0.5 group-hover:rotate-12 transition-all duration-300" />
+            <span className="relative">
+              {t(language, 'about.sendMessage')} 🚀
+            </span>
           </button>
         </form>
       </div>
 
       {/* CV Download */}
-      <div className={`group relative bg-gradient-to-r from-primary-600 via-purple-600 to-primary-400 bg-[length:200%_auto] animate-gradient rounded-xl p-8 text-center text-white shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.05] overflow-hidden ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '500ms' }}>
-        {/* Animated sparkles background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute w-32 h-32 bg-white/10 rounded-full blur-3xl top-0 left-0 animate-float"></div>
-          <div className="absolute w-24 h-24 bg-white/10 rounded-full blur-3xl bottom-0 right-0 animate-float" style={{ animationDelay: '1s' }}></div>
-        </div>
-        <h2 className="relative text-2xl font-bold mb-4 group-hover:animate-bounce">{t(language, 'about.downloadResume')}</h2>
-        <p className="relative mb-6 text-primary-50">{t(language, 'about.downloadCV')}</p>
+      <div className={`group relative bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600 rounded-xl p-8 text-center text-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '500ms' }}>
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary-600/20 via-purple-600/20 to-transparent opacity-40"></div>
+        <h2 className="relative text-2xl font-bold mb-3">{t(language, 'about.downloadResume')}</h2>
+        <p className="relative mb-6 text-white/90">{t(language, 'about.downloadCV')}</p>
         <a
           href="/Cemal-Demirci-CV.pdf"
           download
-          className="relative inline-flex items-center px-6 py-3 bg-white text-primary-700 rounded-lg hover:bg-primary-50 transition-all duration-300 font-medium shadow-md hover:shadow-2xl hover:scale-125 hover:rotate-3 group-hover:animate-pulse"
+          className="relative inline-flex items-center px-6 py-3 bg-white text-slate-800 rounded-lg hover:bg-slate-100 transition-all duration-300 font-semibold shadow-md hover:shadow-lg hover:scale-105"
         >
-          <Download className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+          <Download className="w-5 h-5 mr-2" />
           {t(language, 'about.downloadCVButton')}
         </a>
       </div>
