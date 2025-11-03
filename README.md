@@ -17,14 +17,13 @@
 ### 🤖 AI-Powered Tools
 - **Cemal AI** - Custom-branded AI using multiple providers:
   - Google Gemini API
-  - Claude API (Anthropic)
   - ChatGPT API (OpenAI)
 - **IT Question Bot** - Interactive IT support chatbot
 - **Hardware Support Chat** - AI-powered hardware troubleshooting assistant
 - **Event Analyzers** - AI-powered system log analysis tools
 - IP-based rate limiting with Redis Cloud (Frankfurt)
 
-> **Note**: While branded as "Cemal AI", the platform supports multiple AI model providers (Gemini, Claude, ChatGPT) for flexibility and redundancy.
+> **Note**: While branded as "Cemal AI", the platform supports multiple AI model providers (Gemini, ChatGPT) for flexibility and redundancy.
 
 ### 🛠️ Professional IT Tools (30+)
 
@@ -129,7 +128,6 @@
 - **Redis Cloud** - Rate limiting and message storage (Frankfurt region)
 - **AI Model Providers** (Cemal AI):
   - Google Gemini API - Primary AI provider
-  - Claude API (Anthropic) - Alternative provider
   - ChatGPT API (OpenAI) - Alternative provider
 
 ### Key Libraries
@@ -448,7 +446,6 @@ server {
 ### Getting API Keys
 
 - **Gemini API Key**: Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-- **Claude API Key**: Visit [Anthropic Console](https://console.anthropic.com/)
 - **ChatGPT API Key**: Visit [OpenAI Platform](https://platform.openai.com/api-keys)
 - **Redis Cloud**: Sign up at [Redis Cloud](https://redis.com/try-free/) (Free tier available)
 - **Alternative Redis**: You can use [Upstash Redis](https://upstash.com/), [Railway](https://railway.app/), or self-hosted Redis

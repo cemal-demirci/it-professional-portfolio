@@ -55,13 +55,6 @@ const Admin = () => {
       model: 'gpt-4',
       requestLimit: 10,
       showKey: false
-    },
-    claude: {
-      enabled: false,
-      apiKey: '',
-      model: 'claude-3-sonnet',
-      requestLimit: 20,
-      showKey: false
     }
   })
 
@@ -1380,95 +1373,6 @@ const Admin = () => {
                         })}
                         className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                         disabled={!apiSettings.openai.enabled}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Claude */}
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border-2 border-purple-200 dark:border-purple-800 opacity-75">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                      <Shield className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">Anthropic Claude</h4>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">The thoughtful one 🤔</p>
-                    </div>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={apiSettings.claude.enabled}
-                      onChange={(e) => setApiSettings({
-                        ...apiSettings,
-                        claude: {...apiSettings.claude, enabled: e.target.checked}
-                      })}
-                      className="sr-only peer"
-                    />
-                    <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
-                  </label>
-                </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">API Key</label>
-                    <div className="relative">
-                      <input
-                        type={apiSettings.claude.showKey ? 'text' : 'password'}
-                        value={apiSettings.claude.apiKey}
-                        onChange={(e) => setApiSettings({
-                          ...apiSettings,
-                          claude: {...apiSettings.claude, apiKey: e.target.value}
-                        })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white font-mono pr-10"
-                        placeholder="Enter Claude API Key"
-                        disabled={!apiSettings.claude.enabled}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setApiSettings({
-                          ...apiSettings,
-                          claude: {...apiSettings.claude, showKey: !apiSettings.claude.showKey}
-                        })}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                        disabled={!apiSettings.claude.enabled}
-                      >
-                        {apiSettings.claude.showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Model</label>
-                      <select
-                        value={apiSettings.claude.model}
-                        onChange={(e) => setApiSettings({
-                          ...apiSettings,
-                          claude: {...apiSettings.claude, model: e.target.value}
-                        })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        disabled={!apiSettings.claude.enabled}
-                      >
-                        <option value="claude-3-sonnet">Claude 3 Sonnet</option>
-                        <option value="claude-3-opus">Claude 3 Opus</option>
-                        <option value="claude-3-haiku">Claude 3 Haiku</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Request Limit/min</label>
-                      <input
-                        type="number"
-                        value={apiSettings.claude.requestLimit}
-                        onChange={(e) => setApiSettings({
-                          ...apiSettings,
-                          claude: {...apiSettings.claude, requestLimit: parseInt(e.target.value)}
-                        })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        disabled={!apiSettings.claude.enabled}
                       />
                     </div>
                   </div>
