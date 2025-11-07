@@ -290,7 +290,7 @@ const FileShare = () => {
           </div>
           <h1 className="text-5xl font-bold mb-2">
             <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              QuantumDrop v2
+              Pleiades Share v2
             </span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400">

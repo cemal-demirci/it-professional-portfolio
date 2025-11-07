@@ -158,7 +158,7 @@ const Home = () => {
 
       {/* PREMIUM P2P FEATURES - Side by Side */}
       <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-1000 delay-850 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-        {/* QuantumDrop Section */}
+        {/* Pleiades Share Section */}
         <Link
           to="/fileshare"
           className="group block bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] relative overflow-hidden border border-white/20"
@@ -174,7 +174,7 @@ const Home = () => {
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h2 className="text-2xl font-bold">QuantumDrop v2</h2>
+                <h2 className="text-2xl font-bold">Pleiades Share v2</h2>
                 <p className="text-white/80 text-sm mt-1">
                   {language === 'tr' ? 'Yeni Nesil P2P Dosya Paylaşımı' : 'Next-Gen P2P File Sharing'}
                 </p>

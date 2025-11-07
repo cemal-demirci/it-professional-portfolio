@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
   const navigation = [
     { name: t(language, 'nav.home'), href: '/' },
     { name: t(language, 'nav.tools'), href: '/tools' },
-    { name: 'QuantumDrop', href: '/fileshare' },
+    { name: 'Pleiades Share', href: '/fileshare' },
     { name: 'Remote', href: '/remote-desktop' },
     { name: 'Junior IT', href: '/junior-it' },
     { name: t(language, 'nav.about'), href: '/about' },
