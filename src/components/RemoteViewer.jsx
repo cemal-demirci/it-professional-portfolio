@@ -31,14 +31,33 @@ const RemoteViewer = ({ onBack }) => {
     setError(null)
     setAwaitingAuth(false)
 
-    const peer = new Peer({
+    // Check if session code suggests performance mode
+    const isPerformanceMode = !password.trim() || sessionCode.startsWith('cml-')
+
+    // Optimized config for performance mode
+    const peerConfig = isPerformanceMode ? {
+      config: {
+        // Minimal STUN - LAN öncelikli
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' }
+        ],
+        iceTransportPolicy: 'all',
+        iceCandidatePoolSize: 20, // Hızlı bağlantı için
+        bundlePolicy: 'max-bundle',
+        rtcpMuxPolicy: 'require'
+      },
+      serialization: 'binary',
+      reliable: true
+    } : {
       config: {
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
           { urls: 'stun:global.stun.twilio.com:3478' }
         ]
       }
-    })
+    }
+
+    const peer = new Peer(peerConfig)
 
     peer.on('open', () => {
       const conn = peer.connect(sessionCode, {
@@ -62,15 +81,51 @@ const RemoteViewer = ({ onBack }) => {
 
           // Request screen stream after successful auth
           const call = peer.call(sessionCode, new MediaStream())
+
           call.on('stream', (remoteStream) => {
             setStream(remoteStream)
-            if (videoRef.current) videoRef.current.srcObject = remoteStream
+            if (videoRef.current) {
+              videoRef.current.srcObject = remoteStream
+
+              // Performance mode: Monitor connection
+              if (data.mode === 'performance') {
+                const pc = call.peerConnection
+                console.log('⚡ Turbo mode active - checking connection type...')
+
+                setTimeout(async () => {
+                  try {
+                    const stats = await pc.getStats()
+                    stats.forEach(report => {
+                      if (report.type === 'candidate-pair' && report.state === 'succeeded') {
+                        if (report.localCandidateId) {
+                          const localCandidate = Array.from(stats.values()).find(
+                            s => s.id === report.localCandidateId
+                          )
+                          if (localCandidate && localCandidate.candidateType === 'host') {
+                            console.log('✅ Direct LAN connection established!')
+                            setMessages(prev => [...prev, {
+                              from: 'system',
+                              text: '⚡ Direct LAN connection - Maximum speed!'
+                            }])
+                          }
+                        }
+                      }
+                    })
+                  } catch (e) {
+                    console.error('Stats check failed:', e)
+                  }
+                }, 2000)
+              }
+            }
           })
         } else if (data.type === 'auth_failed') {
           setError(data.message || 'Authentication failed. Incorrect password.')
           setConnecting(false)
           setAwaitingAuth(false)
           conn.close()
+        } else if (data.type === 'ping') {
+          // Respond to ping for latency check
+          conn.send({ type: 'pong', timestamp: data.timestamp })
         } else if (data.type === 'chat') {
           setMessages(prev => [...prev, { from: 'host', text: data.message }])
         }
@@ -232,8 +287,12 @@ const RemoteViewer = ({ onBack }) => {
             </div>
             <div className="space-y-3 mb-4 h-96 overflow-y-auto">
               {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.from === 'viewer' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`px-4 py-2 rounded-lg max-w-xs ${msg.from === 'viewer' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'}`}>
+                <div key={i} className={`flex ${msg.from === 'viewer' ? 'justify-end' : msg.from === 'system' ? 'justify-center' : 'justify-start'}`}>
+                  <div className={`px-4 py-2 rounded-lg max-w-xs ${
+                    msg.from === 'viewer' ? 'bg-blue-600 text-white' :
+                    msg.from === 'system' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs font-semibold' :
+                    'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                  }`}>
                     {msg.text}
                   </div>
                 </div>

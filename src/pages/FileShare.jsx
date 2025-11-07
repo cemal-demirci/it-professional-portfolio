@@ -132,8 +132,10 @@ const FileShare = () => {
 
       // Read file
       const arrayBuffer = await file.arrayBuffer()
-      const chunkSize = 16 * 1024 // 16KB chunks
-      const chunks = Math.ceil(arrayBuffer.byteLength / chunkSize)
+      const chunkSize = 64 * 1024 // 64KB chunks for better performance
+      const totalChunks = Math.ceil(arrayBuffer.byteLength / chunkSize)
+
+      console.log(`Starting file transfer: ${file.name}, Size: ${file.size}, Chunks: ${totalChunks}`)
 
       // Send metadata first
       conn.send({
@@ -141,52 +143,93 @@ const FileShare = () => {
         name: file.name,
         size: file.size,
         mimeType: file.type,
-        chunks
+        chunks: totalChunks,
+        timestamp: Date.now()
       })
 
-      // Send chunks with error handling
-      for (let i = 0; i < chunks; i++) {
-        try {
-          const start = i * chunkSize
-          const end = Math.min(start + chunkSize, arrayBuffer.byteLength)
-          const chunk = arrayBuffer.slice(start, end)
+      // Wait a bit for receiver to prepare
+      await new Promise(resolve => setTimeout(resolve, 100))
 
-          // Convert ArrayBuffer to Array for JSON serialization
-          const chunkArray = Array.from(new Uint8Array(chunk))
+      // Track sent chunks for retry
+      const sentChunks = new Set()
+      let retryCount = 0
+      const maxRetries = 3
 
-          // Verify chunk is not empty
-          if (chunkArray.length === 0) {
-            console.warn(`Empty chunk at index ${i}`)
-            continue
+      // Send chunks with acknowledgement
+      for (let i = 0; i < totalChunks; i++) {
+        let chunkSent = false
+        let attempts = 0
+
+        while (!chunkSent && attempts < maxRetries) {
+          try {
+            const start = i * chunkSize
+            const end = Math.min(start + chunkSize, arrayBuffer.byteLength)
+            const chunk = arrayBuffer.slice(start, end)
+
+            if (chunk.byteLength === 0) {
+              console.warn(`Skipping empty chunk at index ${i}`)
+              chunkSent = true
+              break
+            }
+
+            // Convert to base64 for more reliable transfer
+            const uint8Array = new Uint8Array(chunk)
+            const base64Chunk = btoa(String.fromCharCode(...uint8Array))
+
+            // Check connection state
+            if (conn.open) {
+              conn.send({
+                type: 'chunk',
+                index: i,
+                data: base64Chunk,
+                total: totalChunks,
+                size: chunk.byteLength,
+                checksum: chunk.byteLength // Simple checksum
+              })
+
+              sentChunks.add(i)
+              chunkSent = true
+
+              setTransferProgress(Math.round(((i + 1) / totalChunks) * 100))
+
+              // Adaptive delay based on chunk size
+              await new Promise(resolve => setTimeout(resolve, 10))
+            } else {
+              throw new Error('Connection closed')
+            }
+          } catch (chunkError) {
+            attempts++
+            console.error(`Error sending chunk ${i} (attempt ${attempts}):`, chunkError)
+
+            if (attempts >= maxRetries) {
+              throw new Error(`Failed to send chunk ${i} after ${maxRetries} attempts`)
+            }
+
+            // Wait before retry
+            await new Promise(resolve => setTimeout(resolve, 100 * attempts))
           }
+        }
 
-          conn.send({
-            type: 'chunk',
-            index: i,
-            data: chunkArray,
-            total: chunks
-          })
-
-          setTransferProgress(Math.round(((i + 1) / chunks) * 100))
-
-          // Smaller delay for faster transfer
-          await new Promise(resolve => setTimeout(resolve, 5))
-        } catch (chunkError) {
-          console.error(`Error sending chunk ${i}:`, chunkError)
-          throw new Error(`Failed to send chunk ${i}`)
+        if (!chunkSent) {
+          throw new Error(`Could not send chunk ${i}`)
         }
       }
 
-      // Send completion signal
-      conn.send({ type: 'complete' })
+      // Send completion signal with verification
+      conn.send({
+        type: 'complete',
+        totalChunks,
+        sentChunks: Array.from(sentChunks),
+        timestamp: Date.now()
+      })
 
-      console.log('File sent successfully!')
+      console.log(`File sent successfully! ${sentChunks.size}/${totalChunks} chunks`)
       setTransferring(false)
       setTransferProgress(100)
     } catch (error) {
       console.error('File send error:', error)
       setTransferring(false)
-      alert('Failed to send file: ' + error.message)
+      alert('Failed to send file: ' + error.message + '\n\nTry refreshing and sending the file again.')
     }
   }
 

@@ -128,16 +128,49 @@ const FileDownload = () => {
         mimeType: data.mimeType
       })
       totalChunksRef.current = data.chunks
-      chunksRef.current = new Array(data.chunks)
+      chunksRef.current = new Array(data.chunks).fill(null)
       setDownloading(true)
     } else if (data.type === 'chunk') {
-      // Convert Array back to Uint8Array
-      const chunkArray = new Uint8Array(data.data)
-      chunksRef.current[data.index] = chunkArray
-      const receivedChunks = chunksRef.current.filter(c => c !== undefined).length
-      setDownloadProgress(Math.round((receivedChunks / totalChunksRef.current) * 100))
+      try {
+        // Decode base64 back to binary
+        const binaryString = atob(data.data)
+        const bytes = new Uint8Array(binaryString.length)
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i)
+        }
+
+        // Verify chunk size matches
+        if (data.checksum && bytes.byteLength !== data.checksum) {
+          console.warn(`Chunk ${data.index} size mismatch: expected ${data.checksum}, got ${bytes.byteLength}`)
+        }
+
+        chunksRef.current[data.index] = bytes
+        const receivedChunks = chunksRef.current.filter(c => c !== null && c !== undefined).length
+        const progress = Math.round((receivedChunks / totalChunksRef.current) * 100)
+        setDownloadProgress(progress)
+
+        console.log(`Received chunk ${data.index + 1}/${data.total} (${progress}%)`)
+      } catch (error) {
+        console.error(`Error processing chunk ${data.index}:`, error)
+      }
     } else if (data.type === 'complete') {
-      console.log('Transfer complete!')
+      console.log('Transfer complete signal received!')
+
+      // Verify all chunks received
+      const missingChunks = []
+      for (let i = 0; i < chunksRef.current.length; i++) {
+        if (!chunksRef.current[i]) {
+          missingChunks.push(i)
+        }
+      }
+
+      if (missingChunks.length > 0) {
+        console.error(`Missing chunks: ${missingChunks.join(', ')}`)
+        setError(`Transfer incomplete: ${missingChunks.length} chunks missing`)
+        setDownloading(false)
+        return
+      }
+
       assembleAndDownload()
     }
   }
