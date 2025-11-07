@@ -164,28 +164,33 @@ const Home = () => {
           className="group block bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] relative overflow-hidden border border-white/20"
         >
           <div className="absolute top-3 right-3 flex gap-2">
-            <span className="px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full shadow-lg">
-              NEW
+            <span className="px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 text-xs font-bold rounded-full shadow-lg">
+              v2.0 🚀
             </span>
             <span className="px-2 py-1 bg-green-400 text-green-900 text-xs font-bold rounded-full shadow-lg">
-              PREMIUM
+              4x FASTER
             </span>
           </div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h2 className="text-2xl font-bold">QuantumDrop</h2>
+                <h2 className="text-2xl font-bold">QuantumDrop v2</h2>
                 <p className="text-white/80 text-sm mt-1">
-                  {language === 'tr' ? 'P2P Dosya Paylaşımı' : 'P2P File Sharing'}
+                  {language === 'tr' ? 'Yeni Nesil P2P Dosya Paylaşımı' : 'Next-Gen P2P File Sharing'}
                 </p>
               </div>
               <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform flex-shrink-0" />
             </div>
-            <p className="text-white/70 text-xs">
+            <p className="text-white/90 text-sm mb-2">
               {language === 'tr'
-                ? '✨ Sunucusuz • 🔒 Güvenli • ∞ Sınırsız'
-                : '✨ Serverless • 🔒 Secure • ∞ Unlimited'}
+                ? '⚡ 64KB chunks • 🔄 Auto-retry • 🛡️ Base64 encoding'
+                : '⚡ 64KB chunks • 🔄 Auto-retry • 🛡️ Base64 encoding'}
             </p>
+            <div className="grid grid-cols-3 gap-1 text-xs">
+              <div className="bg-white/10 px-2 py-1 rounded">✓ No corruption</div>
+              <div className="bg-white/10 px-2 py-1 rounded">✓ Unlimited</div>
+              <div className="bg-white/10 px-2 py-1 rounded">✓ P2P Direct</div>
+            </div>
           </div>
         </Link>
 
@@ -195,24 +200,34 @@ const Home = () => {
           className="group block bg-gradient-to-br from-indigo-600 to-cyan-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] relative overflow-hidden border border-white/20"
         >
           <div className="absolute top-3 right-3 flex gap-2">
-            <span className="px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full shadow-lg">
-              NEW
+            <span className="px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 text-xs font-bold rounded-full shadow-lg">
+              v2.0 ⚡
             </span>
-            <span className="px-2 py-1 bg-green-400 text-green-900 text-xs font-bold rounded-full shadow-lg">
-              PREMIUM
+            <span className="px-2 py-1 bg-purple-400 text-purple-900 text-xs font-bold rounded-full shadow-lg">
+              TURBO MODE
             </span>
           </div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <h2 className="text-2xl font-bold">
-                  {language === 'tr' ? 'Uzak Masaüstü' : 'Remote Desktop'}
+                  {language === 'tr' ? 'Uzak Masaüstü v2' : 'Remote Desktop v2'}
                 </h2>
                 <p className="text-white/80 text-sm mt-1">
-                  {language === 'tr' ? 'TeamViewer Alternatifi' : 'TeamViewer Alternative'}
+                  {language === 'tr' ? 'Turbo Mode ile 60 FPS' : 'Turbo Mode with 60 FPS'}
                 </p>
               </div>
               <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform flex-shrink-0" />
+            </div>
+            <p className="text-white/90 text-sm mb-2">
+              {language === 'tr'
+                ? '🔒 Secure • 🏠 Local • ⚡ Turbo (LAN)'
+                : '🔒 Secure • 🏠 Local • ⚡ Turbo (LAN)'}
+            </p>
+            <div className="grid grid-cols-3 gap-1 text-xs">
+              <div className="bg-white/10 px-2 py-1 rounded">✓ 60 FPS</div>
+              <div className="bg-white/10 px-2 py-1 rounded">✓ Auto-reconnect</div>
+              <div className="bg-white/10 px-2 py-1 rounded">✓ LAN Direct</div>
             </div>
             <p className="text-white/70 text-xs">
               {language === 'tr'

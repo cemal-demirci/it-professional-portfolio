@@ -22,21 +22,33 @@ const RemoteDesktop = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24">
           <div className="text-center mb-16">
             {/* Badge */}
-            <div className="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full mb-6">
+            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-300 rounded-full mb-6">
               <Sparkles className="w-4 h-4 mr-2" />
-              <span className="text-sm font-semibold">Free • No Installation • Privacy-First</span>
+              <span className="text-sm font-semibold">🚀 v2.0 • ⚡ Turbo Mode • 🏠 Local Support</span>
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Web-Based Remote
-              <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Desktop Access
+              Remote Desktop
+              <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                with Turbo Mode
               </span>
             </h1>
 
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-              Connect to any computer from anywhere, right in your browser. No downloads, no accounts, no compromises on privacy.
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-4">
+              Connect to any computer from anywhere. Now with <strong className="text-purple-600 dark:text-purple-400">3 session modes</strong> optimized for your needs.
             </p>
+
+            <div className="flex justify-center gap-3 flex-wrap mb-8">
+              <div className="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-lg font-semibold text-sm">
+                🔒 Secure Mode
+              </div>
+              <div className="px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg font-semibold text-sm">
+                🏠 Local Mode
+              </div>
+              <div className="px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-lg font-semibold text-sm">
+                ⚡ Turbo Mode (60 FPS!)
+              </div>
+            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
