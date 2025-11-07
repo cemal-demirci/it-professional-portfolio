@@ -5,6 +5,7 @@ import Peer from 'peerjs'
 const RemoteViewer = ({ onBack }) => {
   const [sessionCode, setSessionCode] = useState('')
   const [password, setPassword] = useState('')
+  const [sessionMode, setSessionMode] = useState(null) // 'secure' or 'local'
   const [connecting, setConnecting] = useState(false)
   const [connected, setConnected] = useState(false)
   const [stream, setStream] = useState(null)
@@ -24,7 +25,8 @@ const RemoteViewer = ({ onBack }) => {
   }, [])
 
   const connectToHost = () => {
-    if (!sessionCode.trim() || !password.trim()) return
+    if (!sessionCode.trim()) return
+    // Don't require password if trying to connect (might be local mode)
     setConnecting(true)
     setError(null)
     setAwaitingAuth(false)
@@ -46,8 +48,8 @@ const RemoteViewer = ({ onBack }) => {
       connectionRef.current = conn
 
       conn.on('open', () => {
-        // Send password for authentication
-        conn.send({ type: 'auth', password })
+        // Send password for authentication (can be empty for local mode)
+        conn.send({ type: 'auth', password: password || 'local' })
         setAwaitingAuth(true)
       })
 
@@ -56,6 +58,7 @@ const RemoteViewer = ({ onBack }) => {
           setConnected(true)
           setConnecting(false)
           setAwaitingAuth(false)
+          setSessionMode(data.mode || 'secure')
 
           // Request screen stream after successful auth
           const call = peer.call(sessionCode, new MediaStream())
@@ -139,16 +142,20 @@ const RemoteViewer = ({ onBack }) => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
                   <Lock className="w-4 h-4" />
                   Password
+                  <span className="text-xs text-gray-500">(optional for local sessions)</span>
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && connectToHost()}
-                  placeholder="6-digit password"
+                  placeholder="6-digit password or leave empty"
                   maxLength={6}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-lg tracking-wider text-center"
                 />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  💡 Leave empty if host is using Local Mode
+                </p>
               </div>
 
               {error && (
@@ -159,7 +166,7 @@ const RemoteViewer = ({ onBack }) => {
 
               <button
                 onClick={connectToHost}
-                disabled={!sessionCode.trim() || !password.trim()}
+                disabled={!sessionCode.trim()}
                 className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Connect
@@ -208,10 +215,21 @@ const RemoteViewer = ({ onBack }) => {
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-              <MessageCircle className="w-5 h-5 mr-2" />
-              Chat
-            </h3>
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center">
+                <MessageCircle className="w-5 h-5 mr-2" />
+                Chat
+              </h3>
+              {sessionMode && (
+                <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold ${
+                  sessionMode === 'local'
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                    : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
+                }`}>
+                  {sessionMode === 'local' ? '🏠 Local Mode' : '🔒 Secure Mode'}
+                </div>
+              )}
+            </div>
             <div className="space-y-3 mb-4 h-96 overflow-y-auto">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.from === 'viewer' ? 'justify-end' : 'justify-start'}`}>

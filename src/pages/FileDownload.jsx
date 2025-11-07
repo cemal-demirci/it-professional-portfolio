@@ -150,14 +150,33 @@ const FileDownload = () => {
         return
       }
 
+      // Validate all chunks are received
+      const missingChunks = chunksRef.current.filter(c => !c || c === undefined)
+      if (missingChunks.length > 0) {
+        setError(`Missing ${missingChunks.length} chunks. Transfer may be incomplete.`)
+        setDownloading(false)
+        return
+      }
+
       // Combine all chunks
-      const totalSize = chunksRef.current.reduce((sum, chunk) => sum + chunk.byteLength, 0)
+      const totalSize = chunksRef.current.reduce((sum, chunk) => {
+        return sum + (chunk ? chunk.byteLength : 0)
+      }, 0)
+
+      if (totalSize === 0) {
+        setError('File is empty or corrupted')
+        setDownloading(false)
+        return
+      }
+
       const completeFile = new Uint8Array(totalSize)
 
       let offset = 0
       for (const chunk of chunksRef.current) {
-        completeFile.set(new Uint8Array(chunk), offset)
-        offset += chunk.byteLength
+        if (chunk && chunk.byteLength > 0) {
+          completeFile.set(new Uint8Array(chunk), offset)
+          offset += chunk.byteLength
+        }
       }
 
       // Create blob and download

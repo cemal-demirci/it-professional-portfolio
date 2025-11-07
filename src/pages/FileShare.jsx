@@ -144,25 +144,37 @@ const FileShare = () => {
         chunks
       })
 
-      // Send chunks
+      // Send chunks with error handling
       for (let i = 0; i < chunks; i++) {
-        const start = i * chunkSize
-        const end = Math.min(start + chunkSize, arrayBuffer.byteLength)
-        const chunk = arrayBuffer.slice(start, end)
+        try {
+          const start = i * chunkSize
+          const end = Math.min(start + chunkSize, arrayBuffer.byteLength)
+          const chunk = arrayBuffer.slice(start, end)
 
-        // Convert ArrayBuffer to Array for JSON serialization
-        const chunkArray = Array.from(new Uint8Array(chunk))
+          // Convert ArrayBuffer to Array for JSON serialization
+          const chunkArray = Array.from(new Uint8Array(chunk))
 
-        conn.send({
-          type: 'chunk',
-          index: i,
-          data: chunkArray
-        })
+          // Verify chunk is not empty
+          if (chunkArray.length === 0) {
+            console.warn(`Empty chunk at index ${i}`)
+            continue
+          }
 
-        setTransferProgress(Math.round(((i + 1) / chunks) * 100))
+          conn.send({
+            type: 'chunk',
+            index: i,
+            data: chunkArray,
+            total: chunks
+          })
 
-        // Small delay to prevent overwhelming the connection
-        await new Promise(resolve => setTimeout(resolve, 10))
+          setTransferProgress(Math.round(((i + 1) / chunks) * 100))
+
+          // Smaller delay for faster transfer
+          await new Promise(resolve => setTimeout(resolve, 5))
+        } catch (chunkError) {
+          console.error(`Error sending chunk ${i}:`, chunkError)
+          throw new Error(`Failed to send chunk ${i}`)
+        }
       }
 
       // Send completion signal

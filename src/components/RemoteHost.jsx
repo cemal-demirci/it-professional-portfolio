@@ -7,6 +7,7 @@ const RemoteHost = ({ onBack }) => {
   const [peer, setPeer] = useState(null)
   const [sessionCode, setSessionCode] = useState(null)
   const [sessionPassword, setSessionPassword] = useState('')
+  const [sessionMode, setSessionMode] = useState('secure') // 'secure' or 'local'
   const [qrCode, setQrCode] = useState(null)
   const [copied, setCopied] = useState(false)
   const [connected, setConnected] = useState(false)
@@ -24,7 +25,7 @@ const RemoteHost = ({ onBack }) => {
       if (peer) peer.destroy()
       if (stream) stream.getTracks().forEach(track => track.stop())
     }
-  }, [])
+  }, [sessionMode])
 
   const generateSimpleCode = () => {
     // Generate simple code: cml-XXXX (4 random numbers)
@@ -40,7 +41,7 @@ const RemoteHost = ({ onBack }) => {
   const initializePeer = () => {
     // Generate simple session code and password first
     const simpleCode = generateSimpleCode()
-    const password = generatePassword()
+    const password = sessionMode === 'secure' ? generatePassword() : 'local'
 
     // Use simple code as Peer ID
     const newPeer = new Peer(simpleCode, {
@@ -64,10 +65,13 @@ const RemoteHost = ({ onBack }) => {
 
     newPeer.on('connection', (conn) => {
       conn.on('data', (data) => {
-        // Check password first
+        // Check password first (skip for local mode)
         if (data.type === 'auth') {
-          if (data.password === sessionPassword) {
-            conn.send({ type: 'auth_success' })
+          if (sessionMode === 'local' || data.password === sessionPassword) {
+            conn.send({
+              type: 'auth_success',
+              mode: sessionMode
+            })
             connectionRef.current = conn
             setConnected(true)
           } else {
@@ -175,6 +179,46 @@ const RemoteHost = ({ onBack }) => {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Session Mode Selector */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Session Mode</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setSessionMode('secure')}
+                  disabled={connected}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    sessionMode === 'secure'
+                      ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30'
+                      : 'border-gray-300 dark:border-gray-600 hover:border-blue-400'
+                  } ${connected ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <Lock className="w-6 h-6 mx-auto mb-2 text-blue-600" />
+                  <div className="text-sm font-semibold text-gray-900 dark:text-white">Secure</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Password required</div>
+                </button>
+                <button
+                  onClick={() => setSessionMode('local')}
+                  disabled={connected}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    sessionMode === 'local'
+                      ? 'border-green-600 bg-green-50 dark:bg-green-900/30'
+                      : 'border-gray-300 dark:border-gray-600 hover:border-green-400'
+                  } ${connected ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <Wifi className="w-6 h-6 mx-auto mb-2 text-green-600" />
+                  <div className="text-sm font-semibold text-gray-900 dark:text-white">Local</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">No password</div>
+                </button>
+              </div>
+              {sessionMode === 'local' && (
+                <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-400 dark:border-yellow-600">
+                  <p className="text-xs text-yellow-800 dark:text-yellow-300">
+                    🏠 Local mode: No password required. Only use on trusted networks!
+                  </p>
+                </div>
+              )}
+            </div>
+
             {/* Session Code & Password */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Connection Details</h3>
@@ -197,20 +241,34 @@ const RemoteHost = ({ onBack }) => {
                 </div>
 
                 {/* Password */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                    <Lock className="w-4 h-4" />
-                    Password
-                  </label>
-                  <div className="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400 dark:border-yellow-600">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white text-center font-mono tracking-wider">
-                      {sessionPassword || '------'}
+                {sessionMode === 'secure' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                      <Lock className="w-4 h-4" />
+                      Password
+                    </label>
+                    <div className="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400 dark:border-yellow-600">
+                      <p className="text-2xl font-bold text-gray-900 dark:text-white text-center font-mono tracking-wider">
+                        {sessionPassword || '------'}
+                      </p>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                      Share this password with the viewer to allow connection
                     </p>
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                    Share this password with the viewer to allow connection
-                  </p>
-                </div>
+                )}
+
+                {sessionMode === 'local' && (
+                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-400 dark:border-green-600">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Wifi className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      <p className="font-semibold text-green-900 dark:text-green-300">Local Mode Active</p>
+                    </div>
+                    <p className="text-sm text-green-800 dark:text-green-400">
+                      Anyone with the session code can connect without a password. Best for local network use.
+                    </p>
+                  </div>
+                )}
 
                 {qrCode && (
                   <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
