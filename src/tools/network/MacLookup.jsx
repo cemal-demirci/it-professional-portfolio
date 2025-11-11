@@ -75,13 +75,13 @@ const MacLookup = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">MAC Address Lookup</h1>
-        <p className="text-gray-600 dark:text-gray-400">Identify network device manufacturer from MAC address</p>
+        <h1 className="text-3xl font-bold text-white">MAC Address Lookup</h1>
+        <p className="text-gray-400">Identify network device manufacturer from MAC address</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">MAC Address</label>
+          <label className="block text-sm font-medium text-gray-300">MAC Address</label>
           <div className="flex gap-2">
             <input
               type="text"
@@ -89,7 +89,7 @@ const MacLookup = () => {
               onChange={(e) => setMac(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && lookupMac()}
               placeholder="00:1A:2B:3C:4D:5E or 001A2B3C4D5E"
-              className="input-field flex-1 font-mono dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="input-field flex-1 font-mono bg-gray-700 border-gray-600 text-white"
               maxLength="17"
             />
             <button
@@ -101,7 +101,7 @@ const MacLookup = () => {
               Lookup
             </button>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-xs text-gray-400">
             Supports formats: 00:1A:2B:3C:4D:5E, 00-1A-2B-3C-4D-5E, or 001A2B3C4D5E
           </p>
         </div>
@@ -111,7 +111,7 @@ const MacLookup = () => {
             <button
               key={example}
               onClick={() => setMac(example)}
-              className="px-3 py-2 text-xs font-mono bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors text-gray-700 dark:text-gray-300"
+              className="px-3 py-2 text-xs font-mono bg-gray-700 hover:hover:bg-gray-600 rounded transition-colors text-gray-300"
             >
               {example}
             </button>
@@ -121,37 +121,37 @@ const MacLookup = () => {
         {result && (
           <div className="space-y-4 pt-4">
             {result.error ? (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-400">
+              <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 text-red-400">
                 {result.error}
               </div>
             ) : (
               <>
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm text-blue-800 dark:text-blue-300">
+                <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4 text-sm text-blue-300">
                   {result.note}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-gradient-to-br from-primary-50 to-cyan-50 dark:from-primary-900/30 dark:to-cyan-900/30 rounded-lg">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">MAC Address</div>
-                    <div className="font-mono font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                  <div className="p-4 bg-gradient-to-br from-primary-900/30 to-cyan-900/30 rounded-lg">
+                    <div className="text-sm text-gray-400 mb-1">MAC Address</div>
+                    <div className="font-mono font-bold text-lg text-white flex items-center gap-2">
                       <Wifi className="w-5 h-5" />
                       {result.mac}
                     </div>
                   </div>
 
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">OUI (First 3 Octets)</div>
-                    <div className="font-mono font-semibold text-gray-900 dark:text-white">{result.oui}</div>
+                  <div className="p-4 bg-gray-50 bg-gray-700/50 rounded-lg">
+                    <div className="text-sm text-gray-400 mb-1">OUI (First 3 Octets)</div>
+                    <div className="font-mono font-semibold text-white">{result.oui}</div>
                   </div>
 
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Type</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{result.type}</div>
+                  <div className="p-4 bg-gray-50 bg-gray-700/50 rounded-lg">
+                    <div className="text-sm text-gray-400 mb-1">Type</div>
+                    <div className="font-semibold text-white">{result.type}</div>
                   </div>
 
-                  <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 rounded-lg">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Vendor</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{result.vendor}</div>
+                  <div className="p-4 bg-gradient-to-br from-green-900/30 to-emerald-900/30 rounded-lg">
+                    <div className="text-sm text-gray-400 mb-1">Vendor</div>
+                    <div className="font-semibold text-white">{result.vendor}</div>
                   </div>
                 </div>
               </>
@@ -160,14 +160,14 @@ const MacLookup = () => {
         )}
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">About MAC Addresses</h3>
-        <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <h3 className="font-semibold text-white mb-3">About MAC Addresses</h3>
+        <div className="space-y-2 text-sm text-gray-400">
           <p>
-            <strong className="text-gray-900 dark:text-white">MAC Address (Media Access Control)</strong> is a unique identifier assigned to network interfaces.
+            <strong className="text-white">MAC Address (Media Access Control)</strong> is a unique identifier assigned to network interfaces.
           </p>
           <p>
-            <strong className="text-gray-900 dark:text-white">OUI (Organizationally Unique Identifier)</strong> - The first 3 octets identify the manufacturer.
+            <strong className="text-white">OUI (Organizationally Unique Identifier)</strong> - The first 3 octets identify the manufacturer.
           </p>
           <p>
             Common formats: 00:1A:2B:3C:4D:5E (IEEE), 00-1A-2B-3C-4D-5E (Microsoft), 001A.2B3C.4D5E (Cisco)

@@ -112,11 +112,11 @@ const ServiceStatus = () => {
   const getStatusText = (status) => {
     switch (status) {
       case 'operational':
-        return { text: 'Operational', color: 'text-green-600 dark:text-green-400' }
+        return { text: 'Operational', color: 'text-green-400' }
       case 'degraded':
-        return { text: 'Degraded', color: 'text-yellow-600 dark:text-yellow-400' }
+        return { text: 'Degraded', color: 'text-yellow-400' }
       case 'down':
-        return { text: 'Down', color: 'text-red-600 dark:text-red-400' }
+        return { text: 'Down', color: 'text-red-400' }
       case 'loading':
         return { text: 'Checking...', color: 'text-gray-400' }
       default:
@@ -127,13 +127,13 @@ const ServiceStatus = () => {
   const getStatusBadgeColor = (status) => {
     switch (status) {
       case 'operational':
-        return 'bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700'
+        return 'bg-green-900/30 border-green-700'
       case 'degraded':
-        return 'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700'
+        return 'bg-yellow-900/30 border-yellow-700'
       case 'down':
-        return 'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700'
+        return 'bg-red-900/30 border-red-700'
       default:
-        return 'bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600'
+        return 'bg-gray-700 border-gray-600'
     }
   }
 
@@ -141,7 +141,7 @@ const ServiceStatus = () => {
   const totalServices = services.length
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-lg p-4 border border-blue-200 dark:border-gray-700 shadow-md">
+    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-4 border border-blue-200 border-gray-700 shadow-md">
       {/* Header - Compact */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -149,10 +149,10 @@ const ServiceStatus = () => {
             <Activity className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+            <h3 className="text-sm font-bold text-white">
               Service Status
             </h3>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
+            <p className="text-xs text-gray-400">
               {operationalCount}/{totalServices} Operational
             </p>
           </div>
@@ -174,7 +174,7 @@ const ServiceStatus = () => {
               <div className="flex items-center gap-1.5">
                 <span className="text-lg">{service.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-xs text-gray-900 dark:text-white truncate group-hover:underline">
+                  <div className="font-semibold text-xs text-white truncate group-hover:underline">
                     {service.name}
                   </div>
                   <div className={`text-xs font-medium ${statusInfo.color} flex items-center gap-0.5`}>
@@ -188,8 +188,8 @@ const ServiceStatus = () => {
       </div>
 
       {/* Footer - Compact */}
-      <div className="mt-3 pt-2 border-t border-blue-200 dark:border-gray-700">
-        <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
+      <div className="mt-3 pt-2 border-t border-blue-200 border-gray-700">
+        <p className="text-xs text-gray-400 text-center">
           {operationalCount === totalServices
             ? 'All services operational'
             : 'Auto-refreshes every 15s when issues detected'}

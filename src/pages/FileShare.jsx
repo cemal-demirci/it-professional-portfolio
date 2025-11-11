@@ -15,6 +15,7 @@ const FileShare = () => {
   const [transferring, setTransferring] = useState(false)
   const [transferProgress, setTransferProgress] = useState(0)
   const [waiting, setWaiting] = useState(false)
+  const [error, setError] = useState(null)
 
   const fileInputRef = useRef(null)
   const connectionRef = useRef(null)
@@ -49,15 +50,29 @@ const FileShare = () => {
   }
 
   const handleFileSelect = (selectedFile) => {
-    setFile(selectedFile)
-    setShareLink(null)
-    setQrCode(null)
-    setPeerConnected(false)
+    try {
+      setError(null)
+      setFile(selectedFile)
+      setShareLink(null)
+      setQrCode(null)
+      setPeerConnected(false)
+      setWaiting(false)
+      setTransferring(false)
+      setTransferProgress(0)
+    } catch (err) {
+      console.error('File selection error:', err)
+      setError('Failed to select file: ' + err.message)
+    }
   }
 
   const handleFileInputChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      handleFileSelect(e.target.files[0])
+    try {
+      if (e.target.files && e.target.files[0]) {
+        handleFileSelect(e.target.files[0])
+      }
+    } catch (err) {
+      console.error('File input error:', err)
+      setError('Failed to read file: ' + err.message)
     }
   }
 
@@ -65,62 +80,91 @@ const FileShare = () => {
     if (!file) return
 
     try {
+      setError(null)
       setWaiting(true)
 
-      // Create peer
+      // Create peer with enhanced production configuration
       const newPeer = new Peer({
+        host: 'localhost' === window.location.hostname ? 'localhost' : '0.peerjs.com',
+        port: 'localhost' === window.location.hostname ? 9000 : 443,
+        path: '/',
+        secure: 'localhost' !== window.location.hostname,
         config: {
           iceServers: [
             { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:global.stun.twilio.com:3478' }
-          ]
-        }
+            { urls: 'stun:stun1.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' },
+            { urls: 'stun:global.stun.twilio.com:3478' },
+            {
+              urls: 'turn:openrelay.metered.ca:80',
+              username: 'openrelayproject',
+              credential: 'openrelayproject',
+            },
+            {
+              urls: 'turn:openrelay.metered.ca:443',
+              username: 'openrelayproject',
+              credential: 'openrelayproject',
+            },
+          ],
+          iceTransportPolicy: 'all',
+          iceCandidatePoolSize: 10,
+          bundlePolicy: 'max-bundle',
+          rtcpMuxPolicy: 'require',
+        },
+        debug: 0
       })
 
       newPeer.on('open', async (id) => {
-        console.log('Peer ID:', id)
-        setPeerId(id)
-        setPeer(newPeer)
+        try {
+          if (import.meta.env.DEV) console.log('Peer ID:', id)
+          setPeerId(id)
+          setPeer(newPeer)
 
-        // Generate share link
-        const link = `${window.location.origin}/share/${id}`
-        setShareLink(link)
+          // Generate share link
+          const link = `${window.location.origin}/share/${id}`
+          setShareLink(link)
 
-        // Generate QR code
-        const qr = await QRCode.toDataURL(link, { width: 200 })
-        setQrCode(qr)
+          // Generate QR code
+          const qr = await QRCode.toDataURL(link, { width: 200 })
+          setQrCode(qr)
+        } catch (err) {
+          console.error('QR code generation error:', err)
+          setError('Failed to generate QR code: ' + err.message)
+          setWaiting(false)
+        }
       })
 
       newPeer.on('connection', (conn) => {
-        console.log('Peer connected!')
+        if (import.meta.env.DEV) console.log('Peer connected!')
         connectionRef.current = conn
         setPeerConnected(true)
         setWaiting(false)
 
         conn.on('open', () => {
-          console.log('Connection opened, sending file...')
+          if (import.meta.env.DEV) console.log('Connection opened, sending file...')
           sendFile(conn)
         })
 
         conn.on('close', () => {
-          console.log('Connection closed')
+          if (import.meta.env.DEV) console.log('Connection closed')
           setPeerConnected(false)
         })
 
         conn.on('error', (err) => {
           console.error('Connection error:', err)
+          setError('Connection error: ' + err.message)
           setPeerConnected(false)
         })
       })
 
       newPeer.on('error', (err) => {
         console.error('Peer error:', err)
-        alert('Failed to create peer connection: ' + err.message)
+        setError('Failed to create peer connection: ' + err.message)
         setWaiting(false)
       })
     } catch (error) {
       console.error('Share link creation error:', error)
-      alert('Failed to create share link: ' + error.message)
+      setError('Failed to create share link: ' + error.message)
       setWaiting(false)
     }
   }
@@ -135,7 +179,7 @@ const FileShare = () => {
       const chunkSize = 64 * 1024 // 64KB chunks for better performance
       const totalChunks = Math.ceil(arrayBuffer.byteLength / chunkSize)
 
-      console.log(`Starting file transfer: ${file.name}, Size: ${file.size}, Chunks: ${totalChunks}`)
+      if (import.meta.env.DEV) console.log(`Starting file transfer: ${file.name}, Size: ${file.size}, Chunks: ${totalChunks}`)
 
       // Send metadata first
       conn.send({
@@ -223,13 +267,13 @@ const FileShare = () => {
         timestamp: Date.now()
       })
 
-      console.log(`File sent successfully! ${sentChunks.size}/${totalChunks} chunks`)
+      if (import.meta.env.DEV) console.log(`File sent successfully! ${sentChunks.size}/${totalChunks} chunks`)
       setTransferring(false)
       setTransferProgress(100)
     } catch (error) {
       console.error('File send error:', error)
       setTransferring(false)
-      alert('Failed to send file: ' + error.message + '\n\nTry refreshing and sending the file again.')
+      setError('Failed to send file: ' + error.message)
     }
   }
 
@@ -252,6 +296,7 @@ const FileShare = () => {
     setTransferring(false)
     setTransferProgress(0)
     setWaiting(false)
+    setError(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -278,60 +323,90 @@ const FileShare = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Background particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 py-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl mb-4 shadow-xl">
             <Shield className="w-8 h-8 text-white" />
           </div>
-          <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-300 rounded-full mb-4">
-            <span className="text-sm font-semibold">🚀 v2.0 • ⚡ 4x Faster • 🔒 Zero Knowledge</span>
+          <div className="inline-flex items-center px-6 py-3 bg-white/5 backdrop-blur-xl border border-white/10 text-white rounded-full mb-4">
+            <span className="text-sm font-medium">v2.0 • 4x Faster • Zero Knowledge</span>
           </div>
-          <h1 className="text-5xl font-bold mb-2">
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-black mb-2 tracking-tight" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>
+            <span className="bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
               Pleiades Share v2
             </span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
-            Next-gen P2P file sharing • 64KB chunks • Base64 encoding • Auto-retry
+          <p className="text-xl text-white/60 font-medium">
+            Next-gen P2P file sharing with advanced transfer technology
           </p>
-          <div className="mt-3 flex justify-center gap-3 text-sm">
-            <div className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full font-semibold">
-              ✓ 400% Faster Transfer
+          <div className="mt-4 flex flex-wrap justify-center gap-3 text-sm">
+            <div className="px-4 py-2 bg-white/5 backdrop-blur-xl border border-white/10 text-white/80 rounded-full font-medium transition-all hover:bg-white/10">
+              400% Faster Transfer
             </div>
-            <div className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full font-semibold">
-              ✓ Smart Retry Logic
+            <div className="px-4 py-2 bg-white/5 backdrop-blur-xl border border-white/10 text-white/80 rounded-full font-medium transition-all hover:bg-white/10">
+              Smart Retry Logic
             </div>
-            <div className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full font-semibold">
-              ✓ Corruption Prevention
+            <div className="px-4 py-2 bg-white/5 backdrop-blur-xl border border-white/10 text-white/80 rounded-full font-medium transition-all hover:bg-white/10">
+              Corruption Prevention
             </div>
           </div>
         </div>
 
+        {/* Error Display */}
+        {error && (
+          <div className="mb-8 p-6 bg-white/5 backdrop-blur-xl border border-red-500/20 rounded-2xl">
+            <div className="flex items-start space-x-4">
+              <X className="w-6 h-6 text-red-400 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <h4 className="font-bold text-red-300 mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>
+                  Error
+                </h4>
+                <p className="text-sm text-white/60 leading-relaxed">
+                  {error}
+                </p>
+              </div>
+              <button
+                onClick={() => setError(null)}
+                className="p-2 hover:bg-white/5 rounded-xl transition-all"
+              >
+                <X className="w-5 h-5 text-white/60 hover:text-white/80" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Upload Section */}
-        {!shareLink ? (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+        {(!shareLink || shareLink === null || shareLink === '') ? (
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
             {/* Drag & Drop Area */}
             <div
-              className={`border-2 border-dashed rounded-xl p-12 text-center transition-all ${
+              className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all ${
                 dragActive
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-300 dark:border-gray-600'
+                  ? 'border-blue-500/50 bg-blue-500/10'
+                  : 'border-white/10 hover:border-white/20'
               }`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
             >
-              {!file ? (
+              {(!file || file === null) ? (
                 <>
-                  <Upload className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                  <Upload className="w-16 h-16 text-white/40 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-white mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>
                     Drop your file here
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    or click to browse (unlimited size with P2P!)
+                  <p className="text-white/60 mb-6 font-medium">
+                    or click to browse • unlimited size with P2P
                   </p>
                   <input
                     ref={fileInputRef}
@@ -341,33 +416,33 @@ const FileShare = () => {
                   />
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+                    className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:scale-105 transition-all duration-300"
                   >
                     Choose File
                   </button>
                 </>
-              ) : (
+              ) : file && file.name ? (
                 <div className="space-y-4">
                   {/* Selected File */}
-                  <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
                     <div className="flex items-center space-x-4">
-                      <div className="text-blue-600 dark:text-blue-400">
+                      <div className="text-blue-400">
                         {getFileIcon(file)}
                       </div>
                       <div className="text-left">
-                        <p className="font-medium text-gray-900 dark:text-white">
-                          {file.name}
+                        <p className="font-semibold text-white">
+                          {file.name || 'Unknown File'}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {formatFileSize(file.size)}
+                        <p className="text-sm text-white/60 font-medium">
+                          {formatFileSize(file.size || 0)}
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={() => setFile(null)}
-                      className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                      className="p-2 hover:bg-white/5 rounded-xl transition-all"
                     >
-                      <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      <X className="w-5 h-5 text-white/60 hover:text-white/80" />
                     </button>
                   </div>
 
@@ -375,7 +450,7 @@ const FileShare = () => {
                   <button
                     onClick={createShareLink}
                     disabled={waiting}
-                    className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                    className="w-full mt-6 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
                     {waiting ? (
                       <div className="flex items-center justify-center space-x-2">
@@ -385,25 +460,37 @@ const FileShare = () => {
                     ) : (
                       <div className="flex items-center justify-center space-x-2">
                         <Wifi className="w-5 h-5" />
-                        <span>Create Share Link (P2P)</span>
+                        <span>Create P2P Share Link</span>
                       </div>
                     )}
+                  </button>
+                </div>
+              ) : (
+                <div className="p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                  <p className="text-white/80 font-semibold text-center">
+                    Invalid file selected. Please try again.
+                  </p>
+                  <button
+                    onClick={() => setFile(null)}
+                    className="mt-4 w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold transition-all hover:scale-105"
+                  >
+                    Try Again
                   </button>
                 </div>
               )}
             </div>
 
             {/* Security Info */}
-            <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <div className="flex items-start space-x-3">
-                <Shield className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+            <div className="mt-6 p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+              <div className="flex items-start space-x-4">
+                <Shield className="w-6 h-6 text-blue-400 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-green-900 dark:text-green-300 mb-1">
-                    True Peer-to-Peer
+                  <h4 className="font-bold text-white mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>
+                    True Peer-to-Peer Security
                   </h4>
-                  <p className="text-sm text-green-800 dark:text-green-400">
+                  <p className="text-sm text-white/60 leading-relaxed">
                     Your file is transferred directly from your browser to the recipient's browser using WebRTC.
-                    It never touches our servers. Maximum privacy and unlimited file size!
+                    It never touches our servers. Maximum privacy and unlimited file size.
                   </p>
                 </div>
               </div>
@@ -411,46 +498,48 @@ const FileShare = () => {
 
             {/* Features Grid */}
             <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <div className="text-blue-600 dark:text-blue-400 mb-2">🌍</div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Eco-Friendly</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Zero server storage = Zero carbon footprint
+              <div className="p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 transition-all duration-300">
+                <div className="text-4xl mb-3">🌍</div>
+                <h4 className="font-semibold text-white mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>Eco-Friendly</h4>
+                <p className="text-sm text-white/60">
+                  Zero server storage equals zero carbon footprint
                 </p>
               </div>
-              <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                <div className="text-purple-600 dark:text-purple-400 mb-2">🔒</div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Private & Secure</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Direct transfer, no middleman
+              <div className="p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 transition-all duration-300">
+                <div className="text-4xl mb-3">🔒</div>
+                <h4 className="font-semibold text-white mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>Private & Secure</h4>
+                <p className="text-sm text-white/60">
+                  Direct transfer with no middleman
                 </p>
               </div>
-              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <div className="text-green-600 dark:text-green-400 mb-2">∞</div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Unlimited Size</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  No file size limits with P2P
+              <div className="p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 transition-all duration-300">
+                <div className="text-4xl mb-3">∞</div>
+                <h4 className="font-semibold text-white mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>Unlimited Size</h4>
+                <p className="text-sm text-white/60">
+                  No file size limits with P2P technology
                 </p>
               </div>
             </div>
           </div>
         ) : (
           /* Success Section */
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
             <div className="text-center mb-6">
-              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
-                peerConnected ? 'bg-green-100 dark:bg-green-900/30' : 'bg-yellow-100 dark:bg-yellow-900/30'
+              <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${
+                peerConnected ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-white/10'
               }`}>
                 {peerConnected ? (
-                  <Users className="w-8 h-8 text-green-600 dark:text-green-400" />
+                  <Users className="w-10 h-10 text-white" />
                 ) : (
-                  <Wifi className="w-8 h-8 text-yellow-600 dark:text-yellow-400 animate-pulse" />
+                  <Wifi className="w-10 h-10 text-white/60 animate-pulse" />
                 )}
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                {peerConnected ? 'Connected! Transferring...' : 'Waiting for Receiver...'}
+              <h3 className="text-3xl font-black text-white mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>
+                <span className="bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
+                  {peerConnected ? 'Connected! Transferring...' : 'Waiting for Receiver...'}
+                </span>
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-white/60 font-medium">
                 {peerConnected
                   ? 'File is being transferred peer-to-peer'
                   : 'Share this link with the recipient to start transfer'}
@@ -459,36 +548,46 @@ const FileShare = () => {
 
             {/* Transfer Progress */}
             {transferring && (
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-base font-semibold text-white flex items-center gap-2">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
                     Transferring...
                   </span>
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
                     {transferProgress}%
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden border border-white/10">
                   <div
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300"
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 h-3 rounded-full transition-all duration-300"
                     style={{ width: `${transferProgress}%` }}
                   />
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-xs font-medium text-white/60">
+                    {transferProgress === 100 ? 'Transfer Complete' : 'Transfer in Progress'}
+                  </span>
                 </div>
               </div>
             )}
 
             {/* Share Link */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 p-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl">
                 <input
                   type="text"
                   value={shareLink}
                   readOnly
-                  className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="flex-1 px-4 py-3 bg-transparent text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 rounded-lg select-all"
                 />
                 <button
                   onClick={copyToClipboard}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2"
+                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${
+                    copied
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600'
+                      : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:scale-105'
+                  } text-white`}
                 >
                   {copied ? (
                     <>
@@ -506,40 +605,46 @@ const FileShare = () => {
 
               {/* QR Code */}
               {qrCode && (
-                <div className="flex justify-center p-6 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div className="flex justify-center p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
                   <div className="text-center">
-                    <img src={qrCode} alt="QR Code" className="mx-auto mb-2" />
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Scan to download
+                    <div className="inline-block p-4 bg-white rounded-2xl mb-4">
+                      <img src={qrCode} alt="QR Code" className="mx-auto" />
+                    </div>
+                    <p className="text-base font-semibold text-white mb-1" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif' }}>
+                      Scan with Phone
+                    </p>
+                    <p className="text-sm text-white/60">
+                      Instant download via QR code
                     </p>
                   </div>
                 </div>
               )}
 
               {/* File Info */}
-              <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">File Name</p>
-                  <p className="font-medium text-gray-900 dark:text-white truncate">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                  <p className="text-xs font-semibold text-white/40 mb-1">FILE NAME</p>
+                  <p className="font-semibold text-sm text-white truncate" title={file.name}>
                     {file.name}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Size</p>
-                  <p className="font-medium text-gray-900 dark:text-white">
+                <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                  <p className="text-xs font-semibold text-white/40 mb-1">SIZE</p>
+                  <p className="font-semibold text-sm text-white">
                     {formatFileSize(file.size)}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Status</p>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {transferring ? 'Transferring...' : peerConnected ? 'Connected' : 'Waiting'}
+                <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                  <p className="text-xs font-semibold text-white/40 mb-1">STATUS</p>
+                  <p className="font-semibold text-sm text-white flex items-center gap-1">
+                    <span className={`w-2 h-2 rounded-full ${transferring ? 'bg-blue-500 animate-pulse' : peerConnected ? 'bg-blue-500' : 'bg-white/40 animate-pulse'}`}></span>
+                    {transferring ? 'Transferring' : peerConnected ? 'Connected' : 'Waiting'}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Method</p>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    P2P (WebRTC)
+                <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                  <p className="text-xs font-semibold text-white/40 mb-1">METHOD</p>
+                  <p className="font-semibold text-sm text-white">
+                    P2P WebRTC
                   </p>
                 </div>
               </div>
@@ -547,7 +652,7 @@ const FileShare = () => {
               {/* Actions */}
               <button
                 onClick={resetShare}
-                className="w-full px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
+                className="w-full px-6 py-4 bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 text-white rounded-xl font-semibold transition-all duration-300"
               >
                 Share Another File
               </button>

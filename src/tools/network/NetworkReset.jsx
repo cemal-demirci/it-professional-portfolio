@@ -109,15 +109,15 @@ const NetworkReset = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <RefreshCw className="w-8 h-8" />
           Network Reset & Repair
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">Fix common network connectivity issues</p>
+        <p className="text-gray-400">Fix common network connectivity issues</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Select Operations</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">Select Operations</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {Object.entries({
             flushDNS: 'Flush DNS Cache',
@@ -129,14 +129,14 @@ const NetworkReset = () => {
             clearARP: 'Clear ARP Cache',
             resetNetBIOS: 'Reset NetBIOS'
           }).map(([key, label]) => (
-            <label key={key} className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+            <label key={key} className="flex items-center gap-2 p-3 bg-gray-50 bg-gray-700/50 rounded-lg cursor-pointer hover:hover:bg-gray-700">
               <input
                 type="checkbox"
                 checked={options[key]}
                 onChange={(e) => setOptions({...options, [key]: e.target.checked})}
                 className="w-4 h-4 text-primary-600 rounded"
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">{label}</span>
+              <span className="text-sm text-gray-300">{label}</span>
             </label>
           ))}
         </div>
@@ -153,8 +153,8 @@ const NetworkReset = () => {
         </div>
       </div>
 
-      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-        <p className="text-sm text-yellow-800 dark:text-yellow-300">
+      <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
+        <p className="text-sm text-yellow-300">
           <strong>Warning:</strong> Some operations require a system restart. Save your work before running this script.
         </p>
       </div>

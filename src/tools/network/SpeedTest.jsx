@@ -141,29 +141,29 @@ const SpeedTest = () => {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Gauge className="w-8 h-8 text-primary-600" />
           Internet Speed Test 🚀
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Let's see if your "high-speed" internet is actually high-speed 😏
         </p>
-        <p className="text-sm text-gray-500 dark:text-gray-500 italic">
+        <p className="text-sm text-gray-500 italic">
           Test your download, upload speed and latency
         </p>
       </div>
 
       {/* Main Test Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 shadow-lg">
+      <div className="bg-gray-800 rounded-xl p-8 border border-gray-700 shadow-lg">
         {!results && !testing && (
           <div className="text-center space-y-6">
             <div className="w-32 h-32 mx-auto bg-gradient-to-br from-primary-600 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
               <Zap className="w-16 h-16 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-white">
               Ready to test your speed?
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
+            <p className="text-gray-400 max-w-md mx-auto">
               Click the button below to measure your internet connection speed. This test will measure download speed, upload speed, and latency.
             </p>
             <button
@@ -181,16 +181,16 @@ const SpeedTest = () => {
             <div className="w-32 h-32 mx-auto bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
               <Activity className="w-16 h-16 text-white animate-spin" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-white">
               {currentTest}
             </h2>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
+            <div className="w-full bg-gray-200 bg-gray-700 rounded-full h-4 overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-primary-600 to-purple-600 transition-all duration-500 rounded-full"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-400">
               {progress}% Complete
             </p>
           </div>
@@ -199,7 +199,7 @@ const SpeedTest = () => {
         {results && !results.error && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <CheckCircle className="w-7 h-7 text-green-600" />
                 Test Results
               </h2>
@@ -213,68 +213,68 @@ const SpeedTest = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Download Speed */}
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
+              <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl p-6 border border-green-800">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
                     <Download className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Download</div>
+                    <div className="text-sm text-gray-400">Download</div>
                     <div className={`text-xs ${getSpeedRating(results.download, 'download').color} font-semibold`}>
                       {getSpeedRating(results.download, 'download').text}
                     </div>
                   </div>
                 </div>
-                <div className="text-4xl font-bold text-gray-900 dark:text-white">
+                <div className="text-4xl font-bold text-white">
                   {results.download}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Mbps</div>
+                <div className="text-sm text-gray-400">Mbps</div>
               </div>
 
               {/* Upload Speed */}
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+              <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/20 rounded-xl p-6 border border-blue-800">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
                     <Upload className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Upload</div>
+                    <div className="text-sm text-gray-400">Upload</div>
                     <div className={`text-xs ${getSpeedRating(results.upload, 'upload').color} font-semibold`}>
                       {getSpeedRating(results.upload, 'upload').text}
                     </div>
                   </div>
                 </div>
-                <div className="text-4xl font-bold text-gray-900 dark:text-white">
+                <div className="text-4xl font-bold text-white">
                   {results.upload}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Mbps</div>
+                <div className="text-sm text-gray-400">Mbps</div>
               </div>
 
               {/* Latency */}
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
+              <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 rounded-xl p-6 border border-purple-800">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
                     <Activity className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Latency</div>
+                    <div className="text-sm text-gray-400">Latency</div>
                     <div className={`text-xs ${results.latency < 50 ? 'text-green-600' : results.latency < 100 ? 'text-yellow-600' : 'text-red-600'} font-semibold`}>
                       {results.latency < 50 ? 'Excellent' : results.latency < 100 ? 'Good' : 'High'}
                     </div>
                   </div>
                 </div>
-                <div className="text-4xl font-bold text-gray-900 dark:text-white">
+                <div className="text-4xl font-bold text-white">
                   {results.latency}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">ms</div>
+                <div className="text-sm text-gray-400">ms</div>
               </div>
             </div>
 
-            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="bg-gray-50 bg-gray-700/50 rounded-lg p-4">
+              <p className="text-sm text-gray-400">
                 <strong>Test completed at:</strong> {results.timestamp}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+              <p className="text-xs text-gray-500 mt-2">
                 Using Cloudflare speed test servers for accurate measurements.
               </p>
             </div>
@@ -286,10 +286,10 @@ const SpeedTest = () => {
             <div className="w-32 h-32 mx-auto bg-gradient-to-br from-red-600 to-pink-600 rounded-full flex items-center justify-center shadow-2xl">
               <AlertCircle className="w-16 h-16 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-white">
               Test Failed
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-400">
               {results.error}
             </p>
             <button
@@ -303,10 +303,10 @@ const SpeedTest = () => {
       </div>
 
       {/* Info Card */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+      <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
         <div className="flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-          <div className="text-sm text-blue-800 dark:text-blue-300">
+          <div className="text-sm text-blue-300">
             <p className="font-semibold mb-1">How it works:</p>
             <ul className="list-disc ml-5 space-y-1">
               <li>Download test: Measures how fast you can download data from the internet</li>

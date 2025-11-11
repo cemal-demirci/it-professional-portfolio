@@ -134,21 +134,21 @@ const PdfOcr = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <FileText className="w-8 h-8 text-blue-600" />
           PDF & Image OCR
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Extract text from PDFs and images using AI
         </p>
       </div>
 
       {/* Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">OCR Settings</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">OCR Settings</h3>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-gray-300 mb-2">
             Recognition Language
           </label>
           <select
@@ -167,8 +167,8 @@ const PdfOcr = () => {
       </div>
 
       {/* Upload Area */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
           <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
           <label className="cursor-pointer">
             <span className="btn-primary inline-block">Select File</span>
@@ -180,14 +180,14 @@ const PdfOcr = () => {
               disabled={processing}
             />
           </label>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+          <p className="text-sm text-gray-400 mt-2">
             {file ? `📄 ${file.name}` : 'PDF or Image (JPG, PNG, etc.)'}
           </p>
         </div>
 
         {preview && (
           <div className="flex justify-center">
-            <img src={preview} alt="Preview" className="max-h-64 rounded-lg border border-gray-200 dark:border-gray-600" />
+            <img src={preview} alt="Preview" className="max-h-64 rounded-lg border border-gray-200 border-gray-600" />
           </div>
         )}
 
@@ -207,7 +207,7 @@ const PdfOcr = () => {
               <Loader className="w-5 h-5 animate-spin" />
               <span>OCR yapıyor... {progress}%</span>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div className="w-full bg-gray-200 bg-gray-700 rounded-full h-2">
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
@@ -222,9 +222,9 @@ const PdfOcr = () => {
 
       {/* Results */}
       {extractedText && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-white">
               Extracted Text ({extractedText.length} characters)
             </h3>
             <div className="flex gap-2">
@@ -255,9 +255,9 @@ const PdfOcr = () => {
       )}
 
       {/* Tips */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-        <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">OCR Tips:</h4>
-        <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1 ml-5 list-disc">
+      <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
+        <h4 className="font-semibold text-blue-300 mb-2">OCR Tips:</h4>
+        <ul className="text-sm text-blue-300 space-y-1 ml-5 list-disc">
           <li>Higher quality images = better OCR accuracy</li>
           <li>Select the correct language for best results</li>
           <li>Works with scanned documents, screenshots, photos</li>

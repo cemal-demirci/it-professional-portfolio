@@ -23,8 +23,8 @@ const YamlJsonConverter = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">YAML ⇄ JSON Converter</h1>
-        <p className="text-gray-600 dark:text-gray-400">Convert between YAML and JSON formats</p>
+        <h1 className="text-3xl font-bold text-white">YAML ⇄ JSON Converter</h1>
+        <p className="text-gray-400">Convert between YAML and JSON formats</p>
       </div>
 
       <div className="flex justify-center gap-2">
@@ -34,13 +34,13 @@ const YamlJsonConverter = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Input ({mode === 'yamlToJson' ? 'YAML' : 'JSON'})</label>
-          <textarea value={input} onChange={(e) => setInput(e.target.value)} className="textarea-field dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+          <label className="block text-sm font-medium text-gray-300">Input ({mode === 'yamlToJson' ? 'YAML' : 'JSON'})</label>
+          <textarea value={input} onChange={(e) => setInput(e.target.value)} className="textarea-field bg-gray-700 border-gray-600 text-white" />
           <button onClick={convert} className="btn-primary w-full">Convert</button>
         </div>
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Output ({mode === 'yamlToJson' ? 'JSON' : 'YAML'})</label>
-          <textarea value={output} readOnly className="textarea-field bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-white" />
+          <label className="block text-sm font-medium text-gray-300">Output ({mode === 'yamlToJson' ? 'JSON' : 'YAML'})</label>
+          <textarea value={output} readOnly className="textarea-field bg-gray-900 border-gray-600 text-white" />
         </div>
       </div>
     </div>

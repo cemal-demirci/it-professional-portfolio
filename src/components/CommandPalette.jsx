@@ -200,9 +200,9 @@ const CommandPalette = () => {
       />
 
       {/* Command Palette */}
-      <div className="relative w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-gray-800 rounded-xl shadow-2xl border border-gray-700 overflow-hidden">
         {/* Search Input */}
-        <div className="flex items-center gap-3 px-4 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-3 px-4 py-4 border-b border-gray-700">
           <Search className="w-5 h-5 text-gray-400" />
           <input
             ref={inputRef}
@@ -213,11 +213,11 @@ const CommandPalette = () => {
               setSelectedIndex(0)
             }}
             placeholder="Search tools... (Type to search, ↑↓ to navigate, ⏎ to select)"
-            className="flex-1 bg-transparent border-none outline-none text-gray-900 dark:text-white placeholder-gray-400"
+            className="flex-1 bg-transparent border-none outline-none text-white placeholder-gray-400"
           />
           <button
             onClick={() => setIsOpen(false)}
-            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+            className="p-1 rounded hover:hover:bg-gray-700 text-gray-400"
           >
             <X className="w-5 h-5" />
           </button>
@@ -229,7 +229,7 @@ const CommandPalette = () => {
           className="max-h-96 overflow-y-auto"
         >
           {filteredTools.length === 0 ? (
-            <div className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+            <div className="px-4 py-8 text-center text-gray-400">
               No tools found for "{search}"
             </div>
           ) : (
@@ -245,15 +245,15 @@ const CommandPalette = () => {
                     onMouseEnter={() => setSelectedIndex(index)}
                     className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                       isSelected
-                        ? 'bg-primary-50 dark:bg-primary-900/30'
-                        : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                        ? 'bg-primary-900/30'
+                        : 'hover:hover:bg-gray-700/50'
                     }`}
                   >
                     <div
                       className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                         isSelected
                           ? 'bg-primary-600 text-white'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                          : 'bg-gray-700 text-gray-400'
                       }`}
                     >
                       <Icon className="w-5 h-5" />
@@ -263,22 +263,22 @@ const CommandPalette = () => {
                         <span
                           className={`font-medium ${
                             isSelected
-                              ? 'text-primary-700 dark:text-primary-400'
-                              : 'text-gray-900 dark:text-white'
+                              ? 'text-primary-400'
+                              : 'text-white'
                           }`}
                         >
                           {tool.name}
                         </span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-gray-400">
                           {tool.category}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                      <p className="text-sm text-gray-400 truncate">
                         {tool.description}
                       </p>
                     </div>
                     {isSelected && (
-                      <ArrowRight className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                      <ArrowRight className="w-5 h-5 text-primary-400" />
                     )}
                   </button>
                 )
@@ -288,20 +288,20 @@ const CommandPalette = () => {
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-          <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+        <div className="px-4 py-3 border-t border-gray-700 bg-gray-900/50">
+          <div className="flex items-center justify-between text-xs text-gray-400">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1">
-                <kbd className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs">↑</kbd>
-                <kbd className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs">↓</kbd>
+                <kbd className="px-2 py-1 bg-gray-800 border border-gray-600 rounded text-xs">↑</kbd>
+                <kbd className="px-2 py-1 bg-gray-800 border border-gray-600 rounded text-xs">↓</kbd>
                 to navigate
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs">⏎</kbd>
+                <kbd className="px-2 py-1 bg-gray-800 border border-gray-600 rounded text-xs">⏎</kbd>
                 to select
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs">ESC</kbd>
+                <kbd className="px-2 py-1 bg-gray-800 border border-gray-600 rounded text-xs">ESC</kbd>
                 to close
               </span>
             </div>

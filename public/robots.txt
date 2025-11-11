@@ -1,0 +1,38 @@
+# www.robotstxt.org/
+
+# Cemal Online - AI & IT Tools Platform
+User-agent: *
+Allow: /
+Allow: /tools
+Allow: /about
+Allow: /fileshare
+Allow: /junior-it
+Allow: /settings
+Disallow: /admin
+Disallow: /api/
+Disallow: /*.json$
+
+# Crawl-delay for polite crawlers
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://www.cemal.online/sitemap.xml
+
+# Popular Search Engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /

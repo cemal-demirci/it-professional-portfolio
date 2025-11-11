@@ -47,11 +47,11 @@ When analyzing logs, if you see Lumen/Nanite errors, IMMEDIATELY warn that Amper
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Cpu className="w-8 h-8 text-yellow-600" />
           Ampere Event Analyzer
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">AI-powered analysis for Ampere systems</p>
+        <p className="text-gray-400">AI-powered analysis for Ampere systems</p>
       </div>
 
       {/* GPU Warning Banner */}
@@ -95,8 +95,8 @@ When analyzing logs, if you see Lumen/Nanite errors, IMMEDIATELY warn that Amper
       </div>
 
       {/* Log Input */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Ampere Event Logs</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">Ampere Event Logs</h3>
         <textarea
           value={eventLog}
           onChange={(e) => setEventLog(e.target.value)}
@@ -110,16 +110,16 @@ When analyzing logs, if you see Lumen/Nanite errors, IMMEDIATELY warn that Amper
 
       {/* Results */}
       {result && (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Analysis Results</h3>
-          <pre className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">{result}</pre>
+        <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
+          <h3 className="font-semibold text-white mb-4">Analysis Results</h3>
+          <pre className="whitespace-pre-wrap text-sm text-gray-800 text-gray-200 bg-gray-900 p-4 rounded-lg">{result}</pre>
         </div>
       )}
 
       {/* Tips */}
-      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-        <h4 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">Ampere Troubleshooting Tips:</h4>
-        <ul className="text-sm text-yellow-800 dark:text-yellow-300 space-y-1 ml-5 list-disc">
+      <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
+        <h4 className="font-semibold text-yellow-300 mb-2">Ampere Troubleshooting Tips:</h4>
+        <ul className="text-sm text-yellow-300 space-y-1 ml-5 list-disc">
           <li>Lumen crashes → Disable in UE5: Edit → Project Settings → Engine → Rendering → Global Illumination → Dynamic Global Illumination Method → None</li>
           <li>Nanite issues → Disable per-mesh or use traditional Static Mesh LODs</li>
           <li>Poor RT performance → Reduce ray tracing quality or disable entirely</li>

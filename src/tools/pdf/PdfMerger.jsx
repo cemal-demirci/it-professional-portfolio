@@ -52,27 +52,27 @@ const PdfMerger = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">PDF Merger</h1>
-        <p className="text-gray-600 dark:text-gray-400">Merge multiple PDF files into one</p>
+        <h1 className="text-3xl font-bold text-white">PDF Merger</h1>
+        <p className="text-gray-400">Merge multiple PDF files into one</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-primary-500 transition-colors">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-primary-500 transition-colors">
           <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
           <label className="cursor-pointer">
             <span className="btn-primary inline-block">Select PDF Files</span>
             <input type="file" multiple accept=".pdf" onChange={handleFileSelect} className="hidden" />
           </label>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">or drag and drop here</p>
+          <p className="text-sm text-gray-400 mt-2">or drag and drop here</p>
         </div>
 
         {files.length > 0 && (
           <div className="space-y-3">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Selected Files ({files.length})</h3>
+            <h3 className="font-semibold text-white">Selected Files ({files.length})</h3>
             <div className="space-y-2">
               {files.map((file, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{file.name}</span>
+                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 bg-gray-700 rounded-lg">
+                  <span className="text-sm text-gray-300">{file.name}</span>
                   <button onClick={() => removeFile(index)} className="text-red-600 hover:text-red-700">
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -88,9 +88,9 @@ const PdfMerger = () => {
         )}
       </div>
 
-      <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-        <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">How to Use</h3>
-        <ul className="text-sm text-blue-800 dark:text-blue-400 space-y-1 list-decimal list-inside">
+      <div className="bg-blue-900/30 border border-blue-800 rounded-lg p-4">
+        <h3 className="font-semibold text-blue-300 mb-2">How to Use</h3>
+        <ul className="text-sm text-blue-400 space-y-1 list-decimal list-inside">
           <li>Select two or more PDF files</li>
           <li>Files will be merged in the order you select them</li>
           <li>Click "Merge PDFs" to download the result</li>

@@ -225,9 +225,9 @@ const RemoteHost = ({ onBack }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white from-gray-900 to-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4">
-        <button onClick={onBack} className="mb-6 flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+        <button onClick={onBack} className="mb-6 flex items-center text-gray-400 hover:hover:text-white">
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back
         </button>
@@ -235,10 +235,10 @@ const RemoteHost = ({ onBack }) => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Main Panel */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+            <div className="bg-gray-800 rounded-2xl shadow-xl p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Screen Sharing</h2>
-                <div className={`px-4 py-2 rounded-lg ${connected ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'}`}>
+                <h2 className="text-2xl font-bold text-white">Screen Sharing</h2>
+                <div className={`px-4 py-2 rounded-lg ${connected ? 'bg-green-900/30 text-green-300' : 'bg-yellow-900/30 text-yellow-300'}`}>
                   {connected ? (
                     <div className="flex items-center">
                       <Users className="w-4 h-4 mr-2" />
@@ -267,8 +267,8 @@ const RemoteHost = ({ onBack }) => {
               </div>
 
               {sharing && (
-                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
-                  <p className="text-sm text-green-800 dark:text-green-400">
+                <div className="bg-green-900/20 rounded-lg p-4">
+                  <p className="text-sm text-green-400">
                     🟢 Your screen is being shared. The viewer can see your screen in real-time.
                   </p>
                 </div>
@@ -279,74 +279,74 @@ const RemoteHost = ({ onBack }) => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Session Mode Selector */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Session Mode</h3>
+            <div className="bg-gray-800 rounded-2xl shadow-xl p-6">
+              <h3 className="text-lg font-bold text-white mb-4">Session Mode</h3>
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => setSessionMode('secure')}
                   disabled={connected}
                   className={`p-3 rounded-lg border-2 transition-all ${
                     sessionMode === 'secure'
-                      ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30'
-                      : 'border-gray-300 dark:border-gray-600 hover:border-blue-400'
+                      ? 'border-blue-600 bg-blue-900/30'
+                      : 'border-gray-600 hover:border-blue-400'
                   } ${connected ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <Lock className="w-5 h-5 mx-auto mb-1 text-blue-600" />
-                  <div className="text-xs font-semibold text-gray-900 dark:text-white">Secure</div>
+                  <div className="text-xs font-semibold text-white">Secure</div>
                 </button>
                 <button
                   onClick={() => setSessionMode('local')}
                   disabled={connected}
                   className={`p-3 rounded-lg border-2 transition-all ${
                     sessionMode === 'local'
-                      ? 'border-green-600 bg-green-50 dark:bg-green-900/30'
-                      : 'border-gray-300 dark:border-gray-600 hover:border-green-400'
+                      ? 'border-green-600 bg-green-900/30'
+                      : 'border-gray-600 hover:border-green-400'
                   } ${connected ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <Wifi className="w-5 h-5 mx-auto mb-1 text-green-600" />
-                  <div className="text-xs font-semibold text-gray-900 dark:text-white">Local</div>
+                  <div className="text-xs font-semibold text-white">Local</div>
                 </button>
                 <button
                   onClick={() => setSessionMode('performance')}
                   disabled={connected}
                   className={`p-3 rounded-lg border-2 transition-all ${
                     sessionMode === 'performance'
-                      ? 'border-purple-600 bg-purple-50 dark:bg-purple-900/30'
-                      : 'border-gray-300 dark:border-gray-600 hover:border-purple-400'
+                      ? 'border-purple-600 bg-purple-900/30'
+                      : 'border-gray-600 hover:border-purple-400'
                   } ${connected ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <Zap className="w-5 h-5 mx-auto mb-1 text-purple-600" />
-                  <div className="text-xs font-semibold text-gray-900 dark:text-white">Turbo</div>
+                  <div className="text-xs font-semibold text-white">Turbo</div>
                 </button>
               </div>
 
               {/* Mode descriptions */}
               <div className="mt-3 text-xs space-y-2">
                 {sessionMode === 'secure' && (
-                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-400 dark:border-blue-600">
-                    <p className="text-blue-800 dark:text-blue-300 font-semibold mb-1">🔒 Secure Mode</p>
-                    <p className="text-blue-700 dark:text-blue-400">Password protection. Best for internet connections.</p>
+                  <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-600">
+                    <p className="text-blue-300 font-semibold mb-1">🔒 Secure Mode</p>
+                    <p className="text-blue-400">Password protection. Best for internet connections.</p>
                   </div>
                 )}
                 {sessionMode === 'local' && (
-                  <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-400 dark:border-green-600">
-                    <p className="text-green-800 dark:text-green-300 font-semibold mb-1">🏠 Local Mode</p>
-                    <p className="text-green-700 dark:text-green-400">No password. Auto-reconnect enabled. For trusted LANs only.</p>
+                  <div className="p-3 bg-green-900/20 rounded-lg border border-green-600">
+                    <p className="text-green-300 font-semibold mb-1">🏠 Local Mode</p>
+                    <p className="text-green-400">No password. Auto-reconnect enabled. For trusted LANs only.</p>
                   </div>
                 )}
                 {sessionMode === 'performance' && (
-                  <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-400 dark:border-purple-600">
-                    <p className="text-purple-800 dark:text-purple-300 font-semibold mb-1">⚡ Turbo Mode</p>
-                    <p className="text-purple-700 dark:text-purple-400">Maximum performance for LAN. No password. Optimized latency.</p>
+                  <div className="p-3 bg-purple-900/20 rounded-lg border border-purple-600">
+                    <p className="text-purple-300 font-semibold mb-1">⚡ Turbo Mode</p>
+                    <p className="text-purple-400">Maximum performance for LAN. No password. Optimized latency.</p>
                   </div>
                 )}
               </div>
 
               {/* Connection Quality Indicator */}
               {connected && (
-                <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div className="mt-3 p-3 bg-gray-50 bg-gray-700 rounded-lg">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Connection Quality</span>
+                    <span className="text-xs font-medium text-gray-300">Connection Quality</span>
                     <div className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-bold ${
                       connectionQuality === 'excellent' ? 'bg-green-100 text-green-800' :
                       connectionQuality === 'good' ? 'bg-blue-100 text-blue-800' :
@@ -365,19 +365,19 @@ const RemoteHost = ({ onBack }) => {
             </div>
 
             {/* Session Code & Password */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Connection Details</h3>
+            <div className="bg-gray-800 rounded-2xl shadow-xl p-6">
+              <h3 className="text-lg font-bold text-white mb-4">Connection Details</h3>
               <div className="space-y-4">
                 {/* Session Code */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Session Code
                   </label>
                   <div className="flex items-center space-x-2">
                     <input
                       value={sessionCode || 'Generating...'}
                       readOnly
-                      className="flex-1 px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white font-mono text-lg font-bold"
+                      className="flex-1 px-4 py-2 bg-gray-50 bg-gray-700 rounded-lg text-white font-mono text-lg font-bold"
                     />
                     <button onClick={copyCode} className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                       {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
@@ -388,16 +388,16 @@ const RemoteHost = ({ onBack }) => {
                 {/* Password */}
                 {sessionMode === 'secure' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
                       <Lock className="w-4 h-4" />
                       Password
                     </label>
-                    <div className="px-4 py-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400 dark:border-yellow-600">
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white text-center font-mono tracking-wider">
+                    <div className="px-4 py-3 bg-yellow-900/20 rounded-lg border-2 border-yellow-600">
+                      <p className="text-2xl font-bold text-white text-center font-mono tracking-wider">
                         {sessionPassword || '------'}
                       </p>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    <p className="text-xs text-gray-400 mt-2">
                       Share this password with the viewer to allow connection
                     </p>
                   </div>
@@ -406,27 +406,27 @@ const RemoteHost = ({ onBack }) => {
                 {(sessionMode === 'local' || sessionMode === 'performance') && (
                   <div className={`p-4 rounded-lg border ${
                     sessionMode === 'performance'
-                      ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-400 dark:border-purple-600'
-                      : 'bg-green-50 dark:bg-green-900/20 border-green-400 dark:border-green-600'
+                      ? 'bg-purple-900/20 border-purple-600'
+                      : 'bg-green-900/20 border-green-600'
                   }`}>
                     <div className="flex items-center gap-2 mb-2">
                       {sessionMode === 'performance' ? (
-                        <Zap className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        <Zap className="w-5 h-5 text-purple-400" />
                       ) : (
-                        <Wifi className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        <Wifi className="w-5 h-5 text-green-400" />
                       )}
                       <p className={`font-semibold ${
                         sessionMode === 'performance'
-                          ? 'text-purple-900 dark:text-purple-300'
-                          : 'text-green-900 dark:text-green-300'
+                          ? 'text-purple-300'
+                          : 'text-green-300'
                       }`}>
                         {sessionMode === 'performance' ? 'Turbo Mode Active' : 'Local Mode Active'}
                       </p>
                     </div>
                     <p className={`text-sm ${
                       sessionMode === 'performance'
-                        ? 'text-purple-800 dark:text-purple-400'
-                        : 'text-green-800 dark:text-green-400'
+                        ? 'text-purple-400'
+                        : 'text-green-400'
                     }`}>
                       {sessionMode === 'performance'
                         ? 'Optimized for maximum performance on local networks. Auto-reconnect enabled.'
@@ -436,17 +436,17 @@ const RemoteHost = ({ onBack }) => {
                 )}
 
                 {qrCode && (
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <div className="bg-gray-50 bg-gray-700 p-4 rounded-lg">
                     <img src={qrCode} alt="QR Code" className="mx-auto" />
-                    <p className="text-xs text-center text-gray-600 dark:text-gray-400 mt-2">Scan to connect</p>
+                    <p className="text-xs text-center text-gray-400 mt-2">Scan to connect</p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Chat */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+            <div className="bg-gray-800 rounded-2xl shadow-xl p-6">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Chat
               </h3>
@@ -455,8 +455,8 @@ const RemoteHost = ({ onBack }) => {
                   <div key={i} className={`flex ${msg.from === 'host' ? 'justify-end' : msg.from === 'system' ? 'justify-center' : 'justify-start'}`}>
                     <div className={`px-4 py-2 rounded-lg max-w-xs ${
                       msg.from === 'host' ? 'bg-blue-600 text-white' :
-                      msg.from === 'system' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs' :
-                      'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                      msg.from === 'system' ? 'bg-yellow-900/30 text-yellow-300 text-xs' :
+                      'bg-gray-700 text-white'
                     }`}>
                       {msg.text}
                     </div>
@@ -470,7 +470,7 @@ const RemoteHost = ({ onBack }) => {
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Type a message..."
                   disabled={!connected}
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50"
+                  className="flex-1 px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white disabled:opacity-50"
                 />
                 <button onClick={sendMessage} disabled={!connected} className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
                   <Send className="w-5 h-5" />

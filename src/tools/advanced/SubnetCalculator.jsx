@@ -86,11 +86,11 @@ const SubnetCalculator = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Advanced Subnet Calculator</h1>
-        <p className="text-gray-600 dark:text-gray-400">Calculate IP subnets with multiple input methods</p>
+        <h1 className="text-3xl font-bold text-white">Advanced Subnet Calculator</h1>
+        <p className="text-gray-400">Calculate IP subnets with multiple input methods</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         {/* Mode Selection */}
         <div className="flex gap-2 flex-wrap">
           <button
@@ -98,7 +98,7 @@ const SubnetCalculator = () => {
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               mode === 'cidr'
                 ? 'bg-primary-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-gray-700 text-gray-300 hover:hover:bg-gray-600'
             }`}
           >
             <Calculator className="w-4 h-4 inline mr-2" />
@@ -109,7 +109,7 @@ const SubnetCalculator = () => {
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               mode === 'subnets'
                 ? 'bg-primary-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-gray-700 text-gray-300 hover:hover:bg-gray-600'
             }`}
           >
             <Network className="w-4 h-4 inline mr-2" />
@@ -120,7 +120,7 @@ const SubnetCalculator = () => {
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               mode === 'hosts'
                 ? 'bg-primary-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-gray-700 text-gray-300 hover:hover:bg-gray-600'
             }`}
           >
             From Host Count
@@ -130,30 +130,30 @@ const SubnetCalculator = () => {
         {/* Input Fields */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">IP Address</label>
-            <input type="text" value={ip} onChange={(e) => setIp(e.target.value)} placeholder="192.168.1.0" className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            <label className="block text-sm font-medium text-gray-300">IP Address</label>
+            <input type="text" value={ip} onChange={(e) => setIp(e.target.value)} placeholder="192.168.1.0" className="input-field bg-gray-700 border-gray-600 text-white" />
           </div>
 
           {mode === 'cidr' && (
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">CIDR Notation (0-32)</label>
-              <input type="number" min="0" max="32" value={cidr} onChange={(e) => setCidr(e.target.value)} className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+              <label className="block text-sm font-medium text-gray-300">CIDR Notation (0-32)</label>
+              <input type="number" min="0" max="32" value={cidr} onChange={(e) => setCidr(e.target.value)} className="input-field bg-gray-700 border-gray-600 text-white" />
             </div>
           )}
 
           {mode === 'subnets' && (
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Number of Subnets Needed</label>
-              <input type="number" min="1" value={subnetCount} onChange={(e) => setSubnetCount(e.target.value)} placeholder="4" className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
-              <p className="text-xs text-gray-500 dark:text-gray-400">Calculate mask based on subnet count</p>
+              <label className="block text-sm font-medium text-gray-300">Number of Subnets Needed</label>
+              <input type="number" min="1" value={subnetCount} onChange={(e) => setSubnetCount(e.target.value)} placeholder="4" className="input-field bg-gray-700 border-gray-600 text-white" />
+              <p className="text-xs text-gray-400">Calculate mask based on subnet count</p>
             </div>
           )}
 
           {mode === 'hosts' && (
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Number of Hosts Needed</label>
-              <input type="number" min="1" value={hostCount} onChange={(e) => setHostCount(e.target.value)} placeholder="50" className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
-              <p className="text-xs text-gray-500 dark:text-gray-400">Calculate mask based on host count</p>
+              <label className="block text-sm font-medium text-gray-300">Number of Hosts Needed</label>
+              <input type="number" min="1" value={hostCount} onChange={(e) => setHostCount(e.target.value)} placeholder="50" className="input-field bg-gray-700 border-gray-600 text-white" />
+              <p className="text-xs text-gray-400">Calculate mask based on host count</p>
             </div>
           )}
         </div>
@@ -164,17 +164,17 @@ const SubnetCalculator = () => {
           <div className="space-y-6 pt-4">
             {/* Primary Information */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-gradient-to-br from-primary-50 to-cyan-50 dark:from-primary-900/30 dark:to-cyan-900/30 rounded-lg">
-                <div className="text-sm text-primary-600 dark:text-primary-400 mb-1">Network Address</div>
-                <div className="font-mono font-bold text-lg text-gray-900 dark:text-white">{result.network}</div>
+              <div className="p-4 bg-gradient-to-br from-primary-900/30 to-cyan-900/30 rounded-lg">
+                <div className="text-sm text-primary-400 mb-1">Network Address</div>
+                <div className="font-mono font-bold text-lg text-white">{result.network}</div>
               </div>
-              <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-lg">
-                <div className="text-sm text-blue-600 dark:text-blue-400 mb-1">Subnet Mask</div>
-                <div className="font-mono font-bold text-lg text-gray-900 dark:text-white">{result.mask}</div>
+              <div className="p-4 bg-gradient-to-br from-blue-900/30 to-indigo-900/30 rounded-lg">
+                <div className="text-sm text-blue-400 mb-1">Subnet Mask</div>
+                <div className="font-mono font-bold text-lg text-white">{result.mask}</div>
               </div>
-              <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-lg">
-                <div className="text-sm text-purple-600 dark:text-purple-400 mb-1">CIDR Notation</div>
-                <div className="font-mono font-bold text-lg text-gray-900 dark:text-white">/{result.cidr}</div>
+              <div className="p-4 bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-lg">
+                <div className="text-sm text-purple-400 mb-1">CIDR Notation</div>
+                <div className="font-mono font-bold text-lg text-white">/{result.cidr}</div>
               </div>
             </div>
 
@@ -191,17 +191,17 @@ const SubnetCalculator = () => {
                 { label: 'Type', value: result.isPrivate ? 'Private IP' : 'Public IP' },
                 { label: 'Possible Subnets', value: result.possibleSubnets.toLocaleString() }
               ].map((item, i) => (
-                <div key={i} className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                  <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">{item.label}</div>
-                  <div className="font-mono font-semibold text-gray-900 dark:text-white">{item.value}</div>
+                <div key={i} className="p-3 bg-gray-50 bg-gray-700/50 rounded-lg">
+                  <div className="text-xs text-gray-400 mb-1">{item.label}</div>
+                  <div className="font-mono font-semibold text-white">{item.value}</div>
                 </div>
               ))}
             </div>
 
             {/* Binary Representation */}
             <div className="space-y-3">
-              <h3 className="font-semibold text-gray-900 dark:text-white">Binary Representation</h3>
-              <div className="p-4 bg-gray-900 dark:bg-black rounded-lg space-y-2 font-mono text-sm">
+              <h3 className="font-semibold text-white">Binary Representation</h3>
+              <div className="p-4 bg-black rounded-lg space-y-2 font-mono text-sm">
                 <div>
                   <span className="text-green-400">Network:    </span>
                   <span className="text-gray-300">{result.binaryNetwork}</span>

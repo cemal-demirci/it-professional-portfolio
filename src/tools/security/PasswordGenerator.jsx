@@ -71,11 +71,11 @@ const PasswordGenerator = () => {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className={`text-center space-y-2 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Şifre Üretici</h1>
-        <p className="text-gray-600 dark:text-gray-400">Güçlü ve güvenli şifreler oluşturun</p>
+        <h1 className="text-3xl font-bold text-white">Şifre Üretici</h1>
+        <p className="text-gray-400">Güçlü ve güvenli şifreler oluşturun</p>
       </div>
 
-      <div className={`bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
+      <div className={`bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
         {/* Generated Password Display */}
         {password && (
           <div className="space-y-3">
@@ -143,9 +143,9 @@ const PasswordGenerator = () => {
         </button>
       </div>
 
-      <div className={`bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
-        <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">Güvenlik İpuçları</h3>
-        <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1 list-disc list-inside">
+      <div className={`bg-blue-900/20 border border-blue-800 rounded-lg p-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
+        <h3 className="font-semibold text-blue-300 mb-2">Güvenlik İpuçları</h3>
+        <ul className="text-sm text-blue-300 space-y-1 list-disc list-inside">
           <li>En az 12-16 karakter uzunluğunda şifre kullanın</li>
           <li>Farklı hesaplar için farklı şifreler kullanın</li>
           <li>Şifrelerinizi bir şifre yöneticisinde saklayın</li>

@@ -164,10 +164,10 @@ const ZeroDensity = () => {
       </div>
 
       {/* Warning Banner */}
-      <div className={`bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-600 p-4 rounded-lg transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
+      <div className={`bg-yellow-900/20 border-l-4 border-yellow-600 p-4 rounded-lg transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
         <div className="flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-yellow-800 dark:text-yellow-300">
+          <div className="text-sm text-yellow-300">
             <strong>Internal Use Only:</strong> Bu araçlar Zero Density şirket içi kullanım içindir.
             Evo II, Evo III, Evo III Pro ve Ampere sistemleri için özelleştirilmiştir.
           </div>
@@ -181,22 +181,22 @@ const ZeroDensity = () => {
           return (
             <div
               key={idx}
-              className={`bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 transition-all duration-700 hover:shadow-xl hover:scale-105 hover:-translate-y-1 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+              className={`bg-gray-800 rounded-xl p-6 border border-gray-700 transition-all duration-700 hover:shadow-xl hover:scale-105 hover:-translate-y-1 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
               style={{ transitionDelay: `${200 + idx * 100}ms` }}
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</span>
+                <span className="text-sm text-gray-400">{stat.label}</span>
                 <Icon className={`w-5 h-5 ${stat.color}`} />
               </div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+              <div className="text-3xl font-bold text-white">{stat.value}</div>
             </div>
           )
         })}
       </div>
 
       {/* System Filter */}
-      <div className={`bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Filter by System</label>
+      <div className={`bg-gray-800 rounded-xl p-6 border border-gray-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
+        <label className="block text-sm font-medium text-gray-300 mb-3">Filter by System</label>
         <div className="flex flex-wrap gap-2">
           {Object.entries(systems).map(([key, label]) => (
             <button
@@ -205,7 +205,7 @@ const ZeroDensity = () => {
               className={`px-4 py-2 rounded-lg font-medium transition-all hover:scale-105 ${
                 selectedSystem === key
                   ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  : 'bg-gray-700 text-gray-300 hover:hover:bg-gray-600'
               }`}
             >
               {label}
@@ -283,7 +283,7 @@ const ZeroDensity = () => {
               <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center animate-gradient-rotate`}>
                 <CategoryIcon className="w-6 h-6 text-white animate-pulse-slow" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{category.category}</h2>
+              <h2 className="text-2xl font-bold text-white">{category.category}</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -293,7 +293,7 @@ const ZeroDensity = () => {
                   <Link
                     key={toolIdx}
                     to={tool.path}
-                    className="group bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500 transition-all hover:shadow-lg hover:scale-105 hover:-translate-y-2"
+                    className="group bg-gray-800 rounded-xl p-6 border border-gray-700 hover:hover:border-orange-500 transition-all hover:shadow-lg hover:scale-105 hover:-translate-y-2"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -301,20 +301,20 @@ const ZeroDensity = () => {
                       </div>
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         tool.status === 'active'
-                          ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                          : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                          ? 'bg-green-900/30 text-green-400'
+                          : 'bg-yellow-900/30 text-yellow-400'
                       }`}>
                         {tool.status === 'active' ? '✓ Active' : '⚡ Beta'}
                       </span>
                     </div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400">
+                    <h3 className="font-semibold text-white mb-2 group-hover:group-hover:text-orange-400">
                       {tool.name}
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                    <p className="text-sm text-gray-400 mb-3">
                       {tool.description}
                     </p>
                     {tool.gpu && (
-                      <div className="text-xs text-gray-500 dark:text-gray-500 flex items-center gap-1">
+                      <div className="text-xs text-gray-500 flex items-center gap-1">
                         <Zap className="w-3 h-3" />
                         {tool.gpu}
                       </div>
@@ -328,72 +328,72 @@ const ZeroDensity = () => {
       })}
 
       {/* System Comparison Table */}
-      <div className={`bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 transition-all duration-700 hover:shadow-xl ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '1000ms' }}>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+      <div className={`bg-gray-800 rounded-xl p-6 border border-gray-700 transition-all duration-700 hover:shadow-xl ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '1000ms' }}>
+        <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
           <Info className="w-6 h-6 text-blue-600" />
           Systems Comparison
         </h3>
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+            <thead className="bg-gray-50 bg-gray-700">
               <tr>
-                <th className="p-3 text-left font-semibold text-gray-900 dark:text-white">Feature</th>
-                <th className="p-3 text-left font-semibold text-red-700 dark:text-red-400">Evo II</th>
-                <th className="p-3 text-left font-semibold text-orange-700 dark:text-orange-400">Evo III</th>
-                <th className="p-3 text-left font-semibold text-yellow-700 dark:text-yellow-400">Evo III Pro</th>
-                <th className="p-3 text-left font-semibold text-amber-700 dark:text-amber-400">Ampere</th>
+                <th className="p-3 text-left font-semibold text-white">Feature</th>
+                <th className="p-3 text-left font-semibold text-red-400">Evo II</th>
+                <th className="p-3 text-left font-semibold text-orange-400">Evo III</th>
+                <th className="p-3 text-left font-semibold text-yellow-400">Evo III Pro</th>
+                <th className="p-3 text-left font-semibold text-amber-400">Ampere</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="divide-y divide-gray-700">
               <tr>
-                <td className="p-3 font-medium text-gray-900 dark:text-white">GPU</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">RTX 4090</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">RTX 5090</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">RTX 6000 Pro</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">RTX A6000</td>
+                <td className="p-3 font-medium text-white">GPU</td>
+                <td className="p-3 text-gray-400">RTX 4090</td>
+                <td className="p-3 text-gray-400">RTX 5090</td>
+                <td className="p-3 text-gray-400">RTX 6000 Pro</td>
+                <td className="p-3 text-gray-400">RTX A6000</td>
               </tr>
               <tr>
-                <td className="p-3 font-medium text-gray-900 dark:text-white">VRAM</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">48GB</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">32GB</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">96GB</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">48GB</td>
+                <td className="p-3 font-medium text-white">VRAM</td>
+                <td className="p-3 text-gray-400">48GB</td>
+                <td className="p-3 text-gray-400">32GB</td>
+                <td className="p-3 text-gray-400">96GB</td>
+                <td className="p-3 text-gray-400">48GB</td>
               </tr>
               <tr>
-                <td className="p-3 font-medium text-gray-900 dark:text-white">RAM</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">64GB DDR5</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">64GB DDR5</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">128GB DDR5 ECC</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">64GB DDR4 ECC</td>
+                <td className="p-3 font-medium text-white">RAM</td>
+                <td className="p-3 text-gray-400">64GB DDR5</td>
+                <td className="p-3 text-gray-400">64GB DDR5</td>
+                <td className="p-3 text-gray-400">128GB DDR5 ECC</td>
+                <td className="p-3 text-gray-400">64GB DDR4 ECC</td>
               </tr>
               <tr>
-                <td className="p-3 font-medium text-gray-900 dark:text-white">UE5 Lumen</td>
+                <td className="p-3 font-medium text-white">UE5 Lumen</td>
                 <td className="p-3 text-green-600">✓ Full Support</td>
                 <td className="p-3 text-green-600">✓ Full Support</td>
                 <td className="p-3 text-green-600">✓ Full Support</td>
                 <td className="p-3 text-red-600">✗ Not Supported</td>
               </tr>
               <tr>
-                <td className="p-3 font-medium text-gray-900 dark:text-white">Nanite</td>
+                <td className="p-3 font-medium text-white">Nanite</td>
                 <td className="p-3 text-green-600">✓ Full Support</td>
                 <td className="p-3 text-green-600">✓ Full Support</td>
                 <td className="p-3 text-green-600">✓ Full Support</td>
                 <td className="p-3 text-yellow-600">⚠ Limited</td>
               </tr>
               <tr>
-                <td className="p-3 font-medium text-gray-900 dark:text-white">DLSS</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">DLSS 3</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">DLSS 3.5</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">DLSS 3.5</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">DLSS 2.0</td>
+                <td className="p-3 font-medium text-white">DLSS</td>
+                <td className="p-3 text-gray-400">DLSS 3</td>
+                <td className="p-3 text-gray-400">DLSS 3.5</td>
+                <td className="p-3 text-gray-400">DLSS 3.5</td>
+                <td className="p-3 text-gray-400">DLSS 2.0</td>
               </tr>
               <tr>
-                <td className="p-3 font-medium text-gray-900 dark:text-white">Use Case</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">Broadcast</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">Professional</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">Enterprise</td>
-                <td className="p-3 text-gray-600 dark:text-gray-400">Legacy</td>
+                <td className="p-3 font-medium text-white">Use Case</td>
+                <td className="p-3 text-gray-400">Broadcast</td>
+                <td className="p-3 text-gray-400">Professional</td>
+                <td className="p-3 text-gray-400">Enterprise</td>
+                <td className="p-3 text-gray-400">Legacy</td>
               </tr>
             </tbody>
           </table>
@@ -401,20 +401,20 @@ const ZeroDensity = () => {
       </div>
 
       {/* Common Issues Guide */}
-      <div className={`bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl p-6 border border-red-200 dark:border-red-800 transition-all duration-700 hover:shadow-xl ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '1100ms' }}>
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className={`bg-gradient-to-r from-red-900/20 to-orange-900/20 rounded-xl p-6 border border-red-800 transition-all duration-700 hover:shadow-xl ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '1100ms' }}>
+        <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
           <AlertTriangle className="w-5 h-5 text-red-600" />
           Common System Issues by Hardware
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Ampere Issues */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-red-200 dark:border-red-700 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-lg">
-            <h4 className="font-semibold text-red-700 dark:text-red-400 mb-2 flex items-center gap-2">
+          <div className="bg-gray-800 rounded-lg p-4 border border-red-700 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-lg">
+            <h4 className="font-semibold text-red-400 mb-2 flex items-center gap-2">
               <Cpu className="w-4 h-4" />
               Ampere (A6000)
             </h4>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+            <ul className="text-sm text-gray-300 space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-red-500 mt-0.5">•</span>
                 <span><strong>Lumen crashes:</strong> Disable in UE5 settings</span>
@@ -427,12 +427,12 @@ const ZeroDensity = () => {
           </div>
 
           {/* Evo II */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-orange-200 dark:border-orange-700 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-lg">
-            <h4 className="font-semibold text-orange-700 dark:text-orange-400 mb-2 flex items-center gap-2">
+          <div className="bg-gray-800 rounded-lg p-4 border border-orange-700 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-lg">
+            <h4 className="font-semibold text-orange-400 mb-2 flex items-center gap-2">
               <Monitor className="w-4 h-4" />
               Evo II (4090)
             </h4>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+            <ul className="text-sm text-gray-300 space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-green-500 mt-0.5">✓</span>
                 <span>Full Lumen & Nanite</span>
@@ -445,12 +445,12 @@ const ZeroDensity = () => {
           </div>
 
           {/* Evo III */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-yellow-200 dark:border-yellow-700 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-lg">
-            <h4 className="font-semibold text-yellow-700 dark:text-yellow-400 mb-2 flex items-center gap-2">
+          <div className="bg-gray-800 rounded-lg p-4 border border-yellow-700 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-lg">
+            <h4 className="font-semibold text-yellow-400 mb-2 flex items-center gap-2">
               <Monitor className="w-4 h-4" />
               Evo III (5090)
             </h4>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+            <ul className="text-sm text-gray-300 space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-green-500 mt-0.5">✓</span>
                 <span>Latest UE5 features</span>
@@ -463,12 +463,12 @@ const ZeroDensity = () => {
           </div>
 
           {/* Evo III Pro */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-amber-200 dark:border-amber-700 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-lg">
-            <h4 className="font-semibold text-amber-700 dark:text-amber-400 mb-2 flex items-center gap-2">
+          <div className="bg-gray-800 rounded-lg p-4 border border-amber-700 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-lg">
+            <h4 className="font-semibold text-amber-400 mb-2 flex items-center gap-2">
               <Monitor className="w-4 h-4" />
               Evo III Pro (6000 Pro)
             </h4>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+            <ul className="text-sm text-gray-300 space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-green-500 mt-0.5">✓</span>
                 <span>96GB VRAM for 8K+</span>

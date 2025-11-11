@@ -105,37 +105,37 @@ pause`
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <FileText className="w-8 h-8" />
           Hosts File Manager
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">Manage Windows hosts file entries</p>
+        <p className="text-gray-400">Manage Windows hosts file entries</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setAction('add')}
-            className={`px-4 py-2 rounded-lg font-medium ${action === 'add' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+            className={`px-4 py-2 rounded-lg font-medium ${action === 'add' ? 'bg-primary-500 text-white' : 'bg-gray-700 text-gray-300'}`}
           >
             Add Entries
           </button>
           <button
             onClick={() => setAction('remove')}
-            className={`px-4 py-2 rounded-lg font-medium ${action === 'remove' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+            className={`px-4 py-2 rounded-lg font-medium ${action === 'remove' ? 'bg-primary-500 text-white' : 'bg-gray-700 text-gray-300'}`}
           >
             Remove Entries
           </button>
           <button
             onClick={() => setAction('backup')}
-            className={`px-4 py-2 rounded-lg font-medium ${action === 'backup' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+            className={`px-4 py-2 rounded-lg font-medium ${action === 'backup' ? 'bg-primary-500 text-white' : 'bg-gray-700 text-gray-300'}`}
           >
             Backup Only
           </button>
           {action === 'add' && (
             <button
               onClick={loadAdBlocking}
-              className="px-4 py-2 rounded-lg font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 hover:bg-red-200"
+              className="px-4 py-2 rounded-lg font-medium bg-red-900/30 text-red-400 hover:bg-red-200"
             >
               Load Ad-Blocking List
             </button>
@@ -145,7 +145,7 @@ pause`
         {action !== 'backup' && (
           <div>
             <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-gray-900 dark:text-white">Hosts Entries</h3>
+              <h3 className="font-semibold text-white">Hosts Entries</h3>
               <button onClick={addEntry} className="btn-primary flex items-center gap-2">
                 <Plus className="w-5 h-5" />
                 Add Entry
@@ -160,25 +160,25 @@ pause`
                     value={entry.ip}
                     onChange={(e) => updateEntry(index, 'ip', e.target.value)}
                     placeholder="IP Address"
-                    className="input-field text-sm md:col-span-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field text-sm md:col-span-3 bg-gray-700 border-gray-600 text-white"
                   />
                   <input
                     type="text"
                     value={entry.hostname}
                     onChange={(e) => updateEntry(index, 'hostname', e.target.value)}
                     placeholder="Hostname/Domain"
-                    className="input-field text-sm md:col-span-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field text-sm md:col-span-4 bg-gray-700 border-gray-600 text-white"
                   />
                   <input
                     type="text"
                     value={entry.comment}
                     onChange={(e) => updateEntry(index, 'comment', e.target.value)}
                     placeholder="Comment (optional)"
-                    className="input-field text-sm md:col-span-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field text-sm md:col-span-4 bg-gray-700 border-gray-600 text-white"
                   />
                   <button
                     onClick={() => removeEntry(index)}
-                    className="px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded hover:bg-red-200 md:col-span-1"
+                    className="px-3 py-2 bg-red-900/30 text-red-400 rounded hover:bg-red-200 md:col-span-1"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -194,8 +194,8 @@ pause`
         </button>
       </div>
 
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-        <p className="text-sm text-blue-800 dark:text-blue-300">
+      <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
+        <p className="text-sm text-blue-300">
           <strong>Tip:</strong> Hosts file location: <code>C:\Windows\System32\drivers\etc\hosts</code>
           <br />Use 0.0.0.0 to block domains, or specific IPs to redirect.
         </p>

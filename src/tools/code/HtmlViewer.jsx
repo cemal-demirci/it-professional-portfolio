@@ -70,11 +70,11 @@ const HtmlViewer = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Eye className="w-8 h-8 text-orange-600" />
           HTML Live Viewer
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Write HTML/CSS/JS and see live preview with responsive modes
         </p>
       </div>
@@ -82,15 +82,15 @@ const HtmlViewer = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* HTML Editor */}
         <div className="space-y-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-            <div className="border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
+          <div className="bg-gray-800 rounded-xl border border-gray-700">
+            <div className="border-b border-gray-700 p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Code className="w-5 h-5 text-orange-600" />
-                <h3 className="font-semibold text-gray-900 dark:text-white">HTML Code</h3>
+                <h3 className="font-semibold text-white">HTML Code</h3>
               </div>
               <button
                 onClick={handleCopy}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-700 text-gray-300 rounded-lg hover:hover:bg-gray-600 transition-colors"
               >
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 {copied ? 'Copied!' : 'Copy'}
@@ -99,7 +99,7 @@ const HtmlViewer = () => {
             <textarea
               value={htmlCode}
               onChange={(e) => setHtmlCode(e.target.value)}
-              className="w-full h-[calc(100vh-24rem)] p-4 font-mono text-sm bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-0 focus:ring-0 resize-none"
+              className="w-full h-[calc(100vh-24rem)] p-4 font-mono text-sm bg-gray-900 text-gray-100 border-0 focus:ring-0 resize-none"
               spellCheck="false"
             />
           </div>
@@ -107,11 +107,11 @@ const HtmlViewer = () => {
 
         {/* Live Preview */}
         <div className="space-y-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-            <div className="border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
+          <div className="bg-gray-800 rounded-xl border border-gray-700">
+            <div className="border-b border-gray-700 p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Eye className="w-5 h-5 text-green-600" />
-                <h3 className="font-semibold text-gray-900 dark:text-white">Live Preview</h3>
+                <h3 className="font-semibold text-white">Live Preview</h3>
               </div>
 
               {/* View Mode Selector */}
@@ -120,8 +120,8 @@ const HtmlViewer = () => {
                   onClick={() => setViewMode('desktop')}
                   className={`p-2 rounded-lg transition-colors ${
                     viewMode === 'desktop'
-                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      ? 'bg-primary-900 text-primary-300'
+                      : 'bg-gray-700 text-gray-400 hover:hover:bg-gray-600'
                   }`}
                   title="Desktop View"
                 >
@@ -131,8 +131,8 @@ const HtmlViewer = () => {
                   onClick={() => setViewMode('tablet')}
                   className={`p-2 rounded-lg transition-colors ${
                     viewMode === 'tablet'
-                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      ? 'bg-primary-900 text-primary-300'
+                      : 'bg-gray-700 text-gray-400 hover:hover:bg-gray-600'
                   }`}
                   title="Tablet View"
                 >
@@ -142,8 +142,8 @@ const HtmlViewer = () => {
                   onClick={() => setViewMode('mobile')}
                   className={`p-2 rounded-lg transition-colors ${
                     viewMode === 'mobile'
-                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      ? 'bg-primary-900 text-primary-300'
+                      : 'bg-gray-700 text-gray-400 hover:hover:bg-gray-600'
                   }`}
                   title="Mobile View"
                 >
@@ -152,7 +152,7 @@ const HtmlViewer = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-gray-50 dark:bg-gray-900 min-h-[calc(100vh-24rem)] flex items-start justify-center overflow-auto">
+            <div className="p-4 bg-gray-900 min-h-[calc(100vh-24rem)] flex items-start justify-center overflow-auto">
               <div
                 style={{
                   width: getPreviewWidth(),
@@ -177,9 +177,9 @@ const HtmlViewer = () => {
       </div>
 
       {/* Tips */}
-      <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
-        <h4 className="font-semibold text-orange-900 dark:text-orange-300 mb-2">Features:</h4>
-        <ul className="text-sm text-orange-800 dark:text-orange-300 space-y-1 ml-5 list-disc">
+      <div className="bg-orange-900/20 border border-orange-800 rounded-lg p-4">
+        <h4 className="font-semibold text-orange-300 mb-2">Features:</h4>
+        <ul className="text-sm text-orange-300 space-y-1 ml-5 list-disc">
           <li>✅ Full HTML5, CSS3, and JavaScript support</li>
           <li>📱 Responsive preview modes (Desktop, Tablet, Mobile)</li>
           <li>⚡ Live preview as you type</li>

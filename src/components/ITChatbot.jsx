@@ -126,7 +126,7 @@ NOT: Sadece IT konularında yardımcı ol!`
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-xl">
+    <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden shadow-xl">
       {/* Header */}
       <div className="bg-gradient-to-r from-cyan-600 to-teal-600 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -155,7 +155,7 @@ NOT: Sadece IT konularında yardımcı ol!`
       </div>
 
       {/* Messages */}
-      <div className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900/50">
+      <div className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-900/50">
         {messages.map((msg, idx) => (
           <div
             key={idx}
@@ -179,11 +179,11 @@ NOT: Sadece IT konularında yardımcı ol!`
               <div className={`inline-block p-3 rounded-lg ${
                 msg.role === 'user'
                   ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white'
-                  : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700'
+                  : 'bg-gray-800 text-white border border-gray-700'
               }`}>
                 <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-xs text-gray-400 mt-1">
                 {new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
@@ -195,7 +195,7 @@ NOT: Sadece IT konularında yardımcı ol!`
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center">
               <Bot className="w-5 h-5 text-white animate-pulse" />
             </div>
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 rounded-lg">
+            <div className="bg-gray-800 border border-gray-700 p-3 rounded-lg">
               <div className="flex gap-1">
                 <div className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -210,8 +210,8 @@ NOT: Sadece IT konularında yardımcı ol!`
 
       {/* Quick Questions */}
       {messages.length === 1 && !loading && (
-        <div className="p-4 bg-cyan-50 dark:bg-cyan-900/20 border-t border-gray-200 dark:border-gray-700">
-          <p className="text-xs text-cyan-900 dark:text-cyan-200 mb-2 flex items-center gap-1">
+        <div className="p-4 bg-cyan-900/20 border-t border-gray-700">
+          <p className="text-xs text-cyan-200 mb-2 flex items-center gap-1">
             <Sparkles className="w-3 h-3" />
             Hızlı Sorular:
           </p>
@@ -220,7 +220,7 @@ NOT: Sadece IT konularında yardımcı ol!`
               <button
                 key={idx}
                 onClick={() => handleQuickQuestion(q)}
-                className="text-xs px-3 py-1 bg-white dark:bg-gray-800 text-cyan-700 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-600 rounded-full hover:bg-cyan-100 dark:hover:bg-cyan-900/50 transition-colors"
+                className="text-xs px-3 py-1 bg-gray-800 text-cyan-300 border border-cyan-600 rounded-full hover:hover:bg-cyan-900/50 transition-colors"
               >
                 {q}
               </button>
@@ -231,21 +231,21 @@ NOT: Sadece IT konularında yardımcı ol!`
 
       {/* Error */}
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 border-t border-red-200 dark:border-red-800 flex items-start gap-2">
+        <div className="p-3 bg-red-900/20 border-t border-red-800 flex items-start gap-2">
           <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-red-800 dark:text-red-300">{error}</p>
+          <p className="text-xs text-red-300">{error}</p>
         </div>
       )}
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 dark:border-gray-700">
+      <form onSubmit={handleSubmit} className="p-4 border-t border-gray-700">
         <div className="flex gap-2">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="IT sorunuzu yazın... (örn: DNS nedir?)"
-            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
+            className="flex-1 px-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white text-sm"
             disabled={loading}
           />
           <button
@@ -260,7 +260,7 @@ NOT: Sadece IT konularında yardımcı ol!`
             )}
           </button>
         </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+        <p className="text-xs text-gray-400 mt-2">
           💡 İpucu: Detaylı soru sorun, daha iyi cevap alın!
         </p>
       </form>

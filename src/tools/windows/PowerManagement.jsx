@@ -67,15 +67,15 @@ const PowerManagement = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Windows Power Management</h1>
-        <p className="text-gray-600 dark:text-gray-400">Generate PowerShell scripts for power management</p>
+        <h1 className="text-3xl font-bold text-white">Windows Power Management</h1>
+        <p className="text-gray-400">Generate PowerShell scripts for power management</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Select Options</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">Select Options</h3>
         <div className="space-y-3">
           {options.map((option) => (
-            <label key={option.key} className="flex items-start space-x-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <label key={option.key} className="flex items-start space-x-3 cursor-pointer p-3 rounded-lg hover:hover:bg-gray-700/50">
               <input
                 type="checkbox"
                 checked={selectedOptions[option.key]}
@@ -83,8 +83,8 @@ const PowerManagement = () => {
                 className="w-5 h-5 mt-0.5 text-primary-600 rounded"
               />
               <div className="flex-1">
-                <div className="font-medium text-gray-900 dark:text-white">{option.label}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{option.desc}</div>
+                <div className="font-medium text-white">{option.label}</div>
+                <div className="text-sm text-gray-400">{option.desc}</div>
               </div>
             </label>
           ))}
@@ -103,16 +103,16 @@ const PowerManagement = () => {
               </button>
             </div>
 
-            <div className="p-4 bg-gray-900 dark:bg-black rounded-lg overflow-x-auto">
+            <div className="p-4 bg-black rounded-lg overflow-x-auto">
               <pre className="text-sm text-green-400 font-mono whitespace-pre-wrap">{generateScript()}</pre>
             </div>
           </div>
         )}
       </div>
 
-      <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-        <h3 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">⚠️ Warning</h3>
-        <ul className="text-sm text-yellow-800 dark:text-yellow-400 space-y-1 list-disc list-inside">
+      <div className="bg-yellow-900/30 border border-yellow-800 rounded-lg p-4">
+        <h3 className="font-semibold text-yellow-300 mb-2">⚠️ Warning</h3>
+        <ul className="text-sm text-yellow-400 space-y-1 list-disc list-inside">
           <li>Run PowerShell as Administrator</li>
           <li>Create a system restore point before running</li>
           <li>Test on non-production systems first</li>

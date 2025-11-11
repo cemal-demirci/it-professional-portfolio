@@ -105,10 +105,13 @@ export const getRemainingRequests = async () => {
 
 export const analyzeWithGemini = async (prompt, systemInstruction = '', options = {}) => {
   try {
-    // Check input length
-    const totalInput = systemInstruction + prompt
-    if (totalInput.length > LIMITS.MAX_INPUT_CHARS) {
-      throw new Error(getRandomMessage(SARCASTIC_MESSAGES.inputTooLong(totalInput.length, LIMITS.MAX_INPUT_CHARS)))
+    // For text-only input, check length (exclude image data from check)
+    const textInput = typeof prompt === 'string' ? prompt : ''
+    const totalTextInput = systemInstruction + textInput
+
+    // Only check text length if no image is present
+    if (!options.imageData && totalTextInput.length > LIMITS.MAX_INPUT_CHARS) {
+      throw new Error(getRandomMessage(SARCASTIC_MESSAGES.inputTooLong(totalTextInput.length, LIMITS.MAX_INPUT_CHARS)))
     }
 
     // Check credits before making request
@@ -128,7 +131,30 @@ export const analyzeWithGemini = async (prompt, systemInstruction = '', options 
       systemInstruction: systemInstruction || undefined
     })
 
-    const result = await model.generateContent(prompt)
+    // If image data is provided, use Vision API format with parts
+    let content
+    if (options.imageData) {
+      if (import.meta.env.DEV) {
+        console.log('📸 Using Vision API format with image')
+      }
+
+      // Extract base64 data (remove data:image/jpeg;base64, prefix)
+      const base64Data = options.imageData.replace(/^data:image\/\w+;base64,/, '')
+
+      content = [
+        { text: prompt },
+        {
+          inlineData: {
+            mimeType: options.imageMimeType || 'image/jpeg',
+            data: base64Data
+          }
+        }
+      ]
+    } else {
+      content = prompt
+    }
+
+    const result = await model.generateContent(content)
     const response = await result.response
 
     // Deduct credits after successful request

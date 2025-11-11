@@ -55,12 +55,12 @@ const PasswordStrength = () => {
 
   const getColorClasses = (color) => {
     const colors = {
-      gray: 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700',
-      red: 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30',
-      orange: 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30',
-      yellow: 'text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/30',
-      blue: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30',
-      green: 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30'
+      gray: 'text-gray-400 bg-gray-700',
+      red: 'text-red-400 bg-red-900/30',
+      orange: 'text-orange-400 bg-orange-900/30',
+      yellow: 'text-yellow-400 bg-yellow-900/30',
+      blue: 'text-blue-400 bg-blue-900/30',
+      green: 'text-green-400 bg-green-900/30'
     }
     return colors[color] || colors.gray
   }
@@ -113,19 +113,19 @@ const PasswordStrength = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Shield className="w-8 h-8" />
           Password Strength Checker
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Test your password strength and get recommendations
         </p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-6">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6">
         {/* Password Input */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-300">
             Enter Password to Test
           </label>
           <div className="relative">
@@ -134,16 +134,16 @@ const PasswordStrength = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Type your password here..."
-              className="input-field pr-12 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full"
+              className="input-field pr-12 bg-gray-700 border-gray-600 text-white w-full"
             />
             <button
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:hover:text-gray-300"
             >
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-xs text-gray-400">
             Your password is never sent to any server. All analysis happens in your browser.
           </p>
         </div>
@@ -156,7 +156,7 @@ const PasswordStrength = () => {
                 <span className="font-semibold">Password Strength:</span>
                 <span className="text-xl font-bold">{strength.level}</span>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+              <div className="w-full bg-gray-200 bg-gray-700 rounded-full h-3">
                 <div
                   className={`${getBarColor(strength.color)} h-3 rounded-full transition-all duration-300`}
                   style={{ width: `${strength.percentage}%` }}
@@ -170,15 +170,15 @@ const PasswordStrength = () => {
 
             {/* Checklist */}
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Requirements</h3>
+              <h3 className="font-semibold text-white mb-3">Requirements</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {checklistItems.map((item, index) => (
                   <div
                     key={index}
                     className={`flex items-center gap-2 p-2 rounded ${
                       item.passed
-                        ? 'text-green-700 dark:text-green-400'
-                        : 'text-gray-500 dark:text-gray-500'
+                        ? 'text-green-400'
+                        : 'text-gray-500'
                     }`}
                   >
                     {item.passed ? (
@@ -194,10 +194,10 @@ const PasswordStrength = () => {
 
             {/* Tips */}
             {strength.score < 80 && (
-              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div className="p-4 bg-blue-900/20 border border-blue-800 rounded-lg">
                 <div className="flex items-start gap-2">
-                  <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                  <div className="space-y-2 text-sm text-blue-800 dark:text-blue-300">
+                  <AlertCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-2 text-sm text-blue-300">
                     <div className="font-semibold">Tips to improve your password:</div>
                     <ul className="list-disc list-inside space-y-1">
                       {!strength.checks.longLength && <li>Make it at least 12 characters long</li>}
@@ -216,23 +216,23 @@ const PasswordStrength = () => {
         )}
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Password Security Tips</h3>
-        <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <h3 className="font-semibold text-white mb-3">Password Security Tips</h3>
+        <div className="space-y-2 text-sm text-gray-400">
           <p>
-            <strong className="text-gray-900 dark:text-white">Length matters:</strong> Longer passwords are exponentially harder to crack.
+            <strong className="text-white">Length matters:</strong> Longer passwords are exponentially harder to crack.
           </p>
           <p>
-            <strong className="text-gray-900 dark:text-white">Use passphrases:</strong> Combine 4-5 random words (e.g., "correct-horse-battery-staple").
+            <strong className="text-white">Use passphrases:</strong> Combine 4-5 random words (e.g., "correct-horse-battery-staple").
           </p>
           <p>
-            <strong className="text-gray-900 dark:text-white">Avoid personal info:</strong> Don't use names, birthdates, or common words.
+            <strong className="text-white">Avoid personal info:</strong> Don't use names, birthdates, or common words.
           </p>
           <p>
-            <strong className="text-gray-900 dark:text-white">Use a password manager:</strong> Let software generate and store complex passwords.
+            <strong className="text-white">Use a password manager:</strong> Let software generate and store complex passwords.
           </p>
           <p>
-            <strong className="text-gray-900 dark:text-white">Enable 2FA:</strong> Two-factor authentication adds an extra layer of security.
+            <strong className="text-white">Enable 2FA:</strong> Two-factor authentication adds an extra layer of security.
           </p>
         </div>
       </div>

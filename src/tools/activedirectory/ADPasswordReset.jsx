@@ -174,18 +174,18 @@ const ADPasswordReset = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <KeyRound className="w-8 h-8" />
           AD Password Reset
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Generate PowerShell script to reset AD user passwords
         </p>
       </div>
 
       {/* Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Password Settings</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">Password Settings</h3>
 
         <div className="space-y-4">
           <label className="flex items-center gap-2">
@@ -195,14 +195,14 @@ const ADPasswordReset = () => {
               onChange={(e) => setSettings({...settings, randomPassword: e.target.checked})}
               className="w-4 h-4 text-primary-600 rounded"
             />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <span className="text-sm font-medium text-gray-300">
               Generate random passwords for each user
             </span>
           </label>
 
           {!settings.randomPassword ? (
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-gray-300">
                 New Password (Same for all users)
               </label>
               <input
@@ -210,12 +210,12 @@ const ADPasswordReset = () => {
                 value={settings.newPassword}
                 onChange={(e) => setSettings({...settings, newPassword: e.target.value})}
                 placeholder="Welcome2024!"
-                className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field bg-gray-700 border-gray-600 text-white"
               />
             </div>
           ) : (
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-gray-300">
                 Password Length
               </label>
               <input
@@ -224,7 +224,7 @@ const ADPasswordReset = () => {
                 max="32"
                 value={settings.passwordLength}
                 onChange={(e) => setSettings({...settings, passwordLength: parseInt(e.target.value)})}
-                className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field bg-gray-700 border-gray-600 text-white"
               />
             </div>
           )}
@@ -237,7 +237,7 @@ const ADPasswordReset = () => {
                 onChange={(e) => setSettings({...settings, requireChange: e.target.checked})}
                 className="w-4 h-4 text-primary-600 rounded"
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Require password change</span>
+              <span className="text-sm text-gray-300">Require password change</span>
             </label>
             <label className="flex items-center gap-2">
               <input
@@ -246,7 +246,7 @@ const ADPasswordReset = () => {
                 onChange={(e) => setSettings({...settings, unlockAccount: e.target.checked})}
                 className="w-4 h-4 text-primary-600 rounded"
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Unlock account</span>
+              <span className="text-sm text-gray-300">Unlock account</span>
             </label>
             <label className="flex items-center gap-2">
               <input
@@ -255,16 +255,16 @@ const ADPasswordReset = () => {
                 onChange={(e) => setSettings({...settings, logResults: e.target.checked})}
                 className="w-4 h-4 text-primary-600 rounded"
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Export results to CSV</span>
+              <span className="text-sm text-gray-300">Export results to CSV</span>
             </label>
           </div>
         </div>
       </div>
 
       {/* Users */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-white">
             Users ({validUserCount})
           </h3>
           <button onClick={addUser} className="btn-primary flex items-center gap-2">
@@ -281,12 +281,12 @@ const ADPasswordReset = () => {
                 value={user}
                 onChange={(e) => updateUser(index, e.target.value)}
                 placeholder="Username or email (e.g., jdoe or jdoe@domain.com)"
-                className="input-field flex-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field flex-1 bg-gray-700 border-gray-600 text-white"
               />
               {users.length > 1 && (
                 <button
                   onClick={() => removeUser(index)}
-                  className="px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-900/50"
+                  className="px-3 py-2 bg-red-900/30 text-red-400 rounded hover:hover:bg-red-900/50"
                 >
                   Remove
                 </button>
@@ -316,8 +316,8 @@ const ADPasswordReset = () => {
         </button>
       </div>
 
-      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-        <p className="text-sm text-yellow-800 dark:text-yellow-300">
+      <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
+        <p className="text-sm text-yellow-300">
           <strong>Warning:</strong> This script will reset passwords for specified users. Always inform users before resetting their passwords. Run on Domain Controller as Administrator.
         </p>
       </div>

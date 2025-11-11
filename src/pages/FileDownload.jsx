@@ -255,10 +255,10 @@ const FileDownload = () => {
 
   if (connecting) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white from-gray-900 to-gray-900 flex items-center justify-center">
         <div className="text-center">
           <Wifi className="w-12 h-12 text-blue-600 animate-pulse mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Connecting to sender...</p>
+          <p className="text-gray-400">Connecting to sender...</p>
         </div>
       </div>
     )
@@ -266,19 +266,19 @@ const FileDownload = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white from-gray-900 to-gray-900 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-xl p-8">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full mb-4">
-              <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-red-900/30 rounded-full mb-4">
+              <AlertCircle className="w-8 h-8 text-red-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-2xl font-bold text-white mb-2">
               Connection Failed
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-gray-400 mb-6">
               {error}
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
+            <p className="text-sm text-gray-500 mb-6">
               Make sure the sender is still online and hasn't closed their browser.
             </p>
             <a
@@ -295,21 +295,21 @@ const FileDownload = () => {
 
   if (downloadComplete) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white from-gray-900 to-gray-900 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-xl p-8">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
-              <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-900/30 rounded-full mb-4">
+              <Check className="w-8 h-8 text-green-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-2xl font-bold text-white mb-2">
               Download Complete!
             </h2>
             {fileMetadata && (
               <>
-                <p className="text-gray-600 dark:text-gray-400 mb-2">
+                <p className="text-gray-400 mb-2">
                   {fileMetadata.name}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
+                <p className="text-sm text-gray-500 mb-6">
                   {formatFileSize(fileMetadata.size)}
                 </p>
               </>
@@ -327,20 +327,20 @@ const FileDownload = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white from-gray-900 to-gray-900">
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+        <div className="bg-gray-800 rounded-2xl shadow-xl p-8">
           {/* File Icon */}
           <div className="text-center mb-6">
             {fileMetadata && (
               <>
-                <div className="inline-flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
+                <div className="inline-flex items-center justify-center text-blue-400 mb-4">
                   {getFileIcon(fileMetadata.mimeType)}
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                <h1 className="text-2xl font-bold text-white mb-2">
                   {fileMetadata.name}
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-400">
                   {formatFileSize(fileMetadata.size)}
                 </p>
               </>
@@ -349,14 +349,14 @@ const FileDownload = () => {
 
           {/* Connection Status */}
           {connected && !downloading && (
-            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+            <div className="mb-6 p-4 bg-green-900/20 rounded-lg">
               <div className="flex items-center space-x-3">
-                <Users className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <Users className="w-5 h-5 text-green-400" />
                 <div>
-                  <p className="font-medium text-green-900 dark:text-green-300">
+                  <p className="font-medium text-green-300">
                     Connected to sender
                   </p>
-                  <p className="text-sm text-green-800 dark:text-green-400">
+                  <p className="text-sm text-green-400">
                     Waiting for file transfer to begin...
                   </p>
                 </div>
@@ -368,14 +368,14 @@ const FileDownload = () => {
           {downloading && (
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span className="text-sm font-medium text-gray-300">
                   Downloading via P2P...
                 </span>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span className="text-sm font-medium text-gray-300">
                   {downloadProgress}%
                 </span>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="w-full bg-gray-200 bg-gray-700 rounded-full h-2">
                 <div
                   className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${downloadProgress}%` }}
@@ -385,14 +385,14 @@ const FileDownload = () => {
           )}
 
           {/* Security Info */}
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+          <div className="mt-6 p-4 bg-blue-900/20 rounded-lg">
             <div className="flex items-start space-x-3">
-              <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+              <Shield className="w-5 h-5 text-blue-400 mt-0.5" />
               <div>
-                <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-1">
+                <h4 className="font-semibold text-blue-300 mb-1">
                   Secure P2P Transfer
                 </h4>
-                <p className="text-sm text-blue-800 dark:text-blue-400">
+                <p className="text-sm text-blue-400">
                   This file is being transferred directly from the sender's browser to yours using WebRTC.
                   No servers involved, maximum privacy!
                 </p>

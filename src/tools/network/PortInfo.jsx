@@ -72,32 +72,32 @@ const PortInfo = () => {
 
   const getCategoryColor = (category) => {
     const colors = {
-      'web': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
-      'email': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
-      'database': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300',
-      'remote-access': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300',
-      'file-transfer': 'bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300',
-      'dns': 'bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300',
-      'time': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300',
-      'monitoring': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300',
-      'directory': 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300',
-      'vpn': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300',
-      'voip': 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300',
+      'web': 'bg-blue-900/30 text-blue-300',
+      'email': 'bg-green-900/30 text-green-300',
+      'database': 'bg-purple-900/30 text-purple-300',
+      'remote-access': 'bg-orange-900/30 text-orange-300',
+      'file-transfer': 'bg-cyan-900/30 text-cyan-300',
+      'dns': 'bg-pink-900/30 text-pink-300',
+      'time': 'bg-indigo-900/30 text-indigo-300',
+      'monitoring': 'bg-yellow-900/30 text-yellow-300',
+      'directory': 'bg-teal-900/30 text-teal-300',
+      'vpn': 'bg-red-900/30 text-red-300',
+      'voip': 'bg-violet-900/30 text-violet-300',
     }
-    return colors[category] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+    return colors[category] || 'bg-gray-700 text-gray-300'
   }
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Port Information Reference</h1>
-        <p className="text-gray-600 dark:text-gray-400">Common network ports and their services</p>
+        <h1 className="text-3xl font-bold text-white">Port Information Reference</h1>
+        <p className="text-gray-400">Common network ports and their services</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Search Port or Service
             </label>
             <div className="relative">
@@ -107,7 +107,7 @@ const PortInfo = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search by port number or service name..."
-                className="input-field pl-10 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full"
+                className="input-field pl-10 bg-gray-700 border-gray-600 text-white w-full"
               />
             </div>
           </div>
@@ -121,7 +121,7 @@ const PortInfo = () => {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 selectedCategory === cat.value
                   ? 'bg-primary-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  : 'bg-gray-700 text-gray-300 hover:hover:bg-gray-600'
               }`}
             >
               {cat.label}
@@ -131,7 +131,7 @@ const PortInfo = () => {
 
         <div className="pt-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <h3 className="font-semibold text-white flex items-center gap-2">
               <Server className="w-5 h-5" />
               {filteredPorts.length} Ports Found
             </h3>
@@ -141,30 +141,30 @@ const PortInfo = () => {
             {filteredPorts.map((port, index) => (
               <div
                 key={index}
-                className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="flex items-center gap-4 p-4 bg-gray-50 bg-gray-700/50 rounded-lg hover:hover:bg-gray-700 transition-colors"
               >
                 <div className="w-20 flex-shrink-0">
-                  <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                  <div className="text-2xl font-bold text-primary-400">
                     {port.port}
                   </div>
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-semibold text-gray-900 dark:text-white">
+                    <span className="font-semibold text-white">
                       {port.service}
                     </span>
                     <span className={`text-xs px-2 py-0.5 rounded ${getCategoryColor(port.category)}`}>
                       {port.category.replace('-', ' ').toUpperCase()}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-400">
                     {port.description}
                   </p>
                 </div>
 
                 <div className="flex-shrink-0">
-                  <span className="text-xs font-mono bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                  <span className="text-xs font-mono bg-gray-600 px-2 py-1 rounded text-gray-300">
                     {port.protocol}
                   </span>
                 </div>
@@ -172,7 +172,7 @@ const PortInfo = () => {
             ))}
 
             {filteredPorts.length === 0 && (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              <div className="text-center py-12 text-gray-400">
                 No ports found matching your search criteria
               </div>
             )}
@@ -180,27 +180,27 @@ const PortInfo = () => {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Port Ranges</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <h3 className="font-semibold text-white mb-3">Port Ranges</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div className="p-4 bg-white dark:bg-gray-700/50 rounded-lg">
-            <div className="font-semibold text-gray-900 dark:text-white mb-2">Well-Known Ports</div>
-            <div className="text-gray-600 dark:text-gray-400">0 - 1023</div>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+          <div className="p-4 bg-gray-700/50 rounded-lg">
+            <div className="font-semibold text-white mb-2">Well-Known Ports</div>
+            <div className="text-gray-400">0 - 1023</div>
+            <p className="text-xs text-gray-500 mt-2">
               System ports assigned by IANA for common services
             </p>
           </div>
-          <div className="p-4 bg-white dark:bg-gray-700/50 rounded-lg">
-            <div className="font-semibold text-gray-900 dark:text-white mb-2">Registered Ports</div>
-            <div className="text-gray-600 dark:text-gray-400">1024 - 49151</div>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+          <div className="p-4 bg-gray-700/50 rounded-lg">
+            <div className="font-semibold text-white mb-2">Registered Ports</div>
+            <div className="text-gray-400">1024 - 49151</div>
+            <p className="text-xs text-gray-500 mt-2">
               Registered with IANA for specific services
             </p>
           </div>
-          <div className="p-4 bg-white dark:bg-gray-700/50 rounded-lg">
-            <div className="font-semibold text-gray-900 dark:text-white mb-2">Dynamic/Private Ports</div>
-            <div className="text-gray-600 dark:text-gray-400">49152 - 65535</div>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+          <div className="p-4 bg-gray-700/50 rounded-lg">
+            <div className="font-semibold text-white mb-2">Dynamic/Private Ports</div>
+            <div className="text-gray-400">49152 - 65535</div>
+            <p className="text-xs text-gray-500 mt-2">
               Available for dynamic allocation
             </p>
           </div>

@@ -29,13 +29,13 @@ const DrPlanner = () => {
         <LifeBuoy className="w-8 h-8 text-purple-600" />
         AI Disaster Recovery Planner
       </h1>
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border space-y-4">
-        <textarea value={scenario} onChange={(e) => setScenario(e.target.value)} placeholder="Describe your infrastructure and critical systems..." className="textarea-field min-h-[200px] dark:bg-gray-700" />
+      <div className="bg-gray-800 rounded-xl p-6 border space-y-4">
+        <textarea value={scenario} onChange={(e) => setScenario(e.target.value)} placeholder="Describe your infrastructure and critical systems..." className="textarea-field min-h-[200px] bg-gray-700" />
         <button onClick={generate} disabled={generating} className="btn-primary w-full">
           {generating ? <><Loader className="w-5 h-5 animate-spin" /> Generating...</> : <><Brain className="w-5 h-5" /> Generate DR Plan</>}
         </button>
       </div>
-      {result && <div className="bg-white dark:bg-gray-800 p-6 rounded-xl"><pre className="whitespace-pre-wrap text-sm">{result}</pre></div>}
+      {result && <div className="bg-gray-800 p-6 rounded-xl"><pre className="whitespace-pre-wrap text-sm">{result}</pre></div>}
     </div>
   )
 }

@@ -29,13 +29,13 @@ const PerfTroubleshooter = () => {
         <Gauge className="w-8 h-8 text-purple-600" />
         AI Performance Troubleshooter
       </h1>
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border space-y-4">
-        <textarea value={issue} onChange={(e) => setIssue(e.target.value)} placeholder="Describe the performance problem..." className="textarea-field min-h-[200px] dark:bg-gray-700" />
+      <div className="bg-gray-800 rounded-xl p-6 border space-y-4">
+        <textarea value={issue} onChange={(e) => setIssue(e.target.value)} placeholder="Describe the performance problem..." className="textarea-field min-h-[200px] bg-gray-700" />
         <button onClick={analyze} disabled={analyzing} className="btn-primary w-full">
           {analyzing ? <><Loader className="w-5 h-5 animate-spin" /> Analyzing...</> : <><Brain className="w-5 h-5" /> Troubleshoot Performance</>}
         </button>
       </div>
-      {result && <div className="bg-white dark:bg-gray-800 p-6 rounded-xl"><pre className="whitespace-pre-wrap text-sm">{result}</pre></div>}
+      {result && <div className="bg-gray-800 p-6 rounded-xl"><pre className="whitespace-pre-wrap text-sm">{result}</pre></div>}
     </div>
   )
 }

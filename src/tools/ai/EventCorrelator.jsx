@@ -31,19 +31,19 @@ const EventCorrelator = () => {
         <FileText className="w-8 h-8 text-purple-600" />
         AI Event Log Correlator
       </h1>
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border space-y-4">
         <textarea
           value={events}
           onChange={(e) => setEvents(e.target.value)}
           placeholder="Paste multiple event log entries..."
-          className="textarea-field min-h-[300px] font-mono text-sm dark:bg-gray-700"
+          className="textarea-field min-h-[300px] font-mono text-sm bg-gray-700"
         />
         <button onClick={analyze} disabled={analyzing} className="btn-primary w-full">
           {analyzing ? <><Loader className="w-5 h-5 animate-spin" /> Analyzing...</> : <><Brain className="w-5 h-5" /> Correlate Events</>}
         </button>
       </div>
       {error && <div className="bg-red-50 p-4 rounded-lg"><AlertCircle className="inline w-5 h-5" /> {error}</div>}
-      {result && <div className="bg-white dark:bg-gray-800 p-6 rounded-xl"><pre className="whitespace-pre-wrap text-sm">{result}</pre></div>}
+      {result && <div className="bg-gray-800 p-6 rounded-xl"><pre className="whitespace-pre-wrap text-sm">{result}</pre></div>}
     </div>
   )
 }

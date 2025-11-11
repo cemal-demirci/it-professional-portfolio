@@ -53,9 +53,13 @@ export default async function handler(req, res) {
       const balance = await redis.get(`credit:balance:${clientIP}`)
       const credits = balance ? parseInt(balance) : 15 // Default 15 free credits
 
+      // Check unlimited mode
+      const unlimited = await redis.get(`credit:unlimited:${clientIP}`)
+
       return res.status(200).json({
         success: true,
         credits,
+        unlimited: unlimited === 'true',
         ip: clientIP
       })
     }
@@ -72,6 +76,22 @@ export default async function handler(req, res) {
       }
 
       const codeUpper = code.toUpperCase().trim()
+
+      // Special code: CXMXL - Unlimited mode
+      if (codeUpper === 'CXMXL') {
+        // Set unlimited flag for this IP
+        await redis.set(`credit:unlimited:${clientIP}`, 'true')
+        // Also give 10000 credits as bonus
+        await redis.set(`credit:balance:${clientIP}`, '10000')
+
+        return res.status(200).json({
+          success: true,
+          amount: 10000,
+          newBalance: 10000,
+          unlimited: true,
+          message: 'Unlimited mode activated!'
+        })
+      }
 
       // Validate format
       const regex = /^CEMAL-(\d+)-([A-Z0-9]{8})$/

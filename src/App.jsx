@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { LanguageProvider } from './contexts/LanguageContext'
+import { RainbowProvider, useRainbow } from './contexts/RainbowContext'
+import { GodModeProvider } from './contexts/GodModeContext'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -8,6 +10,7 @@ import Admin from './pages/Admin'
 import Settings from './pages/Settings'
 import ZeroDensity from './pages/ZeroDensity'
 import ZeroDensityAuth from './components/ZeroDensityAuth'
+import RainbowModeToolBlocker from './components/RainbowModeToolBlocker'
 
 // Zero Density Tools
 import Evo2EventAnalyzer from './tools/zerodensity/Evo2EventAnalyzer'
@@ -121,12 +124,14 @@ import FileDownload from './pages/FileDownload'
 // Remote Desktop
 import RemoteDesktop from './pages/RemoteDesktop'
 
-function App() {
+// AI Bots Page
+import AIBots from './pages/AIBots'
+
+// App Content - No blocking here, let individual pages handle rainbow mode
+function AppContent() {
   return (
-    <LanguageProvider>
-      <Router>
-        <Layout>
-        <Routes>
+    <Layout>
+      <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/tools" element={<Tools />} />
@@ -137,6 +142,9 @@ function App() {
           {/* Junior IT Pages */}
           <Route path="/junior-it" element={<JuniorIT />} />
           <Route path="/junior-it/glossary" element={<ITGlossary />} />
+
+          {/* AI Bots */}
+          <Route path="/ai-bots" element={<AIBots />} />
 
           {/* File Share */}
           <Route path="/fileshare" element={<FileShare />} />
@@ -246,9 +254,21 @@ function App() {
 
           {/* macOS Tools */}
           <Route path="/tools/macos-assistant" element={<MacOsAssistant />} />
-        </Routes>
-      </Layout>
-    </Router>
+      </Routes>
+    </Layout>
+  )
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <RainbowProvider>
+        <GodModeProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </GodModeProvider>
+      </RainbowProvider>
     </LanguageProvider>
   )
 }

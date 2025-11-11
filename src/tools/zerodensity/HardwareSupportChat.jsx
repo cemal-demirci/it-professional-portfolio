@@ -223,20 +223,20 @@ If issue is too complex, unclear, or outside your scope:
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Cpu className="w-8 h-8 text-blue-600" />
           Reality Guide 🎯
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Your Zero Density Reality systems expert | English & Turkish support
         </p>
       </div>
 
       {/* Documentation Notice */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+      <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-          <div className="text-sm text-blue-800 dark:text-blue-300">
+          <FileText className="w-5 h-5 text-blue-400 mt-0.5" />
+          <div className="text-sm text-blue-300">
             <strong>Documentation Priority:</strong> This assistant references{' '}
             <a href="https://docs.zerodensity.io" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600">
               docs.zerodensity.io
@@ -247,19 +247,19 @@ If issue is too complex, unclear, or outside your scope:
       </div>
 
       {/* Quick Questions */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Quick Questions</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <h3 className="font-semibold text-white mb-4">Quick Questions</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {quickQuestions.map((q, idx) => (
             <button
               key={idx}
               onClick={() => setInput(q.question)}
               disabled={loading}
-              className="p-3 text-left border border-gray-200 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all disabled:opacity-50 text-sm"
+              className="p-3 text-left border border-gray-200 border-gray-600 rounded-lg hover:hover:border-blue-500 hover:hover:bg-blue-900/20 transition-all disabled:opacity-50 text-sm"
             >
               <div className="flex items-start gap-2">
                 <span className="text-lg">{q.icon}</span>
-                <span className="text-gray-700 dark:text-gray-300">{q.question}</span>
+                <span className="text-gray-300">{q.question}</span>
               </div>
             </button>
           ))}
@@ -267,7 +267,7 @@ If issue is too complex, unclear, or outside your scope:
       </div>
 
       {/* Chat Messages */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
         <div className="h-96 overflow-y-auto p-6 space-y-4">
           {messages.map((msg, idx) => (
             <div
@@ -284,17 +284,17 @@ If issue is too complex, unclear, or outside your scope:
                   msg.role === 'user'
                     ? 'bg-blue-600 text-white'
                     : msg.error
-                    ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+                    ? 'bg-red-900/20 border border-red-800 text-red-300'
+                    : 'bg-gray-700 text-gray-100'
                 }`}
               >
                 <div className="whitespace-pre-wrap text-sm">{msg.content}</div>
-                <div className={`text-xs mt-2 ${msg.role === 'user' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>
+                <div className={`text-xs mt-2 ${msg.role === 'user' ? 'text-blue-100' : 'text-gray-400'}`}>
                   {msg.timestamp}
                 </div>
               </div>
               {msg.role === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gray-600 dark:bg-gray-500 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-sm">You</span>
                 </div>
               )}
@@ -305,15 +305,15 @@ If issue is too complex, unclear, or outside your scope:
               <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
                 <Cpu className="w-4 h-4 text-white" />
               </div>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-                <Loader className="w-5 h-5 animate-spin text-gray-600 dark:text-gray-400" />
+              <div className="bg-gray-700 rounded-lg p-4">
+                <Loader className="w-5 h-5 animate-spin text-gray-400" />
               </div>
             </div>
           )}
         </div>
 
         {/* Input */}
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+        <div className="border-t border-gray-700 p-4">
           <div className="flex gap-2">
             <input
               type="text"
@@ -321,7 +321,7 @@ If issue is too complex, unclear, or outside your scope:
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Describe your hardware issue..."
-              className="flex-1 input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="flex-1 input-field bg-gray-700 border-gray-600 text-white"
               disabled={loading}
             />
             <button
@@ -339,11 +339,11 @@ If issue is too complex, unclear, or outside your scope:
       {/* System Specs Reference */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {Object.entries(systemInfo).map(([key, specs]) => (
-          <div key={key} className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2 uppercase text-sm">
+          <div key={key} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+            <h4 className="font-semibold text-white mb-2 uppercase text-sm">
               {key === 'evo3pro' ? 'Evo III Pro' : key.replace('evo', 'Evo ').replace('amper', 'Ampere')}
             </h4>
-            <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
+            <div className="space-y-1 text-xs text-gray-400">
               <div><strong>GPU:</strong> {specs.gpu.split('(')[0]}</div>
               <div><strong>RAM:</strong> {specs.ram}</div>
               <div><strong>Use:</strong> {specs.useCase}</div>

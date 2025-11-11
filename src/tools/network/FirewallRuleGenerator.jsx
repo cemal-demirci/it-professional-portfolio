@@ -78,16 +78,16 @@ const FirewallRuleGenerator = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Shield className="w-8 h-8" />
           Firewall Rule Generator
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">Generate Windows Firewall rules script</p>
+        <p className="text-gray-400">Generate Windows Firewall rules script</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="font-semibold text-gray-900 dark:text-white">Rules ({rules.length})</h3>
+          <h3 className="font-semibold text-white">Rules ({rules.length})</h3>
           <button onClick={addRule} className="btn-primary flex items-center gap-2">
             <Plus className="w-5 h-5" />
             Add Rule
@@ -96,19 +96,19 @@ const FirewallRuleGenerator = () => {
 
         <div className="space-y-3 max-h-[500px] overflow-y-auto">
           {rules.map((rule, index) => (
-            <div key={index} className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg space-y-3">
+            <div key={index} className="p-4 bg-gray-50 bg-gray-700/50 rounded-lg space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <input
                   type="text"
                   value={rule.name}
                   onChange={(e) => updateRule(index, 'name', e.target.value)}
                   placeholder="Rule Name*"
-                  className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field text-sm bg-gray-700 border-gray-600 text-white"
                 />
                 <select
                   value={rule.action}
                   onChange={(e) => updateRule(index, 'action', e.target.value)}
-                  className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field text-sm bg-gray-700 border-gray-600 text-white"
                 >
                   <option>Allow</option>
                   <option>Block</option>
@@ -116,7 +116,7 @@ const FirewallRuleGenerator = () => {
                 <select
                   value={rule.direction}
                   onChange={(e) => updateRule(index, 'direction', e.target.value)}
-                  className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field text-sm bg-gray-700 border-gray-600 text-white"
                 >
                   <option>Inbound</option>
                   <option>Outbound</option>
@@ -127,7 +127,7 @@ const FirewallRuleGenerator = () => {
                 <select
                   value={rule.protocol}
                   onChange={(e) => updateRule(index, 'protocol', e.target.value)}
-                  className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field text-sm bg-gray-700 border-gray-600 text-white"
                 >
                   <option>TCP</option>
                   <option>UDP</option>
@@ -138,14 +138,14 @@ const FirewallRuleGenerator = () => {
                   value={rule.port}
                   onChange={(e) => updateRule(index, 'port', e.target.value)}
                   placeholder="Port (e.g., 80, 443, 8000-8080)"
-                  className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field text-sm bg-gray-700 border-gray-600 text-white"
                 />
                 <input
                   type="text"
                   value={rule.remoteAddress}
                   onChange={(e) => updateRule(index, 'remoteAddress', e.target.value)}
                   placeholder="Remote IP (Any, 192.168.1.0/24)"
-                  className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field text-sm bg-gray-700 border-gray-600 text-white"
                 />
               </div>
 
@@ -155,11 +155,11 @@ const FirewallRuleGenerator = () => {
                   value={rule.program}
                   onChange={(e) => updateRule(index, 'program', e.target.value)}
                   placeholder="Program Path (optional)"
-                  className="input-field flex-1 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field flex-1 text-sm bg-gray-700 border-gray-600 text-white"
                 />
                 <button
                   onClick={() => removeRule(index)}
-                  className="px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded hover:bg-red-200"
+                  className="px-3 py-2 bg-red-900/30 text-red-400 rounded hover:bg-red-200"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

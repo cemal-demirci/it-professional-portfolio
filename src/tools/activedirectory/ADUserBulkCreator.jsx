@@ -175,57 +175,57 @@ const ADUserBulkCreator = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Users className="w-8 h-8" />
           AD Bulk User Creator
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Create multiple Active Directory users from CSV or manual input
         </p>
       </div>
 
       {/* Domain Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Domain Settings</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">Domain Settings</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Domain</label>
+            <label className="block text-sm font-medium text-gray-300">Domain</label>
             <input
               type="text"
               value={settings.domain}
               onChange={(e) => setSettings({...settings, domain: e.target.value})}
               placeholder="domain.com"
-              className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="input-field bg-gray-700 border-gray-600 text-white"
             />
           </div>
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Default Password</label>
+            <label className="block text-sm font-medium text-gray-300">Default Password</label>
             <input
               type="text"
               value={settings.defaultPassword}
               onChange={(e) => setSettings({...settings, defaultPassword: e.target.value})}
               placeholder="Welcome2024!"
-              className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="input-field bg-gray-700 border-gray-600 text-white"
             />
           </div>
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Domain</label>
+            <label className="block text-sm font-medium text-gray-300">Email Domain</label>
             <input
               type="text"
               value={settings.emailDomain}
               onChange={(e) => setSettings({...settings, emailDomain: e.target.value})}
               placeholder="@domain.com"
-              className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="input-field bg-gray-700 border-gray-600 text-white"
             />
           </div>
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Add to Group (Optional)</label>
+            <label className="block text-sm font-medium text-gray-300">Add to Group (Optional)</label>
             <input
               type="text"
               value={settings.addToGroup}
               onChange={(e) => setSettings({...settings, addToGroup: e.target.value})}
               placeholder="Domain Users"
-              className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="input-field bg-gray-700 border-gray-600 text-white"
             />
           </div>
           <div className="flex items-center gap-4">
@@ -236,7 +236,7 @@ const ADUserBulkCreator = () => {
                 onChange={(e) => setSettings({...settings, requirePasswordChange: e.target.checked})}
                 className="w-4 h-4 text-primary-600 rounded"
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Require password change</span>
+              <span className="text-sm text-gray-300">Require password change</span>
             </label>
           </div>
           <div className="flex items-center gap-4">
@@ -247,22 +247,22 @@ const ADUserBulkCreator = () => {
                 onChange={(e) => setSettings({...settings, enableUser: e.target.checked})}
                 className="w-4 h-4 text-primary-600 rounded"
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Enable user account</span>
+              <span className="text-sm text-gray-300">Enable user account</span>
             </label>
           </div>
         </div>
       </div>
 
       {/* CSV Import */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Import Users</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">Import Users</h3>
         <div className="flex gap-3">
           <label className="btn-primary flex items-center gap-2 cursor-pointer">
             <Upload className="w-5 h-5" />
             Import CSV
             <input type="file" accept=".csv" onChange={handleCSVImport} className="hidden" />
           </label>
-          <button onClick={downloadCSVTemplate} className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center gap-2">
+          <button onClick={downloadCSVTemplate} className="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:hover:bg-gray-600 flex items-center gap-2">
             <Download className="w-5 h-5" />
             Download CSV Template
           </button>
@@ -270,9 +270,9 @@ const ADUserBulkCreator = () => {
       </div>
 
       {/* Users List */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-white">
             Users ({validUserCount} valid)
           </h3>
           <button onClick={addUser} className="btn-primary flex items-center gap-2">
@@ -283,59 +283,59 @@ const ADUserBulkCreator = () => {
 
         <div className="space-y-3 max-h-[400px] overflow-y-auto">
           {users.map((user, index) => (
-            <div key={index} className="grid grid-cols-1 md:grid-cols-8 gap-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <div key={index} className="grid grid-cols-1 md:grid-cols-8 gap-2 p-3 bg-gray-50 bg-gray-700/50 rounded-lg">
               <input
                 type="text"
                 value={user.firstName}
                 onChange={(e) => updateUser(index, 'firstName', e.target.value)}
                 placeholder="First Name*"
-                className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field text-sm bg-gray-700 border-gray-600 text-white"
               />
               <input
                 type="text"
                 value={user.lastName}
                 onChange={(e) => updateUser(index, 'lastName', e.target.value)}
                 placeholder="Last Name*"
-                className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field text-sm bg-gray-700 border-gray-600 text-white"
               />
               <input
                 type="text"
                 value={user.username}
                 onChange={(e) => updateUser(index, 'username', e.target.value)}
                 placeholder="Username*"
-                className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field text-sm bg-gray-700 border-gray-600 text-white"
               />
               <input
                 type="email"
                 value={user.email}
                 onChange={(e) => updateUser(index, 'email', e.target.value)}
                 placeholder="Email"
-                className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field text-sm bg-gray-700 border-gray-600 text-white"
               />
               <input
                 type="text"
                 value={user.ou}
                 onChange={(e) => updateUser(index, 'ou', e.target.value)}
                 placeholder="OU Path"
-                className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field text-sm bg-gray-700 border-gray-600 text-white"
               />
               <input
                 type="text"
                 value={user.password}
                 onChange={(e) => updateUser(index, 'password', e.target.value)}
                 placeholder="Password"
-                className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field text-sm bg-gray-700 border-gray-600 text-white"
               />
               <input
                 type="text"
                 value={user.department}
                 onChange={(e) => updateUser(index, 'department', e.target.value)}
                 placeholder="Department"
-                className="input-field text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="input-field text-sm bg-gray-700 border-gray-600 text-white"
               />
               <button
                 onClick={() => removeUser(index)}
-                className="px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-900/50"
+                className="px-3 py-2 bg-red-900/30 text-red-400 rounded hover:hover:bg-red-900/50"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -364,9 +364,9 @@ const ADUserBulkCreator = () => {
         </button>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Usage Instructions</h3>
-        <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600 dark:text-gray-400">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <h3 className="font-semibold text-white mb-3">Usage Instructions</h3>
+        <ol className="list-decimal list-inside space-y-2 text-sm text-gray-400">
           <li>Configure domain settings and default options</li>
           <li>Import users from CSV or add manually (minimum: First Name, Last Name, Username)</li>
           <li>Download or copy the generated PowerShell script</li>

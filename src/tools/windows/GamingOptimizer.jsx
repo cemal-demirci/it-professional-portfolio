@@ -151,36 +151,36 @@ netsh interface ipv4 set subinterface "$($adapter.Name)" mtu=1492 store=persiste
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Gamepad2 className="w-8 h-8" />
           Gaming Performance Optimizer
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Generate PowerShell script to optimize Windows for gaming
         </p>
       </div>
 
-      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-        <p className="text-sm text-yellow-800 dark:text-yellow-300">
+      <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
+        <p className="text-sm text-yellow-300">
           <strong>Warning:</strong> These optimizations modify system settings. Create a system restore point before running the script. Always run PowerShell as Administrator.
         </p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-white">
             Select Optimizations ({selectedCount} selected)
           </h3>
           <div className="flex gap-2">
             <button
               onClick={() => setSelected(Object.keys(selected).reduce((acc, key) => ({ ...acc, [key]: true }), {}))}
-              className="text-sm px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded hover:bg-primary-200 dark:hover:bg-primary-900/50"
+              className="text-sm px-3 py-1 bg-primary-900/30 text-primary-300 rounded hover:hover:bg-primary-900/50"
             >
               Select All
             </button>
             <button
               onClick={() => setSelected(Object.keys(selected).reduce((acc, key) => ({ ...acc, [key]: false }), {}))}
-              className="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+              className="text-sm px-3 py-1 bg-gray-700 text-gray-300 rounded hover:hover:bg-gray-600"
             >
               Deselect All
             </button>
@@ -193,8 +193,8 @@ netsh interface ipv4 set subinterface "$($adapter.Name)" mtu=1492 store=persiste
               key={opt.id}
               className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                 selected[opt.id]
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                  ? 'border-primary-500 bg-primary-900/20'
+                  : 'border-gray-700 hover:hover:border-gray-600'
               }`}
             >
               <input
@@ -204,8 +204,8 @@ netsh interface ipv4 set subinterface "$($adapter.Name)" mtu=1492 store=persiste
                 className="mt-1 w-5 h-5 text-primary-600 rounded focus:ring-primary-500"
               />
               <div className="flex-1">
-                <div className="font-semibold text-gray-900 dark:text-white">{opt.name}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{opt.description}</div>
+                <div className="font-semibold text-white">{opt.name}</div>
+                <div className="text-sm text-gray-400 mt-1">{opt.description}</div>
               </div>
             </label>
           ))}
@@ -231,9 +231,9 @@ netsh interface ipv4 set subinterface "$($adapter.Name)" mtu=1492 store=persiste
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">How to Use</h3>
-        <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600 dark:text-gray-400">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <h3 className="font-semibold text-white mb-3">How to Use</h3>
+        <ol className="list-decimal list-inside space-y-2 text-sm text-gray-400">
           <li>Create a System Restore Point before making changes</li>
           <li>Select the optimizations you want to apply</li>
           <li>Download or copy the generated PowerShell script</li>

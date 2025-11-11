@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react'
 import {
   Settings as SettingsIcon, Key, Zap, Clock, CheckCircle, XCircle,
   Shield, Info, Sparkles, Rocket, CreditCard, Gift, Mail, Copy,
-  Trash2, Eye, EyeOff, Lock, Unlock, DollarSign, Send, BarChart3
+  Trash2, Eye, EyeOff, Lock, Unlock, DollarSign, Send, BarChart3, Crown, Infinity,
+  Ghost, PartyPopper
 } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
+import { useRainbow } from '../contexts/RainbowContext'
 import { t } from '../translations'
+import { useGodMode } from '../contexts/GodModeContext'
+import RainbowModeToolBlocker from '../components/RainbowModeToolBlocker'
+import EasterEggs from '../components/EasterEggs'
 import {
   getUserCredits,
   redeemCreditCode,
@@ -23,6 +28,9 @@ import {
 } from '../services/creditService'
 
 const Settings = () => {
+  const { godMode } = useGodMode()
+  const { rainbowMode } = useRainbow()
+
   // User states
   const [credits, setCredits] = useState(15)
   const [codeInput, setCodeInput] = useState('')
@@ -46,6 +54,9 @@ const Settings = () => {
   // UI states
   const [isVisible, setIsVisible] = useState(false)
   const [copiedCode, setCopiedCode] = useState(null)
+  const [showEasterEggs, setShowEasterEggs] = useState(false)
+  const [easterEggInput, setEasterEggInput] = useState('')
+  const [easterEggMessage, setEasterEggMessage] = useState(null)
 
   const { language } = useLanguage()
   const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'cemal2026'
@@ -61,6 +72,60 @@ const Settings = () => {
       loadAdminData()
     }
   }, [])
+
+  const handleEasterEggSubmit = (e) => {
+    e.preventDefault()
+    const code = easterEggInput.toLowerCase().trim()
+
+    if (!code) return
+
+    // Create keyboard events for the easter egg codes
+    const simulateKeyPress = (keys) => {
+      keys.forEach(key => {
+        const event = new KeyboardEvent('keydown', { key })
+        window.dispatchEvent(event)
+      })
+    }
+
+    // Easter egg code mappings
+    const easterEggCodes = {
+      'konami': ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'c', 'd'],
+      'party': ['p', 'a', 'r', 't', 'y'],
+      'rainbow': ['r', 'a', 'i', 'n', 'b', 'o', 'w'],
+      'gay': ['g', 'a', 'y'],
+      'gey': ['g', 'e', 'y'],
+      'retro': ['r', 'e', 't', 'r', 'o'],
+      'dev': ['d', 'e', 'v'],
+      'cxmxl': ['c', 'x', 'm', 'x', 'l'],
+      'terminal': ['t', 'e', 'r', 'm', 'i', 'n', 'a', 'l'],
+      'pervo': ['p', 'e', 'r', 'v', 'o']
+    }
+
+    if (easterEggCodes[code]) {
+      simulateKeyPress(easterEggCodes[code])
+
+      const messages = {
+        'konami': '🎮 Fighting Game + Matrix Rain Activated!',
+        'party': '🎉 Party Mode ON!',
+        'rainbow': '🌈 Rainbow Mode Activated!',
+        'gay': '🌈 Fabulous Mode!',
+        'gey': '🌈 Fabulous Mode!',
+        'retro': '💾 Retro Mode: Welcome to the 90s!',
+        'dev': '👨‍💻 Developer Console Opened!',
+        'cxmxl': '🔱 GOD MODE ACTIVATED!',
+        'terminal': '💻 Terminal Access Granted!',
+        'pervo': '💖 Love Letter Unlocked!'
+      }
+
+      setEasterEggMessage({ type: 'success', text: messages[code] || '✨ Easter Egg Activated!' })
+      setEasterEggInput('')
+
+      setTimeout(() => setEasterEggMessage(null), 3000)
+    } else {
+      setEasterEggMessage({ type: 'error', text: t(language, 'settings.easterEggs.unknownCode') })
+      setTimeout(() => setEasterEggMessage(null), 3000)
+    }
+  }
 
   const updateCredits = async () => {
     const currentCredits = await getUserCredits()
@@ -83,7 +148,9 @@ const Settings = () => {
 
       setRedeemStatus({
         type: 'success',
-        message: `${result.amount} credits added! New balance: ${result.newBalance} credits`
+        message: result.unlimited
+          ? t(language, 'settings.redeemCode.unlimitedActivated')
+          : `${result.amount} ${t(language, 'settings.redeemCode.creditsAdded')} ${result.newBalance} ${t(language, 'settings.redeemCode.creditsBalance')}`
       })
 
       setCodeInput('')
@@ -103,7 +170,7 @@ const Settings = () => {
     if (!requestEmail || !requestName) {
       setRequestStatus({
         type: 'error',
-        message: 'Please fill in your name and email'
+        message: t(language, 'settings.creditRequest.fillNameEmail')
       })
       setTimeout(() => setRequestStatus(null), 3000)
       return
@@ -114,7 +181,7 @@ const Settings = () => {
 
       setRequestStatus({
         type: 'success',
-        message: 'Request sent! We will contact you soon.'
+        message: t(language, 'settings.creditRequest.requestSent')
       })
 
       setRequestEmail('')
@@ -138,7 +205,7 @@ const Settings = () => {
       loadAdminData()
       setAdminPassword('')
     } else {
-      alert('Invalid admin password!')
+      alert(t(language, 'settings.admin.invalidPassword'))
     }
   }
 
@@ -165,7 +232,7 @@ const Settings = () => {
   }
 
   const handleDeleteCode = async (code) => {
-    if (confirm('Delete this code?')) {
+    if (confirm(t(language, 'settings.admin.generatedCodes.deleteConfirm'))) {
       try {
         await deleteGeneratedCode(code)
         await loadAdminData()
@@ -176,7 +243,7 @@ const Settings = () => {
   }
 
   const handleInvalidateCode = async (code) => {
-    if (confirm('Invalidate this code?')) {
+    if (confirm(t(language, 'settings.admin.generatedCodes.invalidateConfirm'))) {
       try {
         await invalidateCode(code)
         await loadAdminData()
@@ -187,7 +254,7 @@ const Settings = () => {
   }
 
   const handleClearRequest = async (timestamp) => {
-    if (confirm('Clear this request?')) {
+    if (confirm(t(language, 'settings.admin.creditRequests.clearConfirm'))) {
       try {
         await clearCreditRequest(timestamp)
         await loadAdminData()
@@ -197,44 +264,250 @@ const Settings = () => {
     }
   }
 
+  // Rainbow Mode: Block Settings page
+  if (rainbowMode) {
+    return <RainbowModeToolBlocker />
+  }
+
   return (
     <div className="max-w-6xl mx-auto space-y-6 relative">
-      {/* Header */}
-      <div className={`text-center space-y-2 relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
-          <SettingsIcon className="w-8 h-8 text-primary-600" />
-          {t(language, 'settings.title')}
-        </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Manage your Cemal AI credits
-        </p>
+      {/* Background Particles */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Credit Balance */}
-      <div className={`bg-gradient-to-br from-cyan-500 via-blue-500 to-teal-500 rounded-xl p-6 text-white transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-              <CreditCard className="w-8 h-8" />
+      {/* Easter Eggs - Only shown when activated */}
+      {showEasterEggs && <EasterEggs />}
+      {/* God Mode Banner */}
+      {godMode && (
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl transition-all">
+          <div className="flex items-center justify-center gap-4 text-white">
+            <Crown className="w-12 h-12" />
+            <div className="text-center">
+              <h2 className="text-3xl font-black mb-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>🔱 {t(language, 'settings.godModeActive')} 🔱</h2>
+              <p className="text-xl font-bold mb-1 text-blue-50">{t(language, 'settings.godModeMessage')}</p>
+              <div className="flex items-center justify-center gap-4 text-sm text-blue-100">
+                <span className="flex items-center gap-1">
+                  <Infinity className="w-4 h-4" />
+                  {t(language, 'settings.unlimitedAI')}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Infinity className="w-4 h-4" />
+                  {t(language, 'settings.unlimitedFileShare')}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Infinity className="w-4 h-4" />
+                  {t(language, 'settings.unlimitedRemote')}
+                </span>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-white/80">Your Credit Balance</p>
-              <h2 className="text-4xl font-bold">{credits}</h2>
-              <p className="text-xs text-white/70">Credits • 1 credit = 1 AI request</p>
-            </div>
+            <Sparkles className="w-12 h-12" />
           </div>
-          <div className="text-right">
-            <p className="text-sm text-white/80">Status</p>
-            <div className="flex items-center gap-2 mt-1">
-              {credits > 0 ? (
+        </div>
+      )}
+
+      {/* Header */}
+      <div className={`text-center space-y-2 relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent flex items-center justify-center gap-2" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+          <SettingsIcon className="w-8 h-8 text-blue-400" />
+          {t(language, 'settings.title')}
+        </h1>
+        <p className="text-sm text-blue-200/70">
+          {godMode ? t(language, 'settings.godModeSubtitle') : t(language, 'settings.manageCredits')}
+        </p>
+
+        {/* Hidden Features Button */}
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => setShowEasterEggs(!showEasterEggs)}
+            className="group relative px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-blue-500/50 overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-20 transition-all duration-500 blur-xl"></div>
+            <div className="relative flex items-center gap-2">
+              {showEasterEggs ? (
                 <>
-                  <CheckCircle className="w-5 h-5" />
-                  <span className="font-semibold">Active</span>
+                  <Ghost className="w-5 h-5" />
+                  <span>{t(language, 'settings.easterEggs.hideSecretFeatures')}</span>
+                  <Ghost className="w-5 h-5" />
                 </>
               ) : (
                 <>
-                  <XCircle className="w-5 h-5" />
-                  <span className="font-semibold">Depleted</span>
+                  <PartyPopper className="w-5 h-5" />
+                  <span>{t(language, 'settings.easterEggs.unlockHiddenFeatures')}</span>
+                  <Sparkles className="w-5 h-5" />
+                </>
+              )}
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Easter Egg Terminal - Mobile Friendly */}
+      {showEasterEggs && (
+        <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-4 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '150ms' }}>
+          <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+              <Ghost className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent flex items-center gap-2" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                {t(language, 'settings.easterEggs.terminalTitle')}
+                <Sparkles className="w-5 h-5 text-blue-400" />
+              </h3>
+              <p className="text-sm text-blue-200/70">{t(language, 'settings.easterEggs.terminalSubtitle')}</p>
+            </div>
+          </div>
+
+          {/* Terminal Input */}
+          <form onSubmit={handleEasterEggSubmit} className="space-y-3">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span className="text-blue-400 font-mono text-sm">$</span>
+              </div>
+              <input
+                type="text"
+                value={easterEggInput}
+                onChange={(e) => setEasterEggInput(e.target.value)}
+                placeholder={t(language, 'settings.easterEggs.enterCode')}
+                className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-mono text-sm placeholder-gray-500 focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={!easterEggInput.trim()}
+              className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg disabled:hover:scale-100 flex items-center justify-center gap-2"
+            >
+              <Zap className="w-5 h-5" />
+              <span>{t(language, 'settings.easterEggs.executeCode')}</span>
+            </button>
+          </form>
+
+          {/* Message Display */}
+          {easterEggMessage && (
+            <div className={`p-4 rounded-xl border ${
+              easterEggMessage.type === 'success'
+                ? 'bg-blue-500/10 border-blue-500/30 text-blue-300'
+                : 'bg-red-500/10 border-red-500/30 text-red-300'
+            } animate-slide-down transition-all`}>
+              <p className="font-bold text-center">{easterEggMessage.text}</p>
+            </div>
+          )}
+
+          {/* Secret Hints - No codes shown! */}
+          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+            <h4 className="text-sm font-bold text-blue-300 mb-3 flex items-center gap-2">
+              <Lock className="w-4 h-4" />
+              {t(language, 'settings.easterEggs.secretCodes')}
+            </h4>
+            <div className="space-y-3 text-xs text-gray-400">
+              <div className="flex items-start gap-2">
+                <span className="text-2xl">🎮</span>
+                <div>
+                  <p className="text-gray-300 font-semibold">{t(language, 'settings.easterEggs.classicGamer')}</p>
+                  <p className="text-gray-500 text-[10px]">{t(language, 'settings.easterEggs.classicGamerHint')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-2xl">🌈</span>
+                <div>
+                  <p className="text-gray-300 font-semibold">{t(language, 'settings.easterEggs.colorfulJourney')}</p>
+                  <p className="text-gray-500 text-[10px]">{t(language, 'settings.easterEggs.colorfulJourneyHint')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-2xl">🔱</span>
+                <div>
+                  <p className="text-gray-300 font-semibold">{t(language, 'settings.easterEggs.ultimatePower')}</p>
+                  <p className="text-gray-500 text-[10px]">{t(language, 'settings.easterEggs.ultimatePowerHint')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-2xl">💾</span>
+                <div>
+                  <p className="text-gray-300 font-semibold">{t(language, 'settings.easterEggs.backToThePast')}</p>
+                  <p className="text-gray-500 text-[10px]">{t(language, 'settings.easterEggs.backToThePastHint')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-2xl">🎉</span>
+                <div>
+                  <p className="text-gray-300 font-semibold">{t(language, 'settings.easterEggs.celebrationTime')}</p>
+                  <p className="text-gray-500 text-[10px]">{t(language, 'settings.easterEggs.celebrationTimeHint')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-2xl">💻</span>
+                <div>
+                  <p className="text-gray-300 font-semibold">{t(language, 'settings.easterEggs.commandLine')}</p>
+                  <p className="text-gray-500 text-[10px]">{t(language, 'settings.easterEggs.commandLineHint')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-2xl">👨‍💻</span>
+                <div>
+                  <p className="text-gray-300 font-semibold">{t(language, 'settings.easterEggs.codersParadise')}</p>
+                  <p className="text-gray-500 text-[10px]">{t(language, 'settings.easterEggs.codersParadiseHint')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-2xl">💖</span>
+                <div>
+                  <p className="text-gray-300 font-semibold">{t(language, 'settings.easterEggs.romanticSecret')}</p>
+                  <p className="text-gray-500 text-[10px]">{t(language, 'settings.easterEggs.romanticSecretHint')}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Hint */}
+          <div className="flex items-start gap-2 bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 transition-all">
+            <Sparkles className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-blue-300">
+              {t(language, 'settings.easterEggs.proTip')}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Credit Balance */}
+      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-white transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-2xl flex items-center justify-center">
+              <CreditCard className="w-8 h-8 text-blue-300" />
+            </div>
+            <div>
+              <p className="text-sm text-blue-200/70">{t(language, 'settings.creditBalance.title')}</p>
+              <h2 className="text-4xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                {godMode ? (
+                  <>
+                    <Infinity className="w-10 h-10 text-blue-300" />
+                    <span>{t(language, 'settings.creditBalance.unlimited')}</span>
+                  </>
+                ) : (
+                  credits
+                )}
+              </h2>
+              <p className="text-xs text-blue-200/60">
+                {godMode ? t(language, 'settings.creditBalance.godModeUnlimited') : `${t(language, 'settings.creditBalance.credits')} • ${t(language, 'settings.creditBalance.creditInfo')}`}
+              </p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-blue-200/70">{t(language, 'settings.creditBalance.status')}</p>
+            <div className="flex items-center gap-2 mt-1">
+              {godMode || credits > 0 ? (
+                <>
+                  <CheckCircle className="w-5 h-5 text-blue-400" />
+                  <span className="font-semibold text-blue-100">{godMode ? t(language, 'settings.creditBalance.godMode') : t(language, 'settings.creditBalance.active')}</span>
+                </>
+              ) : (
+                <>
+                  <XCircle className="w-5 h-5 text-red-400" />
+                  <span className="font-semibold text-red-300">{t(language, 'settings.creditBalance.depleted')}</span>
                 </>
               )}
             </div>
@@ -243,14 +516,14 @@ const Settings = () => {
       </div>
 
       {/* Redeem Code Section */}
-      <div className={`bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
+      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-4 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
         <div className="flex items-center gap-2">
-          <Gift className="w-6 h-6 text-cyan-600" />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Redeem Credit Code</h2>
+          <Gift className="w-6 h-6 text-blue-400" />
+          <h2 className="text-xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'settings.redeemCode.title')}</h2>
         </div>
 
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Have a credit code? Enter it below to add credits to your account.
+        <p className="text-sm text-blue-200/70">
+          {t(language, 'settings.redeemCode.description')}
         </p>
 
         <div className="flex gap-2">
@@ -258,25 +531,25 @@ const Settings = () => {
             type="text"
             value={codeInput}
             onChange={(e) => setCodeInput(e.target.value.toUpperCase())}
-            placeholder="CEMAL-50-XXXXXXXX"
-            className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white uppercase"
+            placeholder={t(language, 'settings.redeemCode.placeholder')}
+            className="flex-1 px-4 py-3 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 bg-white/5 text-white uppercase transition-all"
           />
           <button
             onClick={handleRedeemCode}
             disabled={!codeInput.trim()}
-            className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-semibold"
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-semibold"
           >
             <Zap className="w-5 h-5" />
-            Redeem
+            {t(language, 'settings.redeemCode.button')}
           </button>
         </div>
 
         {redeemStatus && (
-          <div className={`p-4 rounded-lg border ${
+          <div className={`p-4 rounded-xl border ${
             redeemStatus.type === 'success'
-              ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300'
-              : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300'
-          }`}>
+              ? 'bg-blue-500/10 border-blue-500/30 text-blue-300'
+              : 'bg-red-500/10 border-red-500/30 text-red-300'
+          } transition-all`}>
             <div className="flex items-center gap-2">
               {redeemStatus.type === 'success' ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
               <span className="text-sm font-medium">{redeemStatus.message}</span>
@@ -286,100 +559,100 @@ const Settings = () => {
       </div>
 
       {/* Credit Request Section */}
-      <div className={`bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl p-6 border border-cyan-200 dark:border-cyan-800 space-y-4 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '300ms' }}>
+      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-4 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '300ms' }}>
         <div className="flex items-start gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              Need More Credits?
+            <h2 className="text-xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent mb-2" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+              {t(language, 'settings.creditRequest.title')}
             </h2>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-              💬 <strong>Cemal AI says:</strong> Need credits for your AI adventures? Drop me a message! I'll hook you up with a custom code. No corporate BS, just good vibes. ✨
+            <p className="text-sm text-blue-200/80 mb-4">
+              {t(language, 'settings.creditRequest.aiMessage')}
             </p>
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-600 p-3 mb-4 rounded">
-              <p className="text-xs text-yellow-800 dark:text-yellow-300">
-                ⚠️ <strong>Disclaimer:</strong> Cemal AI is Cemal's homelab AI pet project. It can make mistakes (like ChatGPT), but hey, it's not a Kumru either! 🥖 Use with caution and a sense of humor.
+            <div className="bg-blue-500/10 border-l-4 border-blue-500/50 p-3 mb-4 rounded-xl">
+              <p className="text-xs text-blue-300">
+                {t(language, 'settings.creditRequest.disclaimer')}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Your Name *
+                <label className="block text-sm font-medium text-blue-200/80 mb-1">
+                  {t(language, 'settings.creditRequest.yourName')} *
                 </label>
                 <input
                   type="text"
                   value={requestName}
                   onChange={(e) => setRequestName(e.target.value)}
-                  placeholder="John Doe"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                  placeholder={t(language, 'settings.creditRequest.namePlaceholder')}
+                  className="w-full px-4 py-2 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 bg-white/5 text-white transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Your Email *
+                <label className="block text-sm font-medium text-blue-200/80 mb-1">
+                  {t(language, 'settings.creditRequest.yourEmail')} *
                 </label>
                 <input
                   type="email"
                   value={requestEmail}
                   onChange={(e) => setRequestEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                  placeholder={t(language, 'settings.creditRequest.emailPlaceholder')}
+                  className="w-full px-4 py-2 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 bg-white/5 text-white transition-all"
                 />
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Credit Package
+              <label className="block text-sm font-medium text-blue-200/80 mb-1">
+                {t(language, 'settings.creditRequest.creditPackage')}
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {CREDIT_PACKAGES.map(pkg => (
                   <button
                     key={pkg.amount}
                     onClick={() => setRequestAmount(pkg.amount)}
-                    className={`p-3 rounded-lg border-2 font-semibold transition-all ${
+                    className={`p-3 rounded-xl border font-semibold transition-all ${
                       requestAmount === pkg.amount
-                        ? 'border-cyan-600 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-cyan-400'
+                        ? 'border-blue-500/50 bg-blue-500/20 text-blue-200'
+                        : 'border-white/10 bg-white/5 text-blue-100/70 hover:border-blue-500/30'
                     }`}
                   >
-                    {pkg.amount} Credits
+                    {pkg.amount} {t(language, 'settings.creditRequest.creditsLabel')}
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Message (optional)
+              <label className="block text-sm font-medium text-blue-200/80 mb-1">
+                {t(language, 'settings.creditRequest.message')}
               </label>
               <textarea
                 value={requestMessage}
                 onChange={(e) => setRequestMessage(e.target.value)}
-                placeholder="Tell me why you need credits, or just say hi! 😊"
+                placeholder={t(language, 'settings.creditRequest.messagePlaceholder')}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white resize-none"
+                className="w-full px-4 py-2 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 bg-white/5 text-white resize-none transition-all"
               />
             </div>
 
             <button
               onClick={handleCreditRequest}
-              className="w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all font-semibold flex items-center justify-center gap-2"
+              className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all font-semibold flex items-center justify-center gap-2"
             >
               <Send className="w-5 h-5" />
-              Request Credits
+              {t(language, 'settings.creditRequest.requestButton')}
             </button>
 
             {requestStatus && (
-              <div className={`mt-4 p-3 rounded-lg border ${
+              <div className={`mt-4 p-3 rounded-xl border ${
                 requestStatus.type === 'success'
-                  ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300'
-                  : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300'
-              }`}>
+                  ? 'bg-blue-500/10 border-blue-500/30 text-blue-300'
+                  : 'bg-red-500/10 border-red-500/30 text-red-300'
+              } transition-all`}>
                 <div className="flex items-center gap-2">
                   {requestStatus.type === 'success' ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
                   <span className="text-sm font-medium">{requestStatus.message}</span>
@@ -392,10 +665,10 @@ const Settings = () => {
 
       {/* Admin Panel */}
       {!isAdmin ? (
-        <div className={`bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
+        <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
           <div className="flex items-center gap-2 mb-4">
-            <Lock className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Admin Access</h3>
+            <Lock className="w-5 h-5 text-blue-400" />
+            <h3 className="text-lg font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'settings.admin.accessTitle')}</h3>
           </div>
 
           <div className="flex gap-2">
@@ -405,150 +678,150 @@ const Settings = () => {
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
-                placeholder="Admin password"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white pr-10"
+                placeholder={t(language, 'settings.admin.passwordPlaceholder')}
+                className="w-full px-4 py-2 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 bg-white/5 text-white pr-10 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowAdminPass(!showAdminPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-300 transition-all"
               >
                 {showAdminPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
             <button
               onClick={handleAdminLogin}
-              className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-lg text-white rounded-xl transition-all"
             >
-              Login
+              {t(language, 'settings.admin.loginButton')}
             </button>
           </div>
         </div>
       ) : (
-        <div className={`bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-6 border border-slate-700 space-y-6 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
+        <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-6 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Unlock className="w-6 h-6 text-green-400" />
-              <h2 className="text-2xl font-bold text-white">Admin Panel</h2>
+              <Unlock className="w-6 h-6 text-blue-400" />
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'settings.admin.panelTitle')}</h2>
             </div>
             <button
               onClick={handleAdminLogout}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm"
+              className="px-4 py-2 bg-gradient-to-r from-red-600/80 to-red-700/80 hover:shadow-lg text-white rounded-xl transition-all text-sm"
             >
-              Logout
+              {t(language, 'settings.admin.logoutButton')}
             </button>
           </div>
 
           {/* Statistics */}
           {stats && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
-                <p className="text-slate-400 text-sm">Total Codes</p>
+              <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                <p className="text-blue-200/70 text-sm">{t(language, 'settings.admin.stats.totalCodes')}</p>
                 <p className="text-2xl font-bold text-white">{stats.total}</p>
               </div>
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
-                <p className="text-slate-400 text-sm">Used</p>
-                <p className="text-2xl font-bold text-green-400">{stats.used}</p>
+              <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                <p className="text-blue-200/70 text-sm">{t(language, 'settings.admin.stats.used')}</p>
+                <p className="text-2xl font-bold text-blue-300">{stats.used}</p>
               </div>
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
-                <p className="text-slate-400 text-sm">Unused</p>
-                <p className="text-2xl font-bold text-blue-400">{stats.unused}</p>
+              <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                <p className="text-blue-200/70 text-sm">{t(language, 'settings.admin.stats.unused')}</p>
+                <p className="text-2xl font-bold text-indigo-300">{stats.unused}</p>
               </div>
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
-                <p className="text-slate-400 text-sm">Invalid</p>
+              <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                <p className="text-blue-200/70 text-sm">{t(language, 'settings.admin.stats.invalid')}</p>
                 <p className="text-2xl font-bold text-red-400">{stats.invalid}</p>
               </div>
             </div>
           )}
 
           {/* Code Generation */}
-          <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700">
-            <h3 className="text-lg font-bold text-white mb-4">Generate Codes</h3>
+          <div className="bg-white/5 rounded-xl p-5 border border-white/10">
+            <h3 className="text-lg font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent mb-4" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'settings.admin.generateCodes.title')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
-                <label className="block text-sm text-slate-300 mb-2">Credit Amount</label>
+                <label className="block text-sm text-blue-200/70 mb-2">{t(language, 'settings.admin.generateCodes.creditAmount')}</label>
                 <select
                   value={selectedAmount}
                   onChange={(e) => setSelectedAmount(Number(e.target.value))}
-                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white transition-all focus:ring-2 focus:ring-blue-500/50"
                 >
                   {CREDIT_PACKAGES.map(pkg => (
-                    <option key={pkg.amount} value={pkg.amount}>{pkg.amount} Credits</option>
+                    <option key={pkg.amount} value={pkg.amount}>{pkg.amount} {t(language, 'settings.admin.generateCodes.creditsLabel')}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm text-slate-300 mb-2">Number of Codes</label>
+                <label className="block text-sm text-blue-200/70 mb-2">{t(language, 'settings.admin.generateCodes.numberOfCodes')}</label>
                 <input
                   type="number"
                   min="1"
                   max="100"
                   value={codeCount}
                   onChange={(e) => setCodeCount(Math.max(1, Math.min(100, Number(e.target.value))))}
-                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white transition-all focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
               <div className="flex items-end">
                 <button
                   onClick={handleGenerateCodes}
-                  className="w-full px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors font-semibold"
+                  className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-lg text-white rounded-xl transition-all font-semibold"
                 >
-                  Generate
+                  {t(language, 'settings.admin.generateCodes.generateButton')}
                 </button>
               </div>
             </div>
           </div>
 
           {/* Generated Codes List */}
-          <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700">
-            <h3 className="text-lg font-bold text-white mb-4">Generated Codes ({generatedCodes.length})</h3>
+          <div className="bg-white/5 rounded-xl p-5 border border-white/10">
+            <h3 className="text-lg font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent mb-4" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'settings.admin.generatedCodes.title')} ({generatedCodes.length})</h3>
             <div className="max-h-96 overflow-y-auto space-y-2">
               {generatedCodes.length === 0 ? (
-                <p className="text-slate-400 text-center py-8">No codes generated yet</p>
+                <p className="text-blue-200/70 text-center py-8">{t(language, 'settings.admin.generatedCodes.noCodesYet')}</p>
               ) : (
                 generatedCodes.map((codeObj, idx) => (
                   <div
                     key={idx}
-                    className={`flex items-center justify-between p-3 rounded-lg border ${
+                    className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
                       codeObj.usedAt
-                        ? 'bg-green-900/20 border-green-800'
+                        ? 'bg-blue-500/10 border-blue-500/30'
                         : !codeObj.isValid
-                        ? 'bg-red-900/20 border-red-800'
-                        : 'bg-slate-700/50 border-slate-600'
+                        ? 'bg-red-500/10 border-red-500/30'
+                        : 'bg-white/5 border-white/10'
                     }`}
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <code className="text-white font-mono text-sm">{codeObj.code}</code>
-                        {codeObj.usedAt && <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded">USED</span>}
-                        {!codeObj.isValid && <span className="text-xs bg-red-600 text-white px-2 py-0.5 rounded">INVALID</span>}
+                        {codeObj.usedAt && <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">{t(language, 'settings.admin.generatedCodes.used')}</span>}
+                        {!codeObj.isValid && <span className="text-xs bg-red-600 text-white px-2 py-0.5 rounded-full">{t(language, 'settings.admin.generatedCodes.invalid')}</span>}
                       </div>
-                      <p className="text-xs text-slate-400 mt-1">
-                        {codeObj.amount} credits • Created: {new Date(codeObj.createdAt).toLocaleString()}
-                        {codeObj.usedAt && ` • Used: ${new Date(codeObj.usedAt).toLocaleString()}`}
+                      <p className="text-xs text-blue-200/60 mt-1">
+                        {codeObj.amount} {t(language, 'settings.admin.generatedCodes.credits')} • {t(language, 'settings.admin.generatedCodes.created')} {new Date(codeObj.createdAt).toLocaleString()}
+                        {codeObj.usedAt && ` • ${t(language, 'settings.admin.generatedCodes.usedAt')} ${new Date(codeObj.usedAt).toLocaleString()}`}
                       </p>
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleCopyCode(codeObj.code)}
-                        className="p-2 hover:bg-slate-600 rounded transition-colors"
-                        title="Copy code"
+                        className="p-2 hover:bg-blue-500/20 rounded-lg transition-all"
+                        title={t(language, 'settings.admin.generatedCodes.copyCode')}
                       >
-                        <Copy className="w-4 h-4 text-white" />
+                        <Copy className="w-4 h-4 text-blue-300" />
                       </button>
                       {!codeObj.usedAt && codeObj.isValid && (
                         <button
                           onClick={() => handleInvalidateCode(codeObj.code)}
-                          className="p-2 hover:bg-red-600 rounded transition-colors"
-                          title="Invalidate"
+                          className="p-2 hover:bg-red-500/20 rounded-lg transition-all"
+                          title={t(language, 'settings.admin.generatedCodes.invalidate')}
                         >
                           <XCircle className="w-4 h-4 text-red-400" />
                         </button>
                       )}
                       <button
                         onClick={() => handleDeleteCode(codeObj.code)}
-                        className="p-2 hover:bg-red-600 rounded transition-colors"
-                        title="Delete"
+                        className="p-2 hover:bg-red-500/20 rounded-lg transition-all"
+                        title={t(language, 'settings.admin.generatedCodes.delete')}
                       >
                         <Trash2 className="w-4 h-4 text-red-400" />
                       </button>
@@ -560,41 +833,41 @@ const Settings = () => {
           </div>
 
           {/* Credit Requests */}
-          <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700">
-            <h3 className="text-lg font-bold text-white mb-4">Credit Requests ({creditRequests.length})</h3>
+          <div className="bg-white/5 rounded-xl p-5 border border-white/10">
+            <h3 className="text-lg font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent mb-4" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'settings.admin.creditRequests.title')} ({creditRequests.length})</h3>
             <div className="max-h-96 overflow-y-auto space-y-3">
               {creditRequests.length === 0 ? (
-                <p className="text-slate-400 text-center py-8">No requests yet</p>
+                <p className="text-blue-200/70 text-center py-8">{t(language, 'settings.admin.creditRequests.noRequests')}</p>
               ) : (
                 creditRequests.map((req, idx) => (
                   <div
                     key={idx}
-                    className="bg-slate-700/50 border border-slate-600 rounded-lg p-4"
+                    className="bg-white/5 border border-white/10 rounded-xl p-4 transition-all hover:bg-white/10"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <p className="text-white font-semibold">{req.name}</p>
-                        <p className="text-sm text-slate-400">{req.email}</p>
+                        <p className="text-sm text-blue-200/70">{req.email}</p>
                       </div>
                       <div className="flex gap-2">
-                        <span className="px-3 py-1 bg-cyan-600 text-white text-xs rounded-full font-semibold">
-                          {req.requestedAmount} credits
+                        <span className="px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs rounded-full font-semibold">
+                          {req.requestedAmount} {t(language, 'settings.admin.creditRequests.credits')}
                         </span>
                         <button
                           onClick={() => handleClearRequest(req.timestamp)}
-                          className="p-1 hover:bg-red-600 rounded transition-colors"
-                          title="Clear request"
+                          className="p-1 hover:bg-red-500/20 rounded-lg transition-all"
+                          title={t(language, 'settings.admin.creditRequests.clearRequest')}
                         >
                           <Trash2 className="w-4 h-4 text-red-400" />
                         </button>
                       </div>
                     </div>
                     {req.message && (
-                      <p className="text-sm text-slate-300 mb-2 p-2 bg-slate-800/50 rounded">
+                      <p className="text-sm text-blue-200/80 mb-2 p-2 bg-white/5 rounded-lg">
                         "{req.message}"
                       </p>
                     )}
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-blue-200/50">
                       {new Date(req.timestamp).toLocaleString()}
                     </p>
                   </div>
@@ -606,19 +879,19 @@ const Settings = () => {
       )}
 
       {/* Tech Stack - Under the Hood */}
-      <div className={`bg-slate-900 dark:bg-slate-950 rounded-xl p-5 border border-slate-700 dark:border-slate-600 space-y-4 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '500ms' }}>
+      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5 space-y-4 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '500ms' }}>
         <div className="flex items-center gap-2 mb-4">
-          <Rocket className="w-5 h-5 text-slate-400" />
-          <h3 className="text-lg font-bold text-slate-200">
-            Built With Modern Tech
+          <Rocket className="w-5 h-5 text-blue-400" />
+          <h3 className="text-lg font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+            {t(language, 'settings.techStack.title')}
           </h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
           {/* Frontend */}
-          <div className="p-3 bg-slate-800/50 dark:bg-slate-900/50 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-colors">
-            <div className="text-slate-300 font-semibold mb-2">Frontend Stack</div>
-            <ul className="text-gray-300 space-y-1">
+          <div className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
+            <div className="text-blue-200 font-semibold mb-2">{t(language, 'settings.techStack.frontend')}</div>
+            <ul className="text-blue-100/70 space-y-1">
               <li>• React 18 + Vite (Lightning fast HMR)</li>
               <li>• Tailwind CSS v3 (JIT compiler)</li>
               <li>• Lucide Icons (Tree-shakeable)</li>
@@ -627,9 +900,9 @@ const Settings = () => {
           </div>
 
           {/* AI & Credits */}
-          <div className="p-3 bg-slate-800/50 dark:bg-slate-900/50 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-colors">
-            <div className="text-slate-300 font-semibold mb-2">Intelligence</div>
-            <ul className="text-gray-300 space-y-1">
+          <div className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
+            <div className="text-blue-200 font-semibold mb-2">{t(language, 'settings.techStack.intelligence')}</div>
+            <ul className="text-blue-100/70 space-y-1">
               <li>• Cemal AI Engine (Custom built)</li>
               <li>• Credit-based rate limiting</li>
               <li>• Real-time streaming responses</li>
@@ -638,9 +911,9 @@ const Settings = () => {
           </div>
 
           {/* Backend & Database */}
-          <div className="p-3 bg-slate-800/50 dark:bg-slate-900/50 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-colors">
-            <div className="text-slate-300 font-semibold mb-2">Backend & Database</div>
-            <ul className="text-gray-300 space-y-1">
+          <div className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
+            <div className="text-blue-200 font-semibold mb-2">{t(language, 'settings.techStack.backend')}</div>
+            <ul className="text-blue-100/70 space-y-1">
               <li>• Redis Cloud (Frankfurt - EU West 3)</li>
               <li>• ioredis (High-performance client)</li>
               <li>• Vercel Serverless Functions</li>
@@ -649,9 +922,9 @@ const Settings = () => {
           </div>
 
           {/* Infrastructure */}
-          <div className="p-3 bg-slate-800/50 dark:bg-slate-900/50 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-colors">
-            <div className="text-slate-300 font-semibold mb-2">Deployment & CDN</div>
-            <ul className="text-gray-300 space-y-1">
+          <div className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
+            <div className="text-blue-200 font-semibold mb-2">{t(language, 'settings.techStack.deployment')}</div>
+            <ul className="text-blue-100/70 space-y-1">
               <li>• Vercel Edge Network (Global CDN)</li>
               <li>• Auto SSL/TLS (Let's Encrypt)</li>
               <li>• GitHub CI/CD integration</li>
@@ -660,9 +933,9 @@ const Settings = () => {
           </div>
 
           {/* Tools & Libraries */}
-          <div className="p-3 bg-slate-800/50 dark:bg-slate-900/50 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-colors">
-            <div className="text-slate-300 font-semibold mb-2">Tools & Libraries</div>
-            <ul className="text-gray-300 space-y-1">
+          <div className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
+            <div className="text-blue-200 font-semibold mb-2">{t(language, 'settings.techStack.tools')}</div>
+            <ul className="text-blue-100/70 space-y-1">
               <li>• Tesseract.js (OCR engine)</li>
               <li>• pdf.js (Mozilla's PDF renderer)</li>
               <li>• html2canvas (Screenshot utility)</li>
@@ -671,9 +944,9 @@ const Settings = () => {
           </div>
 
           {/* Security & Performance */}
-          <div className="p-3 bg-slate-800/50 dark:bg-slate-900/50 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-colors">
-            <div className="text-slate-300 font-semibold mb-2">Security & Performance</div>
-            <ul className="text-gray-300 space-y-1">
+          <div className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
+            <div className="text-blue-200 font-semibold mb-2">{t(language, 'settings.techStack.security')}</div>
+            <ul className="text-blue-100/70 space-y-1">
               <li>• Environment variable encryption</li>
               <li>• CORS & CSP headers configured</li>
               <li>• Code splitting & lazy loading</li>
@@ -682,31 +955,31 @@ const Settings = () => {
           </div>
         </div>
 
-        <div className="mt-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+        <div className="mt-4 p-3 bg-white/5 rounded-xl border border-white/10">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-slate-300 font-semibold">Open Source Repository</div>
-              <div className="text-slate-400 text-xs mt-1">Built with passion, powered by RedBull 🔋</div>
+              <div className="text-blue-200 font-semibold">{t(language, 'settings.techStack.openSource')}</div>
+              <div className="text-blue-200/60 text-xs mt-1">{t(language, 'settings.techStack.openSourceSubtitle')}</div>
             </div>
             <a
               href="https://github.com/cemal-demirci"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors flex items-center gap-2 text-sm"
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-lg text-white rounded-xl transition-all flex items-center gap-2 text-sm"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
               </svg>
-              GitHub
+              {t(language, 'settings.techStack.githubButton')}
             </a>
           </div>
         </div>
       </div>
 
       {copiedCode && (
-        <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-bounce-subtle">
+        <div className="fixed bottom-4 right-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-xl shadow-lg flex items-center gap-2 backdrop-blur-xl border border-white/10 transition-all">
           <CheckCircle className="w-5 h-5" />
-          Code copied!
+          {t(language, 'settings.toast.codeCopied')}
         </div>
       )}
     </div>

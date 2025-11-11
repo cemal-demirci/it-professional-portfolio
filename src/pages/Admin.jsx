@@ -29,12 +29,6 @@ const Admin = () => {
     aboutText: 'With over eight years of experience in information technology and broadcast engineering, I serve as an IT & Security Administrator at Zero Density, a leading company in virtual production and real-time graphic solutions. My expertise spans IT systems and media streaming, and I hold certifications from Fortinet, AWS, Microsoft, and Cisco, including Cisco cybersecurity certifications, reflecting my skills in network security, cloud computing, and cybersecurity. At Zero Density, I manage on-premises Active Directory, Azure environments, Hyper-V and VMware infrastructures, network and firewall configurations, and system monitoring. Additionally, my experience in video streaming, recording, and broadcast technologies has grown significantly through projects for ACUNMEDYA, a prominent media company both in Turkey and internationally. I have contributed to the production and live broadcasts of high-profile shows such as the UEFA Champions League final, Survivor, Exatlon, and Amor En El Aire.'
   })
 
-  const [appearanceSettings, setAppearanceSettings] = useState({
-    defaultTheme: 'system',
-    accentColor: '#3b82f6',
-    enableAnimations: true
-  })
-
   const [securitySettings, setSecuritySettings] = useState({
     aiUnlimitedKey: 'unlimited2024',
     showKeyInSettings: false,
@@ -298,9 +292,6 @@ const Admin = () => {
     const savedPersonal = storage.getItem('personal_info')
     if (savedPersonal) setPersonalInfo(savedPersonal)
 
-    const savedAppearance = storage.getItem('appearance_settings')
-    if (savedAppearance) setAppearanceSettings(savedAppearance)
-
     const savedSecurity = storage.getItem('security_settings')
     if (savedSecurity) {
       setSecuritySettings(savedSecurity)
@@ -484,14 +475,13 @@ const Admin = () => {
     { id: 'about', name: 'About Page', icon: FileText },
     { id: 'apis', name: 'AI & APIs', icon: Cpu },
     { id: 'ai-tools', name: 'AI Tools Config', icon: Brain },
-    { id: 'appearance', name: 'Appearance', icon: Palette },
     { id: 'security', name: 'Security', icon: Lock },
     { id: 'stats', name: 'Statistics', icon: BarChart3 }
   ]
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 relative overflow-hidden">
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 relative overflow-hidden">
         {/* Animated Background Particles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-10 left-10 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -499,33 +489,33 @@ const Admin = () => {
           <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
 
-        <div className={`max-w-md w-full bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 shadow-2xl relative transition-all duration-1000 hover:scale-105 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
+        <div className={`max-w-md w-full bg-gray-800 rounded-xl p-8 border border-gray-700 shadow-2xl relative transition-all duration-1000 hover:scale-105 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-4 animate-bounce">
-              <Sparkles className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-              <span className="text-sm font-medium text-primary-700 dark:text-primary-300">Secure Access</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-900/30 rounded-full mb-4 animate-bounce">
+              <Sparkles className="w-4 h-4 text-primary-400" />
+              <span className="text-sm font-medium text-primary-300">Secure Access</span>
             </div>
             <Shield className="w-16 h-16 mx-auto text-primary-600 mb-4 animate-pulse-slow" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 via-purple-600 to-primary-600 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">Admin Panel</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">Giriş yap 🔐</p>
+            <p className="text-gray-400 mt-2">Giriş yap 🔐</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter admin password..."
-                  className="input-field pr-10 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field pr-10 bg-gray-700 border-gray-600 text-white"
                   autoFocus
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 hover:text-gray-200"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -554,9 +544,9 @@ const Admin = () => {
       {/* Header */}
       <div className={`flex justify-between items-center relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
         <div>
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-4 animate-bounce">
-            <Sparkles className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-            <span className="text-sm font-medium text-primary-700 dark:text-primary-300">Admin Dashboard</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-900/30 rounded-full mb-4 animate-bounce">
+            <Sparkles className="w-4 h-4 text-primary-400" />
+            <span className="text-sm font-medium text-primary-300">Admin Dashboard</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold flex items-center gap-2">
             <Shield className="w-10 h-10 text-primary-600 animate-pulse-slow" />
@@ -564,7 +554,7 @@ const Admin = () => {
               Admin Control Panel
             </span>
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Manage your portfolio settings and configurations 🚀</p>
+          <p className="text-gray-400 mt-2">Manage your portfolio settings and configurations 🚀</p>
         </div>
         <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2 transition-all">
           <LogOut className="w-5 h-5" />
@@ -582,8 +572,8 @@ const Admin = () => {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div className="border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+        <div className="border-b border-gray-700">
           <div className="flex overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon
@@ -593,8 +583,8 @@ const Admin = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-6 py-4 font-medium border-b-2 transition-all whitespace-nowrap relative ${
                     activeTab === tab.id
-                      ? 'border-primary-600 text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      ? 'border-primary-600 text-primary-400 bg-primary-900/20'
+                      : 'border-transparent text-gray-400 hover:hover:text-gray-200 hover:hover:bg-gray-700'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -614,31 +604,31 @@ const Admin = () => {
         <div className="p-6">
           {activeTab === 'site' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                 <Globe className="w-6 h-6 text-primary-600" />
                 Site Configuration
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Site Name</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Site Name</label>
                   <input
                     type="text"
                     value={siteSettings.siteName}
                     onChange={(e) => setSiteSettings({...siteSettings, siteName: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                     placeholder="Your Name or Site Title"
                   />
                   <p className="text-xs text-gray-500 mt-1">Displayed in navigation bar</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Logo Text</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Logo Text</label>
                   <input
                     type="text"
                     value={siteSettings.logoText}
                     onChange={(e) => setSiteSettings({...siteSettings, logoText: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                     placeholder="CD"
                     maxLength={3}
                   />
@@ -653,17 +643,17 @@ const Admin = () => {
                       onChange={(e) => setSiteSettings({...siteSettings, showNavLogo: e.target.checked})}
                       className="w-5 h-5 text-primary-600 rounded"
                     />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Logo in Navigation Bar</span>
+                    <span className="text-sm font-medium text-gray-300">Show Logo in Navigation Bar</span>
                   </label>
                   <p className="text-xs text-gray-500 mt-1 ml-7">Display logo icon next to site name</p>
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Meta Description</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Meta Description</label>
                   <textarea
                     value={siteSettings.metaDescription}
                     onChange={(e) => setSiteSettings({...siteSettings, metaDescription: e.target.value})}
-                    className="textarea-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="textarea-field bg-gray-700 border-gray-600 text-white"
                     rows={3}
                     placeholder="Site description for SEO"
                   />
@@ -674,34 +664,34 @@ const Admin = () => {
 
           {activeTab === 'inbox' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                 <Inbox className="w-6 h-6 text-primary-600" />
                 Contact Messages 📬
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+              <p className="text-sm text-gray-400 italic">
                 "You've got mail!" - or maybe just spam 😅
               </p>
 
               {contactMessages.length === 0 ? (
                 <div className="text-center py-12">
                   <Mail className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No messages yet</h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <h4 className="text-lg font-semibold text-gray-300 mb-2">No messages yet</h4>
+                  <p className="text-sm text-gray-400">
                     Your inbox is emptier than my LinkedIn notifications 📭
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {contactMessages.map((message, index) => (
-                    <div key={index} className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800">
+                    <div key={index} className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-xl p-6 border-2 border-blue-800">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                             {message.name.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <h4 className="font-bold text-gray-900 dark:text-white">{message.name}</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">{message.email}</p>
+                            <h4 className="font-bold text-white">{message.name}</h4>
+                            <p className="text-sm text-gray-400">{message.email}</p>
                           </div>
                         </div>
                         <button
@@ -728,11 +718,11 @@ const Admin = () => {
                         </button>
                       </div>
 
-                      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-3">
-                        <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{message.message}</p>
+                      <div className="bg-gray-800 rounded-lg p-4 mb-3">
+                        <p className="text-gray-300 whitespace-pre-wrap">{message.message}</p>
                       </div>
 
-                      <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center justify-between text-xs text-gray-400">
                         <span>{message.timestamp}</span>
                         <a
                           href={`mailto:${message.email}?subject=Re: Contact Form Message`}
@@ -751,24 +741,24 @@ const Admin = () => {
           {activeTab === 'content' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                   <FileEdit className="w-6 h-6 text-primary-600" />
                   Content Management
                 </h3>
 
                 {/* Language Selector */}
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Editing Language:</span>
-                  <div className="flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+                  <span className="text-sm text-gray-400">Editing Language:</span>
+                  <div className="flex bg-gray-200 bg-gray-700 rounded-lg p-1">
                     <button
                       onClick={() => setContentLang('en')}
-                      className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${contentLang === 'en' ? 'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow' : 'text-gray-600 dark:text-gray-400'}`}
+                      className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${contentLang === 'en' ? 'bg-gray-600 text-primary-400 shadow' : 'text-gray-400'}`}
                     >
                       🇬🇧 English
                     </button>
                     <button
                       onClick={() => setContentLang('tr')}
-                      className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${contentLang === 'tr' ? 'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow' : 'text-gray-600 dark:text-gray-400'}`}
+                      className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${contentLang === 'tr' ? 'bg-gray-600 text-primary-400 shadow' : 'text-gray-400'}`}
                     >
                       🇹🇷 Türkçe
                     </button>
@@ -777,10 +767,10 @@ const Admin = () => {
               </div>
 
               {/* Homepage Content */}
-              <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4 space-y-4">
-                <h4 className="font-semibold text-gray-900 dark:text-white">Homepage Content ({contentLang === 'en' ? 'English' : 'Türkçe'})</h4>
+              <div className="bg-gray-50 bg-gray-700/30 rounded-lg p-4 space-y-4">
+                <h4 className="font-semibold text-white">Homepage Content ({contentLang === 'en' ? 'English' : 'Türkçe'})</h4>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Page Title</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Page Title</label>
                   <input
                     type="text"
                     value={contentSettings[contentLang].homepage.title}
@@ -791,11 +781,11 @@ const Admin = () => {
                         homepage: {...contentSettings[contentLang].homepage, title: e.target.value}
                       }
                     })}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subtitle</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Subtitle</label>
                   <input
                     type="text"
                     value={contentSettings[contentLang].homepage.subtitle}
@@ -806,11 +796,11 @@ const Admin = () => {
                         homepage: {...contentSettings[contentLang].homepage, subtitle: e.target.value}
                       }
                     })}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hero Tagline</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Hero Tagline</label>
                   <input
                     type="text"
                     value={contentSettings[contentLang].homepage.heroTagline}
@@ -821,16 +811,16 @@ const Admin = () => {
                         homepage: {...contentSettings[contentLang].homepage, heroTagline: e.target.value}
                       }
                     })}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
               </div>
 
               {/* About Page Content */}
-              <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4 space-y-4">
-                <h4 className="font-semibold text-gray-900 dark:text-white">About Page Content ({contentLang === 'en' ? 'English' : 'Türkçe'})</h4>
+              <div className="bg-gray-50 bg-gray-700/30 rounded-lg p-4 space-y-4">
+                <h4 className="font-semibold text-white">About Page Content ({contentLang === 'en' ? 'English' : 'Türkçe'})</h4>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Page Title</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Page Title</label>
                   <input
                     type="text"
                     value={contentSettings[contentLang].aboutPage.title}
@@ -841,11 +831,11 @@ const Admin = () => {
                         aboutPage: {...contentSettings[contentLang].aboutPage, title: e.target.value}
                       }
                     })}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subtitle</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Subtitle</label>
                   <input
                     type="text"
                     value={contentSettings[contentLang].aboutPage.subtitle}
@@ -856,16 +846,16 @@ const Admin = () => {
                         aboutPage: {...contentSettings[contentLang].aboutPage, subtitle: e.target.value}
                       }
                     })}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
               </div>
 
               {/* Tools Page Content */}
-              <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4 space-y-4">
-                <h4 className="font-semibold text-gray-900 dark:text-white">Tools Page Content ({contentLang === 'en' ? 'English' : 'Türkçe'})</h4>
+              <div className="bg-gray-50 bg-gray-700/30 rounded-lg p-4 space-y-4">
+                <h4 className="font-semibold text-white">Tools Page Content ({contentLang === 'en' ? 'English' : 'Türkçe'})</h4>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Page Title</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Page Title</label>
                   <input
                     type="text"
                     value={contentSettings[contentLang].toolsPage.title}
@@ -876,11 +866,11 @@ const Admin = () => {
                         toolsPage: {...contentSettings[contentLang].toolsPage, title: e.target.value}
                       }
                     })}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subtitle</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Subtitle</label>
                   <input
                     type="text"
                     value={contentSettings[contentLang].toolsPage.subtitle}
@@ -891,21 +881,21 @@ const Admin = () => {
                         toolsPage: {...contentSettings[contentLang].toolsPage, subtitle: e.target.value}
                       }
                     })}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
               </div>
 
               {/* Footer Content */}
-              <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4 space-y-4">
-                <h4 className="font-semibold text-gray-900 dark:text-white">Footer</h4>
+              <div className="bg-gray-50 bg-gray-700/30 rounded-lg p-4 space-y-4">
+                <h4 className="font-semibold text-white">Footer</h4>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Footer Text</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Footer Text</label>
                   <input
                     type="text"
                     value={contentSettings.footerText}
                     onChange={(e) => setContentSettings({...contentSettings, footerText: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
               </div>
@@ -914,16 +904,16 @@ const Admin = () => {
 
           {activeTab === 'profile' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                 <User className="w-6 h-6 text-primary-600" />
                 Personal Information
               </h3>
 
               {/* Profile Photo Upload */}
-              <div className="flex items-center gap-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+              <div className="flex items-center gap-6 p-4 bg-gray-50 bg-gray-700/50 rounded-lg">
                 <div className="relative group">
                   {personalInfo.profilePhoto ? (
-                    <img src={personalInfo.profilePhoto} alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-lg" />
+                    <img src={personalInfo.profilePhoto} alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-gray-800 shadow-lg" />
                   ) : (
                     <div className="w-24 h-24 bg-gradient-to-br from-primary-600 to-primary-400 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                       {personalInfo.name.split(' ').map(n => n[0]).join('')}
@@ -940,79 +930,79 @@ const Admin = () => {
                   />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Profile Photo</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Upload a professional photo</p>
+                  <h4 className="font-semibold text-white">Profile Photo</h4>
+                  <p className="text-sm text-gray-400 mb-2">Upload a professional photo</p>
                   <p className="text-xs text-gray-500">JPG, PNG or GIF • Max 2MB</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
                   <input
                     type="text"
                     value={personalInfo.name}
                     onChange={(e) => setPersonalInfo({...personalInfo, name: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email *</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
                   <input
                     type="email"
                     value={personalInfo.email}
                     onChange={(e) => setPersonalInfo({...personalInfo, email: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Professional Title *</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Professional Title *</label>
                   <input
                     type="text"
                     value={personalInfo.title}
                     onChange={(e) => setPersonalInfo({...personalInfo, title: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Company</label>
                   <input
                     type="text"
                     value={personalInfo.company}
                     onChange={(e) => setPersonalInfo({...personalInfo, company: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">GitHub URL</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">GitHub URL</label>
                   <input
                     type="url"
                     value={personalInfo.github}
                     onChange={(e) => setPersonalInfo({...personalInfo, github: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">LinkedIn URL</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">LinkedIn URL</label>
                   <input
                     type="url"
                     value={personalInfo.linkedin}
                     onChange={(e) => setPersonalInfo({...personalInfo, linkedin: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">About Text</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">About Text</label>
                   <textarea
                     value={personalInfo.aboutText}
                     onChange={(e) => setPersonalInfo({...personalInfo, aboutText: e.target.value})}
-                    className="textarea-field min-h-[120px] dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="textarea-field min-h-[120px] bg-gray-700 border-gray-600 text-white"
                   />
                 </div>
               </div>
@@ -1021,33 +1011,33 @@ const Admin = () => {
 
           {activeTab === 'about' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                 <FileText className="w-6 h-6 text-primary-600" />
                 About Page Content Management
               </h3>
 
               {/* Bio */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bio / Introduction</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Bio / Introduction</label>
                 <textarea
                   value={aboutContent.bio}
                   onChange={(e) => setAboutContent({...aboutContent, bio: e.target.value})}
-                  className="textarea-field dark:bg-gray-700 dark:border-gray-600 dark:text-white min-h-[120px]"
+                  className="textarea-field bg-gray-700 border-gray-600 text-white min-h-[120px]"
                   placeholder="Write your professional bio..."
                 />
               </div>
 
               {/* CV Upload/Download */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <div className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 rounded-xl p-6 border border-blue-800">
+                <h4 className="font-semibold text-white mb-4 flex items-center gap-2">
                   <Upload className="w-5 h-5 text-blue-600" />
                   CV / Resume Management
                 </h4>
                 <div className="flex items-center gap-4">
                   <label className="flex-1 cursor-pointer">
-                    <div className="px-4 py-3 bg-white dark:bg-gray-800 border-2 border-dashed border-blue-300 dark:border-blue-700 rounded-lg hover:border-blue-500 transition-all text-center">
+                    <div className="px-4 py-3 bg-gray-800 border-2 border-dashed border-blue-700 rounded-lg hover:border-blue-500 transition-all text-center">
                       <Upload className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <span className="text-sm text-gray-300">
                         {aboutContent.cvFileName || 'Click to upload CV (PDF, DOC, DOCX)'}
                       </span>
                     </div>
@@ -1068,13 +1058,13 @@ const Admin = () => {
                     </button>
                   )}
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Uploaded CV will be available for download on your About page</p>
+                <p className="text-xs text-gray-400 mt-2">Uploaded CV will be available for download on your About page</p>
               </div>
 
               {/* Skills */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Skills & Technologies</label>
+                  <label className="block text-sm font-medium text-gray-300">Skills & Technologies</label>
                   <button
                     onClick={addSkill}
                     className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-2"
@@ -1090,7 +1080,7 @@ const Admin = () => {
                         type="text"
                         value={skill}
                         onChange={(e) => updateSkill(index, e.target.value)}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white flex-1"
+                        className="input-field bg-gray-700 border-gray-600 text-white flex-1"
                         placeholder="e.g., React, Node.js, AWS"
                       />
                       <button
@@ -1107,7 +1097,7 @@ const Admin = () => {
               {/* Experience */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Work Experience</label>
+                  <label className="block text-sm font-medium text-gray-300">Work Experience</label>
                   <button
                     onClick={addExperience}
                     className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-2"
@@ -1118,7 +1108,7 @@ const Admin = () => {
                 </div>
                 <div className="space-y-4">
                   {aboutContent.experience.map((exp, index) => (
-                    <div key={index} className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg space-y-3 relative">
+                    <div key={index} className="p-4 bg-gray-50 bg-gray-700/50 rounded-lg space-y-3 relative">
                       <button
                         onClick={() => removeExperience(index)}
                         className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
@@ -1131,14 +1121,14 @@ const Admin = () => {
                           value={exp.title}
                           onChange={(e) => updateExperience(index, 'title', e.target.value)}
                           placeholder="Job Title"
-                          className="input-field dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+                          className="bg-gray-600 border-gray-500 text-white"
                         />
                         <input
                           type="text"
                           value={exp.company}
                           onChange={(e) => updateExperience(index, 'company', e.target.value)}
                           placeholder="Company Name"
-                          className="input-field dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+                          className="bg-gray-600 border-gray-500 text-white"
                         />
                       </div>
                       <input
@@ -1146,13 +1136,13 @@ const Admin = () => {
                         value={exp.period}
                         onChange={(e) => updateExperience(index, 'period', e.target.value)}
                         placeholder="Period (e.g., 2020 - Present)"
-                        className="input-field dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+                        className="bg-gray-600 border-gray-500 text-white"
                       />
                       <textarea
                         value={exp.description}
                         onChange={(e) => updateExperience(index, 'description', e.target.value)}
                         placeholder="Job description and responsibilities..."
-                        className="textarea-field dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+                        className="bg-gray-600 border-gray-500 text-white"
                         rows={3}
                       />
                     </div>
@@ -1163,7 +1153,7 @@ const Admin = () => {
               {/* Certifications */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Certifications & Awards</label>
+                  <label className="block text-sm font-medium text-gray-300">Certifications & Awards</label>
                   <button
                     onClick={addCertification}
                     className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-2"
@@ -1180,14 +1170,14 @@ const Admin = () => {
                         value={cert.name}
                         onChange={(e) => updateCertification(index, 'name', e.target.value)}
                         placeholder="Certification Name"
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white flex-1"
+                        className="input-field bg-gray-700 border-gray-600 text-white flex-1"
                       />
                       <input
                         type="text"
                         value={cert.year}
                         onChange={(e) => updateCertification(index, 'year', e.target.value)}
                         placeholder="Year"
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-24"
+                        className="input-field bg-gray-700 border-gray-600 text-white w-24"
                       />
                       <button
                         onClick={() => removeCertification(index)}
@@ -1204,24 +1194,24 @@ const Admin = () => {
 
           {activeTab === 'apis' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                 <Cpu className="w-6 h-6 text-primary-600" />
                 AI & API Management 🤖
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+              <p className="text-sm text-gray-400 italic">
                 Because one AI isn't enough to handle all this awesomeness
               </p>
 
               {/* Cemal AI (Gemini Backend) */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800">
+              <div className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 rounded-xl p-6 border-2 border-blue-800">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
                       <Zap className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">Cemal AI</h4>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">The main brain 🧠</p>
+                      <h4 className="text-lg font-bold text-white">Cemal AI</h4>
+                      <p className="text-xs text-gray-400">The main brain 🧠</p>
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -1234,13 +1224,13 @@ const Admin = () => {
                       })}
                       className="sr-only peer"
                     />
-                    <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:peer-focus:ring-blue-800 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">API Key</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">API Key</label>
                     <div className="relative">
                       <input
                         type={apiSettings.gemini.showKey ? 'text' : 'password'}
@@ -1249,7 +1239,7 @@ const Admin = () => {
                           ...apiSettings,
                           gemini: {...apiSettings.gemini, apiKey: e.target.value}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white font-mono pr-10"
+                        className="input-field bg-gray-700 border-gray-600 text-white font-mono pr-10"
                         placeholder="Enter Gemini API Key"
                       />
                       <button
@@ -1258,7 +1248,7 @@ const Admin = () => {
                           ...apiSettings,
                           gemini: {...apiSettings.gemini, showKey: !apiSettings.gemini.showKey}
                         })}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 hover:text-gray-200"
                       >
                         {apiSettings.gemini.showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
@@ -1267,14 +1257,14 @@ const Admin = () => {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Model</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Model</label>
                       <select
                         value={apiSettings.gemini.model}
                         onChange={(e) => setApiSettings({
                           ...apiSettings,
                           gemini: {...apiSettings.gemini, model: e.target.value}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="input-field bg-gray-700 border-gray-600 text-white"
                       >
                         <option value="gemini-1.5-flash">Gemini 1.5 Flash (Fast)</option>
                         <option value="gemini-1.5-pro">Gemini 1.5 Pro (Powerful)</option>
@@ -1282,7 +1272,7 @@ const Admin = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Request Limit/min</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Request Limit/min</label>
                       <input
                         type="number"
                         value={apiSettings.gemini.requestLimit}
@@ -1290,7 +1280,7 @@ const Admin = () => {
                           ...apiSettings,
                           gemini: {...apiSettings.gemini, requestLimit: parseInt(e.target.value)}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="input-field bg-gray-700 border-gray-600 text-white"
                       />
                     </div>
                   </div>
@@ -1298,15 +1288,15 @@ const Admin = () => {
               </div>
 
               {/* OpenAI */}
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6 border-2 border-green-200 dark:border-green-800 opacity-75">
+              <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl p-6 border-2 border-green-800 opacity-75">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg flex items-center justify-center">
                       <Key className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">OpenAI GPT</h4>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">The expensive friend 💸</p>
+                      <h4 className="text-lg font-bold text-white">OpenAI GPT</h4>
+                      <p className="text-xs text-gray-400">The expensive friend 💸</p>
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -1319,13 +1309,13 @@ const Admin = () => {
                       })}
                       className="sr-only peer"
                     />
-                    <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                    <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:peer-focus:ring-green-800 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all border-gray-600 peer-checked:bg-green-600"></div>
                   </label>
                 </div>
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">API Key</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">API Key</label>
                     <div className="relative">
                       <input
                         type={apiSettings.openai.showKey ? 'text' : 'password'}
@@ -1334,7 +1324,7 @@ const Admin = () => {
                           ...apiSettings,
                           openai: {...apiSettings.openai, apiKey: e.target.value}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white font-mono pr-10"
+                        className="input-field bg-gray-700 border-gray-600 text-white font-mono pr-10"
                         placeholder="Enter OpenAI API Key"
                         disabled={!apiSettings.openai.enabled}
                       />
@@ -1344,7 +1334,7 @@ const Admin = () => {
                           ...apiSettings,
                           openai: {...apiSettings.openai, showKey: !apiSettings.openai.showKey}
                         })}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 hover:text-gray-200"
                         disabled={!apiSettings.openai.enabled}
                       >
                         {apiSettings.openai.showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -1354,14 +1344,14 @@ const Admin = () => {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Model</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Model</label>
                       <select
                         value={apiSettings.openai.model}
                         onChange={(e) => setApiSettings({
                           ...apiSettings,
                           openai: {...apiSettings.openai, model: e.target.value}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="input-field bg-gray-700 border-gray-600 text-white"
                         disabled={!apiSettings.openai.enabled}
                       >
                         <option value="gpt-4">GPT-4</option>
@@ -1370,7 +1360,7 @@ const Admin = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Request Limit/min</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Request Limit/min</label>
                       <input
                         type="number"
                         value={apiSettings.openai.requestLimit}
@@ -1378,7 +1368,7 @@ const Admin = () => {
                           ...apiSettings,
                           openai: {...apiSettings.openai, requestLimit: parseInt(e.target.value)}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="input-field bg-gray-700 border-gray-600 text-white"
                         disabled={!apiSettings.openai.enabled}
                       />
                     </div>
@@ -1387,15 +1377,15 @@ const Admin = () => {
               </div>
 
               {/* Claude */}
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border-2 border-purple-200 dark:border-purple-800 opacity-75">
+              <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 rounded-xl p-6 border-2 border-purple-800 opacity-75">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
                       <Shield className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">Anthropic Claude</h4>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">The thoughtful one 🤔</p>
+                      <h4 className="text-lg font-bold text-white">Anthropic Claude</h4>
+                      <p className="text-xs text-gray-400">The thoughtful one 🤔</p>
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -1408,13 +1398,13 @@ const Admin = () => {
                       })}
                       className="sr-only peer"
                     />
-                    <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                    <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:peer-focus:ring-purple-800 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all border-gray-600 peer-checked:bg-purple-600"></div>
                   </label>
                 </div>
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">API Key</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">API Key</label>
                     <div className="relative">
                       <input
                         type={apiSettings.claude.showKey ? 'text' : 'password'}
@@ -1423,7 +1413,7 @@ const Admin = () => {
                           ...apiSettings,
                           claude: {...apiSettings.claude, apiKey: e.target.value}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white font-mono pr-10"
+                        className="input-field bg-gray-700 border-gray-600 text-white font-mono pr-10"
                         placeholder="Enter Claude API Key"
                         disabled={!apiSettings.claude.enabled}
                       />
@@ -1433,7 +1423,7 @@ const Admin = () => {
                           ...apiSettings,
                           claude: {...apiSettings.claude, showKey: !apiSettings.claude.showKey}
                         })}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 hover:text-gray-200"
                         disabled={!apiSettings.claude.enabled}
                       >
                         {apiSettings.claude.showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -1443,14 +1433,14 @@ const Admin = () => {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Model</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Model</label>
                       <select
                         value={apiSettings.claude.model}
                         onChange={(e) => setApiSettings({
                           ...apiSettings,
                           claude: {...apiSettings.claude, model: e.target.value}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="input-field bg-gray-700 border-gray-600 text-white"
                         disabled={!apiSettings.claude.enabled}
                       >
                         <option value="claude-3-sonnet">Claude 3 Sonnet</option>
@@ -1459,7 +1449,7 @@ const Admin = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Request Limit/min</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Request Limit/min</label>
                       <input
                         type="number"
                         value={apiSettings.claude.requestLimit}
@@ -1467,7 +1457,7 @@ const Admin = () => {
                           ...apiSettings,
                           claude: {...apiSettings.claude, requestLimit: parseInt(e.target.value)}
                         })}
-                        className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="input-field bg-gray-700 border-gray-600 text-white"
                         disabled={!apiSettings.claude.enabled}
                       />
                     </div>
@@ -1475,8 +1465,8 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <p className="text-sm text-blue-800 dark:text-blue-300">
+              <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
+                <p className="text-sm text-blue-300">
                   <strong>💡 Pro Tip:</strong> Currently only Gemini is integrated with the tools. Enable others for future features!
                 </p>
               </div>
@@ -1485,25 +1475,25 @@ const Admin = () => {
 
           {activeTab === 'ai-tools' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                 <Brain className="w-6 h-6 text-primary-600" />
                 AI Tools Configuration 🤖
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+              <p className="text-sm text-gray-400 italic">
                 Fine-tune each AI assistant like a boss
               </p>
 
               <div className="grid grid-cols-1 gap-6">
                 {Object.entries(aiToolsConfig).map(([key, tool]) => (
-                  <div key={key} className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border-2 border-purple-200 dark:border-purple-800">
+                  <div key={key} className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 rounded-xl p-6 border-2 border-purple-800">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
                           <Brain className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                          <h4 className="text-lg font-bold text-gray-900 dark:text-white">{tool.name}</h4>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 font-mono">{tool.path}</p>
+                          <h4 className="text-lg font-bold text-white">{tool.name}</h4>
+                          <p className="text-xs text-gray-400 font-mono">{tool.path}</p>
                         </div>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
@@ -1516,14 +1506,14 @@ const Admin = () => {
                           })}
                           className="sr-only peer"
                         />
-                        <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                        <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:peer-focus:ring-purple-800 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all border-gray-600 peer-checked:bg-purple-600"></div>
                       </label>
                     </div>
 
                     <div className="space-y-4">
                       {/* System Prompt */}
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
                           System Prompt (AI'nin kişiliği ve görevleri)
                         </label>
                         <textarea
@@ -1532,7 +1522,7 @@ const Admin = () => {
                             ...aiToolsConfig,
                             [key]: {...tool, systemPrompt: e.target.value}
                           })}
-                          className="textarea-field dark:bg-gray-700 dark:border-gray-600 dark:text-white min-h-[100px] font-mono text-sm"
+                          className="textarea-field bg-gray-700 border-gray-600 text-white min-h-[100px] font-mono text-sm"
                           placeholder="AI'ya nasıl davranması gerektiğini söyle..."
                           disabled={!tool.enabled}
                         />
@@ -1542,7 +1532,7 @@ const Admin = () => {
                       {/* Temperature & Max Tokens */}
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                          <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
                             <Sliders className="w-4 h-4" />
                             Temperature (Yaratıcılık)
                           </label>
@@ -1560,7 +1550,7 @@ const Admin = () => {
                               className="flex-1"
                               disabled={!tool.enabled}
                             />
-                            <span className="text-sm font-mono font-bold text-gray-900 dark:text-white w-12 text-center bg-white dark:bg-gray-800 px-2 py-1 rounded">
+                            <span className="text-sm font-mono font-bold text-white w-12 text-center bg-gray-800 px-2 py-1 rounded">
                               {tool.temperature}
                             </span>
                           </div>
@@ -1570,7 +1560,7 @@ const Admin = () => {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          <label className="block text-sm font-medium text-gray-300 mb-2">
                             Max Tokens (Cevap uzunluğu)
                           </label>
                           <input
@@ -1580,7 +1570,7 @@ const Admin = () => {
                               ...aiToolsConfig,
                               [key]: {...tool, maxTokens: parseInt(e.target.value)}
                             })}
-                            className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            className="input-field bg-gray-700 border-gray-600 text-white"
                             min="256"
                             max="4096"
                             step="256"
@@ -1593,12 +1583,12 @@ const Admin = () => {
                       </div>
 
                       {/* Info Panel */}
-                      <div className="bg-purple-100 dark:bg-purple-900/30 rounded-lg p-3 border border-purple-200 dark:border-purple-700">
+                      <div className="bg-purple-900/30 rounded-lg p-3 border border-purple-700">
                         <div className="flex items-start gap-2">
                           <Settings className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                          <div className="text-xs text-purple-800 dark:text-purple-300">
+                          <div className="text-xs text-purple-300">
                             <strong>Aktif Model:</strong> {apiSettings.gemini.model}
-                            {!tool.enabled && <span className="block mt-1 text-red-600 dark:text-red-400 font-semibold">⚠️ Bu araç devre dışı!</span>}
+                            {!tool.enabled && <span className="block mt-1 text-red-400 font-semibold">⚠️ Bu araç devre dışı!</span>}
                           </div>
                         </div>
                       </div>
@@ -1607,84 +1597,29 @@ const Admin = () => {
                 ))}
               </div>
 
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <p className="text-sm text-blue-800 dark:text-blue-300">
+              <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-800 rounded-lg p-4">
+                <p className="text-sm text-blue-300">
                   <strong>💡 Pro Tip:</strong> Düşük temperature (0.0-0.4) teknik işler için, yüksek temperature (0.7-1.0) yaratıcı işler için idealdir!
                 </p>
               </div>
             </div>
           )}
 
-          {activeTab === 'appearance' && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <Palette className="w-6 h-6 text-primary-600" />
-                Appearance Settings
-              </h3>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Default Theme</label>
-                  <select
-                    value={appearanceSettings.defaultTheme}
-                    onChange={(e) => setAppearanceSettings({...appearanceSettings, defaultTheme: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  >
-                    <option value="light">Light Mode</option>
-                    <option value="dark">Dark Mode</option>
-                    <option value="system">System Preference</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Accent Color</label>
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="color"
-                      value={appearanceSettings.accentColor}
-                      onChange={(e) => setAppearanceSettings({...appearanceSettings, accentColor: e.target.value})}
-                      className="w-20 h-10 rounded cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={appearanceSettings.accentColor}
-                      onChange={(e) => setAppearanceSettings({...appearanceSettings, accentColor: e.target.value})}
-                      className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white flex-1"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={appearanceSettings.enableAnimations}
-                      onChange={(e) => setAppearanceSettings({...appearanceSettings, enableAnimations: e.target.checked})}
-                      className="w-5 h-5 text-primary-600 rounded"
-                    />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Enable Page Animations</span>
-                  </label>
-                  <p className="text-xs text-gray-500 mt-1 ml-7">Smooth transitions and effects</p>
-                </div>
-              </div>
-            </div>
-          )}
-
           {activeTab === 'security' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                 <Lock className="w-6 h-6 text-primary-600" />
                 Security & API Settings
               </h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI Unlimited Secret Key</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">AI Unlimited Secret Key</label>
                   <input
                     type="text"
                     value={securitySettings.aiUnlimitedKey}
                     onChange={(e) => setSecuritySettings({...securitySettings, aiUnlimitedKey: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white font-mono"
+                    className="input-field bg-gray-700 border-gray-600 text-white font-mono"
                   />
                   <p className="text-xs text-gray-500 mt-1">This key unlocks unlimited AI requests</p>
                 </div>
@@ -1697,12 +1632,12 @@ const Admin = () => {
                       onChange={(e) => setSecuritySettings({...securitySettings, showKeyInSettings: e.target.checked})}
                       className="w-5 h-5 text-primary-600 rounded"
                     />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Secret Key in Settings Page</span>
+                    <span className="text-sm font-medium text-gray-300">Show Secret Key in Settings Page</span>
                   </label>
                   <p className="text-xs text-gray-500 mt-1 ml-7">Display the unlock key on public settings page</p>
                 </div>
 
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="pt-4 border-t border-gray-700">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
@@ -1710,19 +1645,19 @@ const Admin = () => {
                       onChange={(e) => setSecuritySettings({...securitySettings, juniorITBotUnlimited: e.target.checked})}
                       className="w-5 h-5 text-purple-600 rounded"
                     />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">🚀 Junior IT Bot Unlimited Mode</span>
+                    <span className="text-sm font-medium text-gray-300">🚀 Junior IT Bot Unlimited Mode</span>
                   </label>
                   <p className="text-xs text-gray-500 mt-1 ml-7">Enable unlimited AI requests for Junior IT Chatbot (bypasses rate limiting)</p>
                 </div>
               </div>
 
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-                <h4 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2 flex items-center gap-2">
+              <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
+                <h4 className="font-semibold text-yellow-300 mb-2 flex items-center gap-2">
                   <Shield className="w-5 h-5" />
                   Security Notice
                 </h4>
-                <ul className="text-sm text-yellow-800 dark:text-yellow-300 space-y-1">
-                  <li>• Admin password: <code className="bg-yellow-100 dark:bg-yellow-900 px-2 py-0.5 rounded">cemal2024</code></li>
+                <ul className="text-sm text-yellow-300 space-y-1">
+                  <li>• Admin password: <code className="bg-yellow-900 px-2 py-0.5 rounded">cemal2024</code></li>
                   <li>• Change the password in the code for production use</li>
                   <li>• Never share your secret keys publicly</li>
                 </ul>
@@ -1732,35 +1667,35 @@ const Admin = () => {
 
           {activeTab === 'stats' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
                 <BarChart3 className="w-6 h-6 text-primary-600" />
                 Portfolio Statistics
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-                  <div className="text-3xl font-bold text-blue-700 dark:text-blue-300 mb-2">62+</div>
-                  <div className="text-sm text-blue-600 dark:text-blue-400">Total Tools</div>
+                <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/30 rounded-xl p-6 border border-blue-800">
+                  <div className="text-3xl font-bold text-blue-300 mb-2">62+</div>
+                  <div className="text-sm text-blue-400">Total Tools</div>
                 </div>
 
-                <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-xl p-6 border border-green-200 dark:border-green-800">
-                  <div className="text-3xl font-bold text-green-700 dark:text-green-300 mb-2">13</div>
-                  <div className="text-sm text-green-600 dark:text-green-400">Tool Categories</div>
+                <div className="bg-gradient-to-br from-green-900/30 to-green-800/30 rounded-xl p-6 border border-green-800">
+                  <div className="text-3xl font-bold text-green-300 mb-2">13</div>
+                  <div className="text-sm text-green-400">Tool Categories</div>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
-                  <div className="text-3xl font-bold text-purple-700 dark:text-purple-300 mb-2">10+</div>
-                  <div className="text-sm text-purple-600 dark:text-purple-400">AI-Powered Tools</div>
+                <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/30 rounded-xl p-6 border border-purple-800">
+                  <div className="text-3xl font-bold text-purple-300 mb-2">10+</div>
+                  <div className="text-sm text-purple-400">AI-Powered Tools</div>
                 </div>
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-6">
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Tool Categories</h4>
+              <div className="bg-gray-50 bg-gray-700/50 rounded-lg p-6">
+                <h4 className="font-semibold text-white mb-4">Tool Categories</h4>
                 <div className="space-y-2">
                   {['Code Tools (6)', 'Security Tools (4)', 'Network Tools (9)', 'Windows Tools (4)', 'PDF Tools (4)', 'Text Tools (5)', 'AI Tools (10)', 'Active Directory (3)', 'macOS Tools (1)'].map((cat, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded">
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{cat}</span>
-                      <div className="h-2 bg-primary-200 dark:bg-primary-900 rounded-full w-32 overflow-hidden">
+                    <div key={idx} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                      <span className="text-sm text-gray-300">{cat}</span>
+                      <div className="h-2 bg-primary-900 rounded-full w-32 overflow-hidden">
                         <div className="h-full bg-primary-600 rounded-full" style={{width: `${Math.random() * 100}%`}}></div>
                       </div>
                     </div>
@@ -1773,10 +1708,10 @@ const Admin = () => {
       </div>
 
       {/* Save Button */}
-      <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-        <div className="text-sm text-gray-600 dark:text-gray-400">
+      <div className="flex items-center justify-between bg-gray-800 rounded-xl p-4 border border-gray-700">
+        <div className="text-sm text-gray-400">
           {saved ? (
-            <span className="flex items-center gap-2 text-green-600 dark:text-green-400">
+            <span className="flex items-center gap-2 text-green-400">
               <Check className="w-5 h-5" />
               Settings saved successfully! Page will reload...
             </span>
@@ -1794,8 +1729,8 @@ const Admin = () => {
         </button>
       </div>
 
-      <div className={`border rounded-lg p-4 ${storage.isProduction() ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800' : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'}`}>
-        <p className={`text-sm ${storage.isProduction() ? 'text-yellow-800 dark:text-yellow-300' : 'text-blue-800 dark:text-blue-300'}`}>
+      <div className={`border rounded-lg p-4 ${storage.isProduction() ? 'bg-yellow-900/20 border-yellow-800' : 'bg-blue-900/20 border-blue-800'}`}>
+        <p className={`text-sm ${storage.isProduction() ? 'text-yellow-300' : 'text-blue-300'}`}>
           {storage.isProduction() ? (
             <>
               <strong>⚠️ Production Mode:</strong> Settings are stored in browser localStorage. Changes persist only in this browser. For multi-device access, consider implementing a backend database.
@@ -1807,7 +1742,7 @@ const Admin = () => {
           )}
         </p>
         {!storage.isAvailable() && (
-          <p className="text-sm text-red-800 dark:text-red-300 mt-2">
+          <p className="text-sm text-red-300 mt-2">
             <strong>❌ localStorage Unavailable:</strong> Your browser settings may prevent data persistence. Changes won't be saved.
           </p>
         )}

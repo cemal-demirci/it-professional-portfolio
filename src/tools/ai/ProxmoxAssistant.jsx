@@ -67,25 +67,25 @@ User: ${question}`
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Server className="w-8 h-8 text-orange-600" />
           Proxmox VE Assistant 🔧
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           AI-powered Proxmox Virtual Environment expert
         </p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         {/* Conversation Area */}
         <div className="space-y-4 max-h-[600px] overflow-y-auto">
           {conversation.length === 0 ? (
             <div className="text-center py-12">
               <Server className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-gray-400">
                 Ask me anything about Proxmox VE!
               </p>
-              <div className="mt-4 text-sm text-gray-400 dark:text-gray-500">
+              <div className="mt-4 text-sm text-gray-500">
                 <p>Example questions:</p>
                 <ul className="mt-2 space-y-1">
                   <li>• How do I create a new VM in Proxmox?</li>
@@ -101,18 +101,18 @@ User: ${question}`
                 key={index}
                 className={`p-4 rounded-lg ${
                   message.role === 'user'
-                    ? 'bg-primary-50 dark:bg-primary-900/20 ml-12'
-                    : 'bg-gray-50 dark:bg-gray-700/50 mr-12'
+                    ? 'bg-primary-900/20 ml-12'
+                    : 'bg-gray-50 bg-gray-700/50 mr-12'
                 }`}
               >
                 <div className="flex justify-between items-start mb-2">
-                  <p className="font-semibold text-sm text-gray-700 dark:text-gray-300">
+                  <p className="font-semibold text-sm text-gray-300">
                     {message.role === 'user' ? '👤 You' : '🤖 Proxmox Assistant'}
                   </p>
                   {message.role === 'assistant' && (
                     <button
                       onClick={() => copyToClipboard(message.content)}
-                      className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors"
+                      className="p-1 hover:hover:bg-gray-600 rounded transition-colors"
                       title="Copy response"
                     >
                       {copied ? (
@@ -123,7 +123,7 @@ User: ${question}`
                     </button>
                   )}
                 </div>
-                <div className="prose dark:prose-invert max-w-none text-sm">
+                <div className="prose-invert max-w-none text-sm">
                   <pre className="whitespace-pre-wrap font-sans">{message.content}</pre>
                 </div>
               </div>
@@ -133,7 +133,7 @@ User: ${question}`
           {loading && (
             <div className="flex items-center justify-center py-4">
               <Loader2 className="w-6 h-6 animate-spin text-primary-600" />
-              <span className="ml-2 text-gray-600 dark:text-gray-400">Thinking...</span>
+              <span className="ml-2 text-gray-400">Thinking...</span>
             </div>
           )}
         </div>
@@ -145,7 +145,7 @@ User: ${question}`
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="Ask about Proxmox VE, VMs, storage, networking..."
-            className="flex-1 input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="flex-1 input-field bg-gray-700 border-gray-600 text-white"
             disabled={loading}
           />
           <button
@@ -170,7 +170,7 @@ User: ${question}`
         </form>
 
         {/* Info */}
-        <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
+        <div className="text-xs text-gray-400 text-center">
           💡 Conversation context is maintained
         </div>
       </div>

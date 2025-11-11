@@ -83,27 +83,27 @@ const ServiceStatusMonitor = () => {
 
   const getStatusColor = (status) => {
     return status === 'online'
-      ? 'text-green-600 dark:text-green-400'
-      : 'text-red-600 dark:text-red-400'
+      ? 'text-green-400'
+      : 'text-red-400'
   }
 
   const getStatusBg = (status) => {
     return status === 'online'
-      ? 'bg-green-100 dark:bg-green-900/30'
-      : 'bg-red-100 dark:bg-red-900/30'
+      ? 'bg-green-900/30'
+      : 'bg-red-900/30'
   }
 
   const getResponseTimeColor = (time) => {
     if (!time) return 'text-gray-500'
-    if (time < 100) return 'text-green-600 dark:text-green-400'
-    if (time < 300) return 'text-yellow-600 dark:text-yellow-400'
-    return 'text-red-600 dark:text-red-400'
+    if (time < 100) return 'text-green-400'
+    if (time < 300) return 'text-yellow-400'
+    return 'text-red-400'
   }
 
   const getUptimeColor = (uptime) => {
-    if (uptime >= 99.9) return 'text-green-600 dark:text-green-400'
-    if (uptime >= 99.5) return 'text-yellow-600 dark:text-yellow-400'
-    return 'text-red-600 dark:text-red-400'
+    if (uptime >= 99.9) return 'text-green-400'
+    if (uptime >= 99.5) return 'text-yellow-400'
+    return 'text-red-400'
   }
 
   const totalServices = services.length
@@ -123,59 +123,59 @@ const ServiceStatusMonitor = () => {
 
       {/* Header */}
       <div className={`text-center space-y-4 relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 rounded-full mb-4 animate-bounce">
-          <Activity className="w-4 h-4 text-green-600 dark:text-green-400" />
-          <span className="text-sm font-medium text-green-700 dark:text-green-300">Live Monitoring</span>
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-900/30 rounded-full mb-4 animate-bounce">
+          <Activity className="w-4 h-4 text-green-400" />
+          <span className="text-sm font-medium text-green-300">Live Monitoring</span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-4xl md:text-5xl font-bold text-white flex items-center justify-center gap-2">
           <Server className="w-10 h-10 text-primary-600 animate-pulse-slow" />
           <span className="bg-gradient-to-r from-green-600 via-blue-600 to-green-600 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
             Service Status Monitor
           </span>
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Real-time monitoring of essential services 📊
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">Services Online</h3>
+            <h3 className="text-sm font-medium text-gray-400">Services Online</h3>
             <Server className="w-5 h-5 text-green-600" />
           </div>
-          <p className="text-3xl font-bold text-gray-900 dark:text-white">{onlineServices}/{totalServices}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-3xl font-bold text-white">{onlineServices}/{totalServices}</p>
+          <p className="text-xs text-gray-400 mt-1">
             {((onlineServices / totalServices) * 100).toFixed(1)}% operational
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">Average Uptime</h3>
+            <h3 className="text-sm font-medium text-gray-400">Average Uptime</h3>
             <TrendingUp className="w-5 h-5 text-blue-600" />
           </div>
-          <p className="text-3xl font-bold text-gray-900 dark:text-white">{averageUptime}%</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Last 30 days</p>
+          <p className="text-3xl font-bold text-white">{averageUptime}%</p>
+          <p className="text-xs text-gray-400 mt-1">Last 30 days</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">Last Check</h3>
+            <h3 className="text-sm font-medium text-gray-400">Last Check</h3>
             <Clock className="w-5 h-5 text-purple-600" />
           </div>
-          <p className="text-lg font-bold text-gray-900 dark:text-white">
+          <p className="text-lg font-bold text-white">
             {lastCheck ? lastCheck.toLocaleTimeString() : 'Never'}
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-xs text-gray-400 mt-1">
             Auto-refresh: {autoRefresh ? 'ON' : 'OFF'}
           </p>
         </div>
       </div>
 
       {/* Controls */}
-      <div className={`flex flex-wrap gap-4 items-center justify-between bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <div className={`flex flex-wrap gap-4 items-center justify-between bg-gray-800 rounded-xl p-4 border border-gray-700 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="flex items-center gap-2">
           <button
             onClick={checkServices}
@@ -186,7 +186,7 @@ const ServiceStatusMonitor = () => {
             {loading ? 'Checking...' : 'Refresh Now'}
           </button>
 
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
             <input
               type="checkbox"
               checked={autoRefresh}
@@ -198,39 +198,39 @@ const ServiceStatusMonitor = () => {
         </div>
 
         {lastCheck && (
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-400">
             Updated {Math.floor((Date.now() - lastCheck.getTime()) / 1000)}s ago
           </p>
         )}
       </div>
 
       {/* Services Table */}
-      <div className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <div className={`bg-gray-800 rounded-xl border border-gray-700 overflow-hidden transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700/50">
+            <thead className="bg-gray-50 bg-gray-700/50">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                   Service
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                   Response Time
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                   Uptime (30d)
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                   Last Checked
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="divide-y divide-gray-700">
               {services.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan="5" className="px-6 py-8 text-center text-gray-400">
                     <AlertTriangle className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                     <p>No services checked yet. Click "Refresh Now" to start monitoring.</p>
                   </td>
@@ -239,16 +239,16 @@ const ServiceStatusMonitor = () => {
                 services.map((service, index) => (
                   <tr
                     key={index}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
+                    className="hover:hover:bg-gray-700/30 transition-colors"
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className={`w-2 h-2 rounded-full mr-3 ${service.status === 'online' ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          <div className="text-sm font-medium text-white">
                             {service.name}
                           </div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                          <div className="text-xs text-gray-400">
                             {service.type}
                           </div>
                         </div>
@@ -275,7 +275,7 @@ const ServiceStatusMonitor = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 max-w-[100px]">
+                        <div className="flex-1 bg-gray-200 bg-gray-700 rounded-full h-2 max-w-[100px]">
                           <div
                             className={`h-2 rounded-full transition-all ${
                               service.uptime >= 99.9 ? 'bg-green-500' :
@@ -290,7 +290,7 @@ const ServiceStatusMonitor = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                       {service.lastChecked || 'Never'}
                     </td>
                   </tr>
@@ -302,10 +302,10 @@ const ServiceStatusMonitor = () => {
       </div>
 
       {/* Info Footer */}
-      <div className={`bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <div className={`bg-blue-900/20 border border-blue-800 rounded-lg p-4 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="flex items-start gap-3">
-          <Activity className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-blue-800 dark:text-blue-300">
+          <Activity className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+          <div className="text-sm text-blue-300">
             <p className="font-semibold mb-2">💡 Monitoring Information:</p>
             <ul className="list-disc ml-5 space-y-1 text-xs">
               <li>Services are checked every 30 seconds when auto-refresh is enabled</li>

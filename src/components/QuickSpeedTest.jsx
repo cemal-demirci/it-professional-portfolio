@@ -78,15 +78,15 @@ const QuickSpeedTest = () => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800">
+    <div className="bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-pink-900/20 rounded-xl p-6 border-2 border-blue-800">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center animate-pulse-slow">
             <Gauge className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Quick Speed Test</h3>
-            <p className="text-xs text-gray-600 dark:text-gray-400">Test your internet speed in seconds ⚡</p>
+            <h3 className="text-lg font-bold text-white">Quick Speed Test</h3>
+            <p className="text-xs text-gray-400">Test your internet speed in seconds ⚡</p>
           </div>
         </div>
 
@@ -105,23 +105,35 @@ const QuickSpeedTest = () => {
         <div className="flex items-center justify-center py-6">
           <div className="text-center space-y-3">
             <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto" />
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Testing your connection...</p>
+            <p className="text-sm text-gray-400 font-medium">Testing your connection...</p>
           </div>
         </div>
       )}
 
       {results && !testing && (
         <div className="space-y-4">
+          {/* Retro Mode Special Message */}
+          {document.body.classList.contains('retro-mode') && results.download > 1 && (
+            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-4 border-2 border-yellow-300 animate-pulse">
+              <p className="text-center text-lg font-black text-white drop-shadow-lg">
+                💾 ZAMANIN ÇOK İLERİSİNDESİN! 🚀
+              </p>
+              <p className="text-center text-sm text-white/90 mt-1">
+                {results.download} Mbps? 1990'larda böyle hızlar yoktu!
+              </p>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-              <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Download</div>
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{results.download}</div>
+            <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
+              <div className="text-xs text-gray-400 mb-1">Download</div>
+              <div className="text-2xl font-bold text-blue-400">{results.download}</div>
               <div className="text-xs text-gray-500">Mbps</div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-              <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Latency</div>
-              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{results.latency}</div>
+            <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
+              <div className="text-xs text-gray-400 mb-1">Latency</div>
+              <div className="text-2xl font-bold text-purple-400">{results.latency}</div>
               <div className="text-xs text-gray-500">ms</div>
             </div>
           </div>
@@ -129,7 +141,7 @@ const QuickSpeedTest = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={runQuickTest}
-              className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all font-medium"
+              className="flex-1 px-4 py-2 bg-gray-200 bg-gray-700 text-gray-300 rounded-lg hover:hover:bg-gray-600 transition-all font-medium"
             >
               Test Again
             </button>
@@ -142,7 +154,7 @@ const QuickSpeedTest = () => {
             </Link>
           </div>
 
-          <p className="text-xs text-center text-gray-500 dark:text-gray-500">
+          <p className="text-xs text-center text-gray-500">
             {results.timestamp}
           </p>
         </div>
@@ -150,12 +162,12 @@ const QuickSpeedTest = () => {
 
       {!results && !testing && (
         <div className="text-center py-2">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-400">
             Click the button to test your connection speed
           </p>
           <Link
             to="/tools/network-diagnostics"
-            className="text-xs text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1 mt-2"
+            className="text-xs text-blue-400 hover:underline inline-flex items-center gap-1 mt-2"
           >
             Need network diagnostics?
             <ArrowRight className="w-3 h-3" />

@@ -153,32 +153,32 @@ const EmailDnsChecker = () => {
 
   const ResultCard = ({ title, icon: Icon, result }) => {
     const bgColor = {
-      success: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
-      warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800',
-      error: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
-      info: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
-    }[result.status] || 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'
+      success: 'bg-green-900/20 border-green-800',
+      warning: 'bg-yellow-900/20 border-yellow-800',
+      error: 'bg-red-900/20 border-red-800',
+      info: 'bg-blue-900/20 border-blue-800'
+    }[result.status] || 'bg-gray-50 bg-gray-700/50 border-gray-200 border-gray-600'
 
     return (
       <div className={`p-4 rounded-lg border ${bgColor}`}>
         <div className="flex items-start gap-3">
-          <Icon className="w-5 h-5 text-gray-700 dark:text-gray-300 mt-1" />
+          <Icon className="w-5 h-5 text-gray-300 mt-1" />
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-900 dark:text-white">{title}</h3>
+              <h3 className="font-semibold text-white">{title}</h3>
               <StatusIcon status={result.status} />
             </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300">{result.message}</p>
+            <p className="text-sm text-gray-300">{result.message}</p>
             {result.record && (
-              <div className="mt-2 p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700">
-                <code className="text-xs text-gray-800 dark:text-gray-200 break-all">{result.record}</code>
+              <div className="mt-2 p-2 bg-gray-800 rounded border border-gray-700">
+                <code className="text-xs text-gray-800 text-gray-200 break-all">{result.record}</code>
               </div>
             )}
             {result.records && result.records.length > 0 && (
               <div className="mt-2 space-y-1">
                 {result.records.map((record, idx) => (
-                  <div key={idx} className="p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700">
-                    <code className="text-xs text-gray-800 dark:text-gray-200">{record}</code>
+                  <div key={idx} className="p-2 bg-gray-800 rounded border border-gray-700">
+                    <code className="text-xs text-gray-800 text-gray-200">{record}</code>
                   </div>
                 ))}
               </div>
@@ -192,13 +192,13 @@ const EmailDnsChecker = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Email DNS Checker</h1>
-        <p className="text-gray-600 dark:text-gray-400">Check SPF, DMARC, DKIM, BIMI, and MX records</p>
+        <h1 className="text-3xl font-bold text-white">Email DNS Checker</h1>
+        <p className="text-gray-400">Check SPF, DMARC, DKIM, BIMI, and MX records</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Domain Name</label>
+          <label className="block text-sm font-medium text-gray-300">Domain Name</label>
           <div className="flex gap-2">
             <input
               type="text"
@@ -206,7 +206,7 @@ const EmailDnsChecker = () => {
               onChange={(e) => setDomain(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && performCheck()}
               placeholder="example.com"
-              className="input-field flex-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="input-field flex-1 bg-gray-700 border-gray-600 text-white"
             />
             <button
               onClick={performCheck}
@@ -219,7 +219,7 @@ const EmailDnsChecker = () => {
           </div>
         </div>
 
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm text-blue-800 dark:text-blue-300">
+        <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4 text-sm text-blue-300">
           <p><strong>MX Toolbox Style:</strong> This tool checks email authentication records using Google Public DNS API.</p>
           <ul className="list-disc list-inside mt-2 space-y-1">
             <li>SPF: Sender Policy Framework (prevents email spoofing)</li>
@@ -232,7 +232,7 @@ const EmailDnsChecker = () => {
 
         {results && !results.error && (
           <div className="space-y-4 pt-4">
-            <div className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="flex items-center gap-2 text-lg font-semibold text-white">
               <Globe className="w-5 h-5" />
               Results for: {results.domain}
             </div>
@@ -245,9 +245,9 @@ const EmailDnsChecker = () => {
               <ResultCard title="BIMI Record" icon={Mail} result={results.bimi} />
             </div>
 
-            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Recommendations</h3>
-              <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+            <div className="bg-gray-50 bg-gray-700/50 rounded-lg p-4">
+              <h3 className="font-semibold text-white mb-2">Recommendations</h3>
+              <ul className="space-y-2 text-sm text-gray-300">
                 {results.spf.status === 'error' && (
                   <li className="flex items-start gap-2">
                     <span className="text-red-600">•</span>
@@ -284,7 +284,7 @@ const EmailDnsChecker = () => {
         )}
 
         {results && results.error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-sm text-red-800 dark:text-red-300">
+          <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 text-sm text-red-300">
             {results.error}
           </div>
         )}

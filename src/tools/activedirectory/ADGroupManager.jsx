@@ -71,20 +71,20 @@ pause`
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Users className="w-8 h-8" />
           AD Group Manager
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">Manage Active Directory groups and memberships</p>
+        <p className="text-gray-400">Manage Active Directory groups and memberships</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="flex gap-2">
           {['add', 'remove', 'create'].map(act => (
             <button
               key={act}
               onClick={() => setAction(act)}
-              className={`px-4 py-2 rounded-lg font-medium ${action === act ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+              className={`px-4 py-2 rounded-lg font-medium ${action === act ? 'bg-primary-500 text-white' : 'bg-gray-700 text-gray-300'}`}
             >
               {act === 'add' ? 'Add Users' : act === 'remove' ? 'Remove Users' : 'Create Group'}
             </button>
@@ -93,13 +93,13 @@ pause`
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Group Name</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Group Name</label>
             <input
               type="text"
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
               placeholder="Domain Admins"
-              className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="input-field bg-gray-700 border-gray-600 text-white"
             />
           </div>
 
@@ -107,11 +107,11 @@ pause`
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Scope</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Scope</label>
                   <select
                     value={groupSettings.scope}
                     onChange={(e) => setGroupSettings({...groupSettings, scope: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   >
                     <option>Global</option>
                     <option>Universal</option>
@@ -119,11 +119,11 @@ pause`
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
                   <select
                     value={groupSettings.category}
                     onChange={(e) => setGroupSettings({...groupSettings, category: e.target.value})}
-                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="input-field bg-gray-700 border-gray-600 text-white"
                   >
                     <option>Security</option>
                     <option>Distribution</option>
@@ -131,12 +131,12 @@ pause`
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
                 <input
                   type="text"
                   value={groupSettings.description}
                   onChange={(e) => setGroupSettings({...groupSettings, description: e.target.value})}
-                  className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="input-field bg-gray-700 border-gray-600 text-white"
                 />
               </div>
             </>
@@ -144,12 +144,12 @@ pause`
 
           {action !== 'create' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Users (one per line)</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Users (one per line)</label>
               <textarea
                 value={users.join('\n')}
                 onChange={(e) => setUsers(e.target.value.split('\n'))}
                 placeholder="jdoe&#10;jsmith&#10;awhite"
-                className="textarea-field min-h-[150px] dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="textarea-field min-h-[150px] bg-gray-700 border-gray-600 text-white"
               />
             </div>
           )}

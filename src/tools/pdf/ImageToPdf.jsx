@@ -46,12 +46,12 @@ const ImageToPdf = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Image to PDF</h1>
-        <p className="text-gray-600 dark:text-gray-400">Convert images to PDF</p>
+        <h1 className="text-3xl font-bold text-white">Image to PDF</h1>
+        <p className="text-gray-400">Convert images to PDF</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-primary-500 transition-colors">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-primary-500 transition-colors">
           <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
           <label className="cursor-pointer">
             <span className="btn-primary inline-block">Select Images</span>
@@ -61,7 +61,7 @@ const ImageToPdf = () => {
 
         {images.length > 0 && (
           <div className="space-y-3">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Selected Images ({images.length})</h3>
+            <h3 className="font-semibold text-white">Selected Images ({images.length})</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {images.map((image, index) => (
                 <div key={index} className="relative group">

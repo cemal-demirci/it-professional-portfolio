@@ -89,20 +89,20 @@ const PdfToImage = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <FileImage className="w-8 h-8 text-purple-600" />
           PDF to Image Converter
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">Convert PDF pages to high-quality images</p>
+        <p className="text-gray-400">Convert PDF pages to high-quality images</p>
       </div>
 
       {/* Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Conversion Settings</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">Conversion Settings</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Image Format
             </label>
             <select
@@ -117,7 +117,7 @@ const PdfToImage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Quality Scale: {quality}x
             </label>
             <input
@@ -139,8 +139,8 @@ const PdfToImage = () => {
       </div>
 
       {/* Upload Area */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-purple-500 transition-colors">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-purple-500 transition-colors">
           <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
           <label className="cursor-pointer">
             <span className="btn-primary inline-block">Select PDF File</span>
@@ -151,7 +151,7 @@ const PdfToImage = () => {
               className="hidden"
             />
           </label>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+          <p className="text-sm text-gray-400 mt-2">
             {file ? `📄 ${file.name}` : 'or drag and drop here'}
           </p>
         </div>
@@ -172,7 +172,7 @@ const PdfToImage = () => {
               <Loader className="w-5 h-5 animate-spin" />
               <span>Converting kardeşim... {progress}%</span>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div className="w-full bg-gray-200 bg-gray-700 rounded-full h-2">
               <div
                 className="bg-purple-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
@@ -184,9 +184,9 @@ const PdfToImage = () => {
 
       {/* Results */}
       {images.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-white">
               Converted Images ({images.length} pages)
             </h3>
             <button
@@ -202,20 +202,20 @@ const PdfToImage = () => {
             {images.map((image) => (
               <div
                 key={image.pageNum}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 space-y-2"
+                className="border border-gray-700 rounded-lg p-3 space-y-2"
               >
                 <img
                   src={image.data}
                   alt={`Page ${image.pageNum}`}
-                  className="w-full rounded border border-gray-200 dark:border-gray-600"
+                  className="w-full rounded border border-gray-200 border-gray-600"
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-400">
                     Page {image.pageNum}
                   </span>
                   <button
                     onClick={() => downloadImage(image)}
-                    className="text-purple-600 hover:text-purple-700 p-2 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded"
+                    className="text-purple-600 hover:text-purple-700 p-2 hover:hover:bg-purple-900/20 rounded"
                   >
                     <Download className="w-4 h-4" />
                   </button>
@@ -230,9 +230,9 @@ const PdfToImage = () => {
       )}
 
       {/* Tips */}
-      <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
-        <h4 className="font-semibold text-purple-900 dark:text-purple-300 mb-2">Pro Tips:</h4>
-        <ul className="text-sm text-purple-800 dark:text-purple-300 space-y-1 ml-5 list-disc">
+      <div className="bg-purple-900/20 border border-purple-800 rounded-lg p-4">
+        <h4 className="font-semibold text-purple-300 mb-2">Pro Tips:</h4>
+        <ul className="text-sm text-purple-300 space-y-1 ml-5 list-disc">
           <li>PNG format: Best for text and diagrams (lossless)</li>
           <li>JPEG format: Smaller files, good for photos</li>
           <li>Higher quality scale = better resolution but larger files</li>

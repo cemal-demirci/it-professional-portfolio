@@ -73,57 +73,57 @@ Provide concrete, implementable solutions with exact commands where applicable.`
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
           <Shield className="w-8 h-8 text-purple-600" />
           AI Security Configuration Advisor
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           Get expert security recommendations powered by AI
         </p>
       </div>
 
       {/* Usage Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/20 border border-blue-800 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
-            <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-xs font-medium text-blue-700 dark:text-blue-300">Query Length</span>
+            <Activity className="w-4 h-4 text-blue-400" />
+            <span className="text-xs font-medium text-blue-300">Query Length</span>
           </div>
-          <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+          <div className="text-2xl font-bold text-blue-100">
             {charCount.toLocaleString()}
-            <span className="text-sm text-blue-600 dark:text-blue-400 ml-1">/ {LIMITS.MAX_INPUT_CHARS.toLocaleString()}</span>
+            <span className="text-sm text-blue-400 ml-1">/ {LIMITS.MAX_INPUT_CHARS.toLocaleString()}</span>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 border border-green-800 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
-            <Zap className="w-4 h-4 text-green-600 dark:text-green-400" />
-            <span className="text-xs font-medium text-green-700 dark:text-green-300">Credits Available</span>
+            <Zap className="w-4 h-4 text-green-400" />
+            <span className="text-xs font-medium text-green-300">Credits Available</span>
           </div>
-          <div className="text-2xl font-bold text-green-900 dark:text-green-100">
+          <div className="text-2xl font-bold text-green-100">
             {credits}
-            <span className="text-sm text-green-600 dark:text-green-400 ml-1">credits</span>
+            <span className="text-sm text-green-400 ml-1">credits</span>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-800 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
-            <Brain className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-            <span className="text-xs font-medium text-purple-700 dark:text-purple-300">Response Time</span>
+            <Brain className="w-4 h-4 text-purple-400" />
+            <span className="text-xs font-medium text-purple-300">Response Time</span>
           </div>
-          <div className="text-2xl font-bold text-purple-900 dark:text-purple-100">
+          <div className="text-2xl font-bold text-purple-100">
             {analysisTime > 0 ? `${analysisTime}s` : '-'}
           </div>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">System Type</label>
+          <label className="block text-sm font-medium text-gray-300">System Type</label>
           <select
             value={systemType}
             onChange={(e) => setSystemType(e.target.value)}
-            className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="input-field bg-gray-700 border-gray-600 text-white"
           >
             <option value="windows-server">Windows Server</option>
             <option value="active-directory">Active Directory</option>
@@ -134,23 +134,23 @@ Provide concrete, implementable solutions with exact commands where applicable.`
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Security Question</label>
+          <label className="block text-sm font-medium text-gray-300">Your Security Question</label>
           <textarea
             value={scenario}
             onChange={(e) => setScenario(e.target.value)}
             placeholder="Describe your security scenario or ask a question..."
-            className="textarea-field min-h-[150px] dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="textarea-field min-h-[150px] bg-gray-700 border-gray-600 text-white"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Quick Questions</label>
+          <label className="block text-sm font-medium text-gray-300">Quick Questions</label>
           <div className="flex flex-wrap gap-2">
             {quickQuestions.map((q, i) => (
               <button
                 key={i}
                 onClick={() => setScenario(q)}
-                className="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/30"
+                className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded-full hover:hover:bg-primary-900/30"
               >
                 {q}
               </button>
@@ -178,22 +178,22 @@ Provide concrete, implementable solutions with exact commands where applicable.`
       </div>
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+        <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
           <AlertCircle className="w-5 h-5 text-red-600 inline mr-2" />
           {error}
         </div>
       )}
 
       {result && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <h3 className="font-semibold text-white flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
               Security Recommendations
             </h3>
             <span className="text-xs text-gray-500">{result.timestamp}</span>
           </div>
-          <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200">
+          <div className="p-4 bg-gray-50 bg-gray-700/50 rounded-lg whitespace-pre-wrap text-sm text-gray-800 text-gray-200">
             {result.analysis}
           </div>
         </div>

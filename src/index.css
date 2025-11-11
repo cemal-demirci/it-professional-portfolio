@@ -3,59 +3,102 @@
 @tailwind utilities;
 
 @layer base {
+  /* SÜPER MODERN DARK TEMA - TEK TEMA SİSTEMİ */
+  * {
+    @apply border-gray-700;
+  }
+
   body {
-    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+    @apply bg-gradient-to-br from-gray-950 via-blue-950 to-purple-950 text-gray-100;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gradient-to-b from-blue-600 to-purple-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply from-blue-500 to-purple-500;
   }
 }
 
 @layer components {
+  /* MODERN DARK COMPONENTS */
   .tool-card {
-    @apply bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-300 cursor-pointer hover:border-primary-500;
+    @apply bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6
+           hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 cursor-pointer
+           hover:border-blue-500/50 hover:scale-105;
   }
 
   .btn-primary {
-    @apply bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors duration-200 font-medium;
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl
+           hover:from-blue-500 hover:to-purple-500 transition-all duration-200 font-bold
+           shadow-lg hover:shadow-xl hover:scale-105;
   }
 
   .btn-secondary {
-    @apply bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium;
+    @apply bg-gray-800/80 backdrop-blur-md text-gray-100 px-6 py-3 rounded-xl
+           hover:bg-gray-700/80 transition-all duration-200 font-bold border border-gray-700
+           hover:border-gray-600 hover:scale-105;
   }
 
   .input-field {
-    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
+    @apply w-full px-4 py-3 border border-gray-700 rounded-xl focus:outline-none
+           focus:ring-2 focus:ring-blue-500 focus:border-transparent
+           bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400
+           transition-all duration-200;
   }
 
   .textarea-field {
-    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent min-h-[200px] font-mono text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
+    @apply w-full px-4 py-3 border border-gray-700 rounded-xl focus:outline-none
+           focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[200px]
+           font-mono text-sm bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400
+           transition-all duration-200;
   }
 
   /* Result display areas */
   pre {
-    @apply text-gray-800 dark:text-gray-200;
+    @apply text-gray-200 bg-gray-800/50 p-4 rounded-xl border border-gray-700;
   }
 
-  /* Ensure all text content is visible in dark mode */
-  .dark pre,
-  .dark code {
-    @apply text-gray-200;
+  code {
+    @apply text-blue-400 bg-gray-800/30 px-2 py-1 rounded;
   }
 
-  /* Prose content in dark mode */
+  /* Prose content */
   .prose {
-    @apply text-gray-900 dark:text-gray-100;
+    @apply text-gray-100;
   }
 
   .prose pre {
-    @apply bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100;
+    @apply bg-gray-800/80 text-gray-100 border border-gray-700;
   }
 
   .prose code {
-    @apply text-gray-900 dark:text-gray-100;
+    @apply text-blue-400 bg-gray-800/30;
+  }
+
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    @apply text-white font-bold;
+  }
+
+  .prose a {
+    @apply text-blue-400 hover:text-blue-300 transition-colors;
   }
 }
 
@@ -138,13 +181,14 @@
     animation: spin-slow 8s linear infinite;
   }
 
-  /* Glassmorphism */
+  /* MODERN GLASSMORPHISM */
   .glass {
-    @apply backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border border-white/20 dark:border-gray-700/20;
+    @apply backdrop-blur-xl bg-gray-900/70 border border-gray-700/30 shadow-2xl;
   }
 
   .glass-card {
-    @apply backdrop-blur-md bg-white/60 dark:bg-gray-800/60 border border-white/20 dark:border-gray-700/30 shadow-xl;
+    @apply backdrop-blur-md bg-gray-800/40 border border-gray-700/40 shadow-xl
+           hover:bg-gray-800/60 transition-all duration-300;
   }
 
   /* Glow Effect */

@@ -73,19 +73,19 @@ const BloatwareRemover = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Windows Bloatware Remover</h1>
-        <p className="text-gray-600 dark:text-gray-400">Generate PowerShell script to remove unwanted Windows apps</p>
+        <h1 className="text-3xl font-bold text-white">Windows Bloatware Remover</h1>
+        <p className="text-gray-400">Generate PowerShell script to remove unwanted Windows apps</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="font-semibold text-gray-900 dark:text-white">Select Apps to Remove ({selectedApps.length})</h3>
+          <h3 className="font-semibold text-white">Select Apps to Remove ({selectedApps.length})</h3>
           <div className="flex gap-2">
-            <button onClick={selectAll} className="text-sm text-primary-600 dark:text-primary-400 hover:underline">
+            <button onClick={selectAll} className="text-sm text-primary-400 hover:underline">
               Select All
             </button>
             <span className="text-gray-400">|</span>
-            <button onClick={clearAll} className="text-sm text-gray-600 dark:text-gray-400 hover:underline">
+            <button onClick={clearAll} className="text-sm text-gray-400 hover:underline">
               Clear All
             </button>
           </div>
@@ -95,7 +95,7 @@ const BloatwareRemover = () => {
           {bloatwareApps.map((app) => (
             <label
               key={app.name}
-              className="flex items-center space-x-2 cursor-pointer p-2 rounded hover:bg-gray-50 dark:hover:bg-gray-700/50"
+              className="flex items-center space-x-2 cursor-pointer p-2 rounded hover:hover:bg-gray-700/50"
             >
               <input
                 type="checkbox"
@@ -103,13 +103,13 @@ const BloatwareRemover = () => {
                 onChange={() => toggleApp(app)}
                 className="w-4 h-4 text-primary-600 rounded"
               />
-              <span className="text-sm text-gray-900 dark:text-white">{app.display}</span>
+              <span className="text-sm text-white">{app.display}</span>
             </label>
           ))}
         </div>
 
         {selectedApps.length > 0 && (
-          <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="space-y-3 pt-4 border-t border-gray-700">
             <div className="flex gap-2">
               <button onClick={copyScript} className="btn-primary flex-1 flex items-center justify-center gap-2">
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -121,16 +121,16 @@ const BloatwareRemover = () => {
               </button>
             </div>
 
-            <div className="p-4 bg-gray-900 dark:bg-black rounded-lg overflow-x-auto max-h-64">
+            <div className="p-4 bg-black rounded-lg overflow-x-auto max-h-64">
               <pre className="text-xs text-green-400 font-mono whitespace-pre-wrap">{generateScript()}</pre>
             </div>
           </div>
         )}
       </div>
 
-      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
-        <h3 className="font-semibold text-red-900 dark:text-red-300 mb-2">⚠️ Important Warnings</h3>
-        <ul className="text-sm text-red-800 dark:text-red-400 space-y-1 list-disc list-inside">
+      <div className="bg-red-900/30 border border-red-800 rounded-lg p-4">
+        <h3 className="font-semibold text-red-300 mb-2">⚠️ Important Warnings</h3>
+        <ul className="text-sm text-red-400 space-y-1 list-disc list-inside">
           <li>Create a system restore point before running</li>
           <li>Some apps may be reinstalled after Windows updates</li>
           <li>Removing certain apps may affect Windows functionality</li>
@@ -139,9 +139,9 @@ const BloatwareRemover = () => {
         </ul>
       </div>
 
-      <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-        <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">How to Use</h3>
-        <ol className="text-sm text-blue-800 dark:text-blue-400 space-y-1 list-decimal list-inside">
+      <div className="bg-blue-900/30 border border-blue-800 rounded-lg p-4">
+        <h3 className="font-semibold text-blue-300 mb-2">How to Use</h3>
+        <ol className="text-sm text-blue-400 space-y-1 list-decimal list-inside">
           <li>Select the apps you want to remove</li>
           <li>Copy or download the generated PowerShell script</li>
           <li>Open PowerShell as Administrator</li>

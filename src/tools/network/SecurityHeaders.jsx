@@ -109,11 +109,11 @@ const SecurityHeaders = () => {
 
   const getGradeColor = (grade) => {
     const colors = {
-      'A': 'text-green-600 dark:text-green-400',
-      'B': 'text-blue-600 dark:text-blue-400',
-      'C': 'text-yellow-600 dark:text-yellow-400',
-      'D': 'text-orange-600 dark:text-orange-400',
-      'F': 'text-red-600 dark:text-red-400'
+      'A': 'text-green-400',
+      'B': 'text-blue-400',
+      'C': 'text-yellow-400',
+      'D': 'text-orange-400',
+      'F': 'text-red-400'
     }
     return colors[grade] || colors['F']
   }
@@ -121,13 +121,13 @@ const SecurityHeaders = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Security Headers Checker</h1>
-        <p className="text-gray-600 dark:text-gray-400">Analyze HTTP security headers of any website</p>
+        <h1 className="text-3xl font-bold text-white">Security Headers Checker</h1>
+        <p className="text-gray-400">Analyze HTTP security headers of any website</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Website URL</label>
+          <label className="block text-sm font-medium text-gray-300">Website URL</label>
           <div className="flex gap-2">
             <input
               type="url"
@@ -135,7 +135,7 @@ const SecurityHeaders = () => {
               onChange={(e) => setUrl(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && checkHeaders()}
               placeholder="https://example.com"
-              className="input-field flex-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="input-field flex-1 bg-gray-700 border-gray-600 text-white"
             />
             <button
               onClick={checkHeaders}
@@ -150,7 +150,7 @@ const SecurityHeaders = () => {
 
         {result && (
           <div className="space-y-4 pt-4">
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 text-sm text-yellow-800 dark:text-yellow-300">
+            <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4 text-sm text-yellow-300">
               <div className="flex items-start gap-2">
                 <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div>{result.note}</div>
@@ -158,30 +158,30 @@ const SecurityHeaders = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-6 bg-gradient-to-br from-primary-50 to-cyan-50 dark:from-primary-900/30 dark:to-cyan-900/30 rounded-lg text-center">
+              <div className="p-6 bg-gradient-to-br from-primary-900/30 to-cyan-900/30 rounded-lg text-center">
                 <div className={`text-5xl font-bold mb-2 ${getGradeColor(result.grade)}`}>
                   {result.grade}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Security Grade</div>
+                <div className="text-sm text-gray-400">Security Grade</div>
               </div>
 
-              <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
-                <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              <div className="p-6 bg-gray-50 bg-gray-700/50 rounded-lg text-center">
+                <div className="text-3xl font-bold text-white mb-2">
                   {result.score}/{result.total}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Headers Present</div>
+                <div className="text-sm text-gray-400">Headers Present</div>
               </div>
 
-              <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
-                <div className={`text-3xl font-bold mb-2 ${result.criticalMissing > 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+              <div className="p-6 bg-gray-50 bg-gray-700/50 rounded-lg text-center">
+                <div className={`text-3xl font-bold mb-2 ${result.criticalMissing > 0 ? 'text-red-400' : 'text-green-400'}`}>
                   {result.criticalMissing}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Critical Missing</div>
+                <div className="text-sm text-gray-400">Critical Missing</div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="font-semibold text-white flex items-center gap-2">
                 <Shield className="w-5 h-5" />
                 Header Analysis
               </h3>
@@ -191,32 +191,32 @@ const SecurityHeaders = () => {
                   key={index}
                   className={`p-4 rounded-lg border ${
                     header.status === 'present'
-                      ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                      ? 'bg-green-900/20 border-green-800'
                       : header.critical
-                      ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-                      : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'
+                      ? 'bg-red-900/20 border-red-800'
+                      : 'bg-gray-50 bg-gray-700/50 border-gray-200 border-gray-600'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center gap-2">
                         {getStatusIcon(header.status)}
-                        <span className="font-semibold text-gray-900 dark:text-white">
+                        <span className="font-semibold text-white">
                           {header.name}
                           {header.critical && (
-                            <span className="ml-2 text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-2 py-0.5 rounded">
+                            <span className="ml-2 text-xs bg-red-900/30 text-red-400 px-2 py-0.5 rounded">
                               Critical
                             </span>
                           )}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{header.description}</p>
+                      <p className="text-sm text-gray-400">{header.description}</p>
                       {header.status === 'present' ? (
-                        <p className="text-sm font-mono text-green-700 dark:text-green-300">
+                        <p className="text-sm font-mono text-green-300">
                           Value: {header.value}
                         </p>
                       ) : (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-sm text-gray-400">
                           Recommended: <code className="text-xs">{header.recommendation}</code>
                         </p>
                       )}
@@ -229,14 +229,14 @@ const SecurityHeaders = () => {
         )}
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">About Security Headers</h3>
-        <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <h3 className="font-semibold text-white mb-3">About Security Headers</h3>
+        <div className="space-y-2 text-sm text-gray-400">
           <p>
             HTTP Security Headers are essential for protecting websites against common vulnerabilities and attacks.
           </p>
           <p>
-            <strong className="text-gray-900 dark:text-white">Critical headers</strong> protect against serious vulnerabilities like XSS, clickjacking, and protocol downgrade attacks.
+            <strong className="text-white">Critical headers</strong> protect against serious vulnerabilities like XSS, clickjacking, and protocol downgrade attacks.
           </p>
           <p>
             For production websites, implement all recommended security headers and test regularly.

@@ -19,6 +19,12 @@
   - Google Gemini API
   - Claude API (Anthropic)
   - ChatGPT API (OpenAI)
+- **Premium AI Chatbots** - Advanced features:
+  - 📸 Image Upload & Analysis (Gemini Vision API)
+  - 🎤 Voice Recording (Web Speech API)
+  - 🔊 Text-to-Speech Response Playback
+  - 💾 Conversation History with Digital Passport
+  - Image compression (10MB → ~1MB) with quality optimization
 - **IT Question Bot** - Interactive IT support chatbot
 - **Hardware Support Chat** - AI-powered hardware troubleshooting assistant
 - **Event Analyzers** - AI-powered system log analysis tools
@@ -101,6 +107,16 @@
 - English and Turkish language support
 - Persistent language preference
 - Dynamic content translation
+- 100% coverage across all 7 pages and 62 tools
+
+### 🎫 Digital Passport System
+- Unique user identity (UUID-based)
+- AI-style auto-generated usernames (e.g., CyberNinja#4A2F)
+- Deterministic avatar colors and patterns
+- Credit system with level progression (100 XP per level)
+- Achievement unlocking (8 achievements)
+- Conversation history (last 50 per bot)
+- Import/export passport via UUID code
 
 ### 🔒 Privacy & Security
 - Client-side processing for sensitive operations (encryption, hashing)
@@ -119,7 +135,7 @@
 
 ### Frontend
 - **React 18.3.1** - UI library
-- **Vite 5.4.9** - Build tool and dev server
+- **Vite 7.x** - Build tool and dev server (latest)
 - **Tailwind CSS 3.4.14** - Utility-first CSS framework
 - **React Router 6** - Client-side routing
 - **Lucide React** - Icon library
@@ -133,14 +149,16 @@
   - ChatGPT API (OpenAI) - Alternative provider
 
 ### Key Libraries
-- **@google/generative-ai** - Gemini AI integration
+- **@google/generative-ai** - Gemini AI integration (Vision API)
 - **crypto-js** - Encryption/decryption
 - **qrcode** - QR code generation
 - **markdown-it** - Markdown parsing
 - **pdf-lib** - PDF manipulation
 - **tesseract.js** - OCR for PDF text extraction
-- **jspdf** - PDF generation
+- **jspdf 3.x** - PDF generation (latest)
 - **jwt-decode** - JWT token decoding
+- **uuid** - Digital Passport ID generation
+- **Web Speech API** - Voice recording and text-to-speech
 
 ## 🚀 Quick Start - Choose Your Version
 

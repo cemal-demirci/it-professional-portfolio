@@ -45,8 +45,8 @@ const JsonFormatter = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className={`text-center space-y-2 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">JSON Formatter</h1>
-        <p className="text-gray-600 dark:text-gray-400">JSON verilerinizi formatla, doğrula ve küçült</p>
+        <h1 className="text-3xl font-bold text-white">JSON Formatter</h1>
+        <p className="text-gray-400">JSON verilerinizi formatla, doğrula ve küçült</p>
       </div>
 
       <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
@@ -102,14 +102,14 @@ const JsonFormatter = () => {
       </div>
 
       {error && (
-        <div className={`bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-300 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+        <div className={`bg-red-900/30 border border-red-800 rounded-lg p-4 text-red-300 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {error}
         </div>
       )}
 
-      <div className={`bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
-        <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">Kullanım İpuçları</h3>
-        <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1 list-disc list-inside">
+      <div className={`bg-blue-900/20 border border-blue-800 rounded-lg p-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
+        <h3 className="font-semibold text-blue-300 mb-2">Kullanım İpuçları</h3>
+        <ul className="text-sm text-blue-300 space-y-1 list-disc list-inside">
           <li>JSON verinizi sol tarafa yapıştırın</li>
           <li>"Formatla" butonuna basarak okunabilir hale getirin</li>
           <li>"Küçült" butonuna basarak boyutunu azaltın</li>

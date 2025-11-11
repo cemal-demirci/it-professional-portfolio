@@ -167,28 +167,28 @@ Focus on: Terminal.app, zsh/bash, Homebrew, launchctl, diskutil, networksetup, s
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
-          <Apple className="w-8 h-8 text-gray-600 dark:text-gray-400" />
+        <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
+          <Apple className="w-8 h-8 text-gray-400" />
           macOS AI Assistant
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-400">
           AI-powered help for macOS terminal commands and troubleshooting
         </p>
       </div>
 
       {/* macOS Info Banner */}
-      <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
+      <div className="bg-gradient-to-r from-gray-800 to-gray-700 rounded-xl p-4 border border-gray-200 border-gray-600">
         <div className="flex items-center gap-3">
-          <Terminal className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-          <div className="text-sm text-gray-700 dark:text-gray-300">
+          <Terminal className="w-6 h-6 text-gray-300" />
+          <div className="text-sm text-gray-300">
             <strong>Terminal:</strong> /Applications/Utilities/Terminal.app | <strong>Shell:</strong> zsh (default) | <strong>Package Manager:</strong> Homebrew
           </div>
         </div>
       </div>
 
       {/* Quick Questions */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white flex items-center gap-2">
           <Zap className="w-5 h-5 text-yellow-600" />
           Quick Questions
         </h3>
@@ -201,10 +201,10 @@ Focus on: Terminal.app, zsh/bash, Homebrew, launchctl, diskutil, networksetup, s
                 analyze(q.question)
               }}
               disabled={analyzing}
-              className="p-4 text-left border border-gray-200 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-md transition-all disabled:opacity-50"
+              className="p-4 text-left border border-gray-200 border-gray-600 rounded-lg hover:hover:border-blue-500 hover:shadow-md transition-all disabled:opacity-50"
             >
               <div className="text-2xl mb-2">{q.icon}</div>
-              <div className="font-medium text-gray-900 dark:text-white text-sm">
+              <div className="font-medium text-white text-sm">
                 {q.title}
               </div>
             </button>
@@ -213,8 +213,8 @@ Focus on: Terminal.app, zsh/bash, Homebrew, launchctl, diskutil, networksetup, s
       </div>
 
       {/* Question Input */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 space-y-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Ask Your macOS Question</h3>
+      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
+        <h3 className="font-semibold text-white">Ask Your macOS Question</h3>
 
         <textarea
           value={question}
@@ -247,31 +247,31 @@ Focus on: Terminal.app, zsh/bash, Homebrew, launchctl, diskutil, networksetup, s
       {result && (
         <div className={`rounded-xl p-6 border space-y-4 ${
           result.isError
-            ? 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700'
-            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+            ? 'bg-red-900/20 border-red-700'
+            : 'bg-gray-800 border-gray-700'
         }`}>
-          <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between pb-4 border-b border-gray-700">
             <div>
               <h3 className={`font-semibold flex items-center gap-2 ${
                 result.isError
-                  ? 'text-red-900 dark:text-red-300'
-                  : 'text-gray-900 dark:text-white'
+                  ? 'text-red-300'
+                  : 'text-white'
               }`}>
                 <Command className={`w-5 h-5 ${result.isError ? 'text-red-600' : 'text-green-600'}`} />
                 {result.isError ? 'Error - Wrong OS!' : 'Solution'}
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-sm text-gray-400 mt-1">
                 {result.question}
               </p>
             </div>
             <span className="text-xs text-gray-500">{result.timestamp}</span>
           </div>
 
-          <div className="prose prose-sm max-w-none dark:prose-invert">
+          <div className="prose prose-sm prose-invert">
             <div className={`p-4 rounded-lg whitespace-pre-wrap text-sm ${
               result.isError
-                ? 'bg-red-100 dark:bg-red-900/30 text-red-900 dark:text-red-200'
-                : 'bg-gray-50 dark:bg-gray-900 font-mono'
+                ? 'bg-red-900/30 text-red-200'
+                : 'bg-gray-900 font-mono'
             }`}>
               {result.answer}
             </div>
@@ -290,18 +290,18 @@ Focus on: Terminal.app, zsh/bash, Homebrew, launchctl, diskutil, networksetup, s
       )}
 
       {/* Tips */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-        <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
+      <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
+        <h4 className="font-semibold text-blue-300 mb-2 flex items-center gap-2">
           <Apple className="w-4 h-4" />
           Common macOS Terminal Tips:
         </h4>
-        <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1 ml-5 list-disc">
-          <li><code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">man command</code> - Show manual for any command</li>
-          <li><code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">brew install app</code> - Install applications via Homebrew</li>
-          <li><code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">sudo</code> - Run commands as admin (use carefully!)</li>
-          <li><code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">⌃C</code> - Cancel running command</li>
-          <li><code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">⌃R</code> - Search command history</li>
-          <li><code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">open .</code> - Open current directory in Finder</li>
+        <ul className="text-sm text-blue-300 space-y-1 ml-5 list-disc">
+          <li><code className="bg-blue-900 px-1 rounded">man command</code> - Show manual for any command</li>
+          <li><code className="bg-blue-900 px-1 rounded">brew install app</code> - Install applications via Homebrew</li>
+          <li><code className="bg-blue-900 px-1 rounded">sudo</code> - Run commands as admin (use carefully!)</li>
+          <li><code className="bg-blue-900 px-1 rounded">⌃C</code> - Cancel running command</li>
+          <li><code className="bg-blue-900 px-1 rounded">⌃R</code> - Search command history</li>
+          <li><code className="bg-blue-900 px-1 rounded">open .</code> - Open current directory in Finder</li>
         </ul>
       </div>
     </div>

@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react'
 import { BookOpen, MessageSquare, Sparkles, GraduationCap, Zap, Rocket, Brain } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ITChatbot from '../components/ITChatbot'
+import { useLanguage } from '../contexts/LanguageContext'
+import { t } from '../translations'
 
 const JuniorIT = () => {
   const [isVisible, setIsVisible] = useState(false)
+  const { language } = useLanguage()
 
   useEffect(() => {
     setIsVisible(true)
@@ -13,31 +16,40 @@ const JuniorIT = () => {
   const features = [
     {
       icon: BookOpen,
-      title: 'IT Sözlük',
-      description: 'Yeni başlayanlar için eğlenceli ve anlaşılır IT terimleri sözlüğü. Cemal tarzında!',
+      title: t(language, 'juniorIT.features.glossary.name'),
+      description: t(language, 'juniorIT.features.glossary.desc'),
       link: '/junior-it/glossary',
-      color: 'from-slate-700 to-slate-600'
+      color: 'from-blue-600 to-indigo-600'
     },
     {
       icon: MessageSquare,
-      title: 'AI Soru Botu',
-      description: 'IT sorunlarına anında cevap! Cemal AI destekli chatbot ile istediğin soruyu sor.',
+      title: t(language, 'juniorIT.features.aiBot.name'),
+      description: t(language, 'juniorIT.features.aiBot.desc'),
       link: '#chatbot',
-      color: 'from-slate-700 to-slate-600'
+      color: 'from-indigo-600 to-purple-600'
     },
   ]
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8 relative">
+      {/* Background Particles */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-40 right-20 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 left-1/3 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl"></div>
+      </div>
+
       {/* Header */}
-      <div className={`bg-gradient-to-r from-slate-800 to-slate-700 rounded-xl p-6 text-white transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
+      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-white transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
         <div className="text-center space-y-3">
-          <h1 className="text-2xl md:text-3xl font-bold">Junior IT'ler İçin</h1>
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif' }}>
+            {t(language, 'juniorIT.title')}
+          </h1>
           <p className="text-base text-white/90">
-            IT dünyasına yeni mi başladın? Doğru yerdesin!
+            {t(language, 'juniorIT.welcome')}
           </p>
           <p className="text-sm text-white/80 max-w-2xl mx-auto">
-            Cemal tarzında IT terimleri, AI destekli soru-cevap ve daha fazlası. Eğlenerek öğren!
+            {t(language, 'juniorIT.description')}
           </p>
         </div>
       </div>
@@ -50,25 +62,25 @@ const JuniorIT = () => {
             <Link
               key={idx}
               to={feature.link}
-              className={`group bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-700 hover:shadow-2xl hover:scale-105 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+              className={`group bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-700 hover:shadow-2xl hover:scale-[1.02] ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
               style={{ transitionDelay: `${200 + idx * 100}ms` }}
             >
               {/* Icon */}
-              <div className={`w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
+              <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-all`}>
                 <Icon className="w-8 h-8 text-white" />
               </div>
 
               {/* Content */}
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                <h3 className="text-xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif' }}>
                   {feature.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-white/70">
                   {feature.description}
                 </p>
                 <div className="pt-3">
-                  <span className="inline-block px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all">
-                    Başla →
+                  <span className="inline-block px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-semibold transition-all shadow-lg">
+                    {t(language, 'juniorIT.button')}
                   </span>
                 </div>
               </div>
@@ -79,12 +91,16 @@ const JuniorIT = () => {
 
       {/* AI Chatbot Section */}
       <div id="chatbot" className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
-        <div className="bg-gradient-to-r from-slate-800 to-slate-700 rounded-xl p-5 text-white mb-4">
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5 text-white mb-4">
           <div className="flex items-center gap-3">
-            <Brain className="w-7 h-7" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center">
+              <Brain className="w-6 h-6" />
+            </div>
             <div>
-              <h2 className="text-xl font-bold">AI IT Soru Botu</h2>
-              <p className="text-sm text-white/90">IT sorunlarını sor, Cemal AI anında cevaplasın!</p>
+              <h2 className="text-xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif' }}>
+                {t(language, 'juniorIT.aiSection.title')}
+              </h2>
+              <p className="text-sm text-white/80">{t(language, 'juniorIT.aiSection.desc')}</p>
             </div>
           </div>
         </div>
@@ -92,90 +108,75 @@ const JuniorIT = () => {
       </div>
 
       {/* Learning Tips */}
-      <div className={`bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '500ms' }}>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-          Junior IT için Öğrenme İpuçları
+      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '500ms' }}>
+        <h2 className="text-xl font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent mb-4" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif' }}>
+          {t(language, 'juniorIT.learningTips.title')}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border-l-4 border-slate-600">
-            <h3 className="font-semibold text-slate-900 dark:text-slate-200 mb-1">
-              Lab Kur, Pratik Yap
-            </h3>
-            <p className="text-sm text-slate-700 dark:text-slate-400">
-              VirtualBox/VMware kur, Windows Server/Linux denemeler yap. Kitaptan öğrenme yetmez!
-            </p>
-          </div>
-          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border-l-4 border-slate-600">
-            <h3 className="font-semibold text-slate-900 dark:text-slate-200 mb-1">
-              Sertifika Hedefle
-            </h3>
-            <p className="text-sm text-slate-700 dark:text-slate-400">
-              CompTIA A+, Network+, Security+ ile başla. MCSA artık yok ama Azure/AWS cert'ler var!
-            </p>
-          </div>
-          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border-l-4 border-slate-600">
-            <h3 className="font-semibold text-slate-900 dark:text-slate-200 mb-1">
-              Google Kullanmayı Öğren
-            </h3>
-            <p className="text-sm text-slate-700 dark:text-slate-400">
-              "Error code + Windows" yaz Google'a. Stack Overflow senin arkadaşın. Reddit IT subs takip et!
-            </p>
-          </div>
-          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border-l-4 border-slate-600">
-            <h3 className="font-semibold text-slate-900 dark:text-slate-200 mb-1">
-              Toplulukta Aktif Ol
-            </h3>
-            <p className="text-sm text-slate-700 dark:text-slate-400">
-              Discord IT sunucularına katıl, forumları takip et. Soru sor, cevap ver, network kur!
-            </p>
-          </div>
+          {t(language, 'juniorIT.learningTips.tips').map((tip, idx) => {
+            const borderColors = [
+              'border-blue-600 hover:border-blue-500',
+              'border-indigo-600 hover:border-indigo-500',
+              'border-blue-600 hover:border-blue-500',
+              'border-purple-600 hover:border-purple-500'
+            ]
+            return (
+              <div key={idx} className={`p-4 bg-white/5 backdrop-blur-xl rounded-xl border-l-4 ${borderColors[idx % borderColors.length]} transition-all`}>
+                <h3 className="font-semibold text-white mb-1">
+                  {tip.title}
+                </h3>
+                <p className="text-sm text-white/70">
+                  {tip.desc}
+                </p>
+              </div>
+            )
+          })}
         </div>
       </div>
 
       {/* Resources */}
-      <div className={`bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
-        <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-3">
-          Faydalı Kaynaklar
+      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
+        <h3 className="text-base font-semibold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent mb-3" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif' }}>
+          {t(language, 'juniorIT.resources.title')}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div className="text-slate-700 dark:text-slate-300">
-            <strong>YouTube:</strong>
-            <ul className="mt-2 space-y-1 text-slate-600 dark:text-slate-400">
-              <li>• Can Değer</li>
-              <li>• Türk IT kanalları</li>
-              <li>• Professor Messer</li>
-              <li>• NetworkChuck</li>
+          <div className="text-white">
+            <strong>{t(language, 'juniorIT.resources.platforms.title')}</strong>
+            <ul className="mt-2 space-y-1 text-white/70">
+              {t(language, 'juniorIT.resources.platforms.items').map((item, idx) => (
+                <li key={idx}>• {item}</li>
+              ))}
             </ul>
           </div>
-          <div className="text-slate-700 dark:text-slate-300">
-            <strong>Döküman:</strong>
-            <ul className="mt-2 space-y-1 text-slate-600 dark:text-slate-400">
-              <li>• Microsoft Learn</li>
-              <li>• Linux man pages</li>
-              <li>• DigitalOcean tutorials</li>
+          <div className="text-white">
+            <strong>{t(language, 'juniorIT.resources.certifications.title')}</strong>
+            <ul className="mt-2 space-y-1 text-white/70">
+              {t(language, 'juniorIT.resources.certifications.items').map((item, idx) => (
+                <li key={idx}>• {item}</li>
+              ))}
             </ul>
           </div>
-          <div className="text-slate-700 dark:text-slate-300">
-            <strong>Lab:</strong>
-            <ul className="mt-2 space-y-1 text-slate-600 dark:text-slate-400">
-              <li>• TryHackMe</li>
-              <li>• HackTheBox</li>
-              <li>• Azure/AWS Free Tier</li>
+          <div className="text-white">
+            <strong>{t(language, 'juniorIT.resources.tools.title')}</strong>
+            <ul className="mt-2 space-y-1 text-white/70">
+              {t(language, 'juniorIT.resources.tools.items').map((item, idx) => (
+                <li key={idx}>• {item}</li>
+              ))}
             </ul>
           </div>
         </div>
       </div>
 
       {/* Footer Message */}
-      <div className="text-center py-6 text-slate-600 dark:text-slate-400">
-        <p className="text-base font-semibold mb-2">
-          Başarılar Junior! Öğrenmeye devam et, vazgeçme.
+      <div className="text-center py-6 text-white/60">
+        <p className="text-base font-semibold mb-2 text-white/80">
+          {t(language, 'juniorIT.footer.message1')}
         </p>
-        <p className="text-sm">
-          Bugün öğrendiğin her şey, yarın seni senior yapacak.
+        <p className="text-sm text-white/70">
+          {t(language, 'juniorIT.footer.message2')}
         </p>
-        <p className="text-xs mt-4 text-slate-400 dark:text-slate-600">
-          Made by Cemal Demirci
+        <p className="text-xs mt-4 text-white/50">
+          {t(language, 'juniorIT.footer.madeBy')}
         </p>
       </div>
     </div>
