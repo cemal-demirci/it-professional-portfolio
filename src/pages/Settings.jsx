@@ -54,7 +54,7 @@ const Settings = () => {
   // UI states
   const [isVisible, setIsVisible] = useState(false)
   const [copiedCode, setCopiedCode] = useState(null)
-  const [showEasterEggs, setShowEasterEggs] = useState(false)
+  const [showEasterEggs, setShowEasterEggs] = useState(true) // Show Easter Eggs by default
   const [easterEggInput, setEasterEggInput] = useState('')
   const [easterEggMessage, setEasterEggMessage] = useState(null)
 
