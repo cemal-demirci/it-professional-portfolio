@@ -8,6 +8,7 @@ import {
 import { useLanguage } from '../contexts/LanguageContext'
 import { useRainbow } from '../contexts/RainbowContext'
 import { t } from '../translations'
+import CemalLogo from '../components/CemalLogo'
 import { useGodMode } from '../contexts/GodModeContext'
 import RainbowModeToolBlocker from '../components/RainbowModeToolBlocker'
 import EasterEggs from '../components/EasterEggs'
@@ -277,6 +278,9 @@ const Settings = () => {
         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
       </div>
+
+      {/* Animated Logo */}
+      <CemalLogo size="medium" showDecorations={false} />
 
       {/* Easter Eggs - Only shown when activated */}
       {showEasterEggs && <EasterEggs />}

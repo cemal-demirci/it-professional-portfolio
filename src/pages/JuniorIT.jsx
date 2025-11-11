@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import ITChatbot from '../components/ITChatbot'
 import { useLanguage } from '../contexts/LanguageContext'
 import { t } from '../translations'
+import CemalLogo from '../components/CemalLogo'
 
 const JuniorIT = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -38,6 +39,9 @@ const JuniorIT = () => {
         <div className="absolute top-40 right-20 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-1/3 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl"></div>
       </div>
+
+      {/* Animated Logo */}
+      <CemalLogo size="medium" showDecorations={false} />
 
       {/* Header */}
       <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-white transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>

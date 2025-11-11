@@ -4,6 +4,7 @@ import { Sparkles, ArrowLeft, Mic, Upload, MessageCircle } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useRainbow } from '../contexts/RainbowContext'
 import { t } from '../translations'
+import CemalLogo from '../components/CemalLogo'
 import PremiumChatbot from '../components/PremiumChatbot'
 
 const AIBots = () => {
@@ -216,6 +217,8 @@ const AIBots = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Animated Logo */}
+        <CemalLogo size="medium" showDecorations={false} />
         {/* Back Button */}
         <Link
           to="/"

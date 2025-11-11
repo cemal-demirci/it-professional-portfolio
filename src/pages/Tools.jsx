@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { getFavorites, toggleFavorite, isFavorite, addToRecent } from '../services/favoritesService'
 import RainbowModeToolBlocker from '../components/RainbowModeToolBlocker'
+import CemalLogo from '../components/CemalLogo'
 
 const Tools = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -266,7 +267,12 @@ const Tools = () => {
         <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      <div className={`text-center space-y-4 relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
+      {/* Animated Logo */}
+      <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
+        <CemalLogo size="medium" showDecorations={false} />
+      </div>
+
+      <div className={`text-center space-y-4 relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-xl rounded-full mb-4 border border-white/10">
           <Sparkles className="w-4 h-4 text-blue-400" />
           <span className="text-sm font-medium text-gray-300" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'tools.professionalTools')}</span>

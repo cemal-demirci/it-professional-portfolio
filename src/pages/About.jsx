@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useRainbow } from '../contexts/RainbowContext'
 import { t } from '../translations'
+import CemalLogo from '../components/CemalLogo'
 import storage from '../utils/storage'
 import PremiumChatbot from '../components/PremiumChatbot'
 
@@ -541,6 +542,10 @@ const About = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-12 relative">
+      {/* Animated Logo */}
+      <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
+        <CemalLogo size="medium" showDecorations={false} />
+      </div>
       {/* Animated Background Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute top-20 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-float"></div>

@@ -7,6 +7,7 @@ import { t } from '../translations'
 import ServiceStatus from '../components/ServiceStatus'
 import QuickSpeedTest from '../components/QuickSpeedTest'
 import RainbowModeToolBlocker from '../components/RainbowModeToolBlocker'
+import CemalLogo from '../components/CemalLogo'
 
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -143,70 +144,6 @@ const Home = () => {
     }
   ]
 
-  // cemal.online Logo Component - iPhone Glass Style
-  const SimpleTitle = () => {
-    return (
-      <div className="text-center mb-12 group">
-        <div className="inline-block relative">
-          {/* Soft Glow Effect */}
-          <div className="absolute inset-0 blur-3xl opacity-30 bg-gradient-to-r from-blue-500/50 via-indigo-500/50 to-purple-500/50"></div>
-
-          {/* Main Logo */}
-          <div className="relative">
-            {/* CEMAL text with frosted glass styling */}
-            <h1 className="text-7xl md:text-9xl font-black relative mb-2"
-                style={{
-                  fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
-                  letterSpacing: '-0.04em',
-                  fontWeight: '900'
-                }}>
-              {/* Subtle background glow */}
-              <span className="absolute inset-0 bg-gradient-to-br from-blue-400/80 via-indigo-400/80 to-purple-400/80 bg-clip-text text-transparent blur-[2px]">
-                CEMAL
-              </span>
-
-              {/* Main text with premium glass effect */}
-              <span className="relative bg-gradient-to-br from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent"
-                    style={{
-                      textShadow: '0 0 60px rgba(99, 102, 241, 0.4), 0 0 30px rgba(59, 130, 246, 0.3)',
-                      filter: 'drop-shadow(0 4px 16px rgba(79, 70, 229, 0.3))'
-                    }}>
-                CEMAL
-              </span>
-
-              {/* Soft top highlight */}
-              <span className="absolute inset-0 bg-gradient-to-b from-white/50 to-transparent bg-clip-text text-transparent">
-                CEMAL
-              </span>
-            </h1>
-
-            {/* .online suffix with glass effect */}
-            <div className="flex items-center justify-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 animate-pulse shadow-lg shadow-blue-400/50"></div>
-              <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent tracking-wide">
-                online
-              </span>
-            </div>
-
-            {/* Refined underline decoration */}
-            <div className="mt-4 flex justify-center gap-2">
-              <div className="h-0.5 w-16 bg-gradient-to-r from-transparent via-blue-400/60 to-transparent rounded-full"></div>
-              <div className="h-0.5 w-10 bg-gradient-to-r from-transparent via-indigo-400/60 to-transparent rounded-full"></div>
-              <div className="h-0.5 w-16 bg-gradient-to-r from-transparent via-purple-400/60 to-transparent rounded-full"></div>
-            </div>
-          </div>
-
-          {/* Minimal border frame */}
-          <div className="absolute -inset-8 pointer-events-none opacity-40">
-            <div className="absolute top-0 left-0 w-12 h-12 border-t border-l border-blue-400/20 rounded-tl-3xl"></div>
-            <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-indigo-400/20 rounded-tr-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-indigo-400/20 rounded-bl-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-purple-400/20 rounded-br-3xl"></div>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   if (!bootComplete) {
     return (
@@ -270,8 +207,8 @@ const Home = () => {
       {/* Hero Section */}
       <div className={`text-center space-y-8 py-16 relative transition-all duration-1000 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ zIndex: 2 }}>
 
-        {/* Simple Title */}
-        <SimpleTitle />
+        {/* Animated Logo */}
+        <CemalLogo size="large" showDecorations={true} />
 
         <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           <div className="inline-flex items-center gap-3 px-6 py-3 glass rounded-full mb-6 border-2 border-cyan-400/30 animate-glow">
