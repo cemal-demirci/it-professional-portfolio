@@ -23,13 +23,16 @@ const Home = () => {
   const [bootComplete, setBootComplete] = useState(false)
   const [terminalLines, setTerminalLines] = useState([])
   const [showContent, setShowContent] = useState(false)
-  const canvasRef = useRef(null)
+  const bootCanvasRef = useRef(null)
+  const mainCanvasRef = useRef(null)
   const { language } = useLanguage()
   const { rainbowMode } = useRainbow()
 
-  // Matrix Rain Effect
+  // Matrix Rain Effect for Boot Screen
   useEffect(() => {
-    const canvas = canvasRef.current
+    if (sessionStorage.getItem('cemal_booted')) return // Skip if already booted
+
+    const canvas = bootCanvasRef.current
     if (!canvas) return
 
     const ctx = canvas.getContext('2d')
@@ -66,6 +69,48 @@ const Home = () => {
     const interval = setInterval(draw, 33)
     return () => clearInterval(interval)
   }, [])
+
+  // Matrix Rain Effect for Main Content
+  useEffect(() => {
+    if (!bootComplete) return // Don't start until boot is complete
+
+    const canvas = mainCanvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    const letters = '01'
+    const fontSize = 12
+    const columns = canvas.width / fontSize
+    const drops = Array(Math.floor(columns)).fill(1)
+
+    const draw = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      // Gradient from blue to purple
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+      gradient.addColorStop(0, '#60a5fa') // blue-400
+      gradient.addColorStop(1, '#a78bfa') // purple-400
+      ctx.fillStyle = gradient
+      ctx.font = fontSize + 'px monospace'
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)]
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize)
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0
+        }
+        drops[i]++
+      }
+    }
+
+    const interval = setInterval(draw, 33)
+    return () => clearInterval(interval)
+  }, [bootComplete])
 
   // Terminal Boot Sequence - Fast & lightweight version
   useEffect(() => {
@@ -159,7 +204,7 @@ const Home = () => {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-50 flex items-center justify-center overflow-hidden">
         {/* Matrix Background */}
-        <canvas ref={canvasRef} className="absolute inset-0 opacity-10" />
+        <canvas ref={bootCanvasRef} className="absolute inset-0 opacity-10" />
 
         {/* Terminal Window */}
         <div className="relative z-10 w-full max-w-2xl mx-4">
@@ -205,7 +250,7 @@ const Home = () => {
   return (
     <div className="space-y-12 relative overflow-hidden min-h-screen">
       {/* Matrix Background - Faded */}
-      <canvas ref={canvasRef} className="fixed inset-0 opacity-5 pointer-events-none" style={{ zIndex: 0 }} />
+      <canvas ref={mainCanvasRef} className="fixed inset-0 opacity-5 pointer-events-none" style={{ zIndex: 0 }} />
 
       {/* Animated Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
