@@ -17,10 +17,8 @@ const Home = () => {
   const { language } = useLanguage()
   const { rainbowMode } = useRainbow()
 
-  // Matrix Rain Effect - Only for boot screen, disabled after
+  // Matrix Rain Effect
   useEffect(() => {
-    if (bootComplete) return // Don't run if already booted
-
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -37,9 +35,10 @@ const Home = () => {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+      // Gradient from blue to purple
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-      gradient.addColorStop(0, '#60a5fa')
-      gradient.addColorStop(1, '#a78bfa')
+      gradient.addColorStop(0, '#60a5fa') // blue-400
+      gradient.addColorStop(1, '#a78bfa') // purple-400
       ctx.fillStyle = gradient
       ctx.font = fontSize + 'px monospace'
 
@@ -54,9 +53,9 @@ const Home = () => {
       }
     }
 
-    const interval = setInterval(draw, 50) // Increased from 33ms to 50ms
+    const interval = setInterval(draw, 33)
     return () => clearInterval(interval)
-  }, [bootComplete])
+  }, [])
 
   // Terminal Boot Sequence - Only once per session
   useEffect(() => {
@@ -144,32 +143,65 @@ const Home = () => {
     }
   ]
 
-  // cemal.online Logo Component - Simplified for performance
+  // cemal.online Logo Component - iPhone Glass Style
   const SimpleTitle = () => {
     return (
-      <div className="text-center mb-12">
+      <div className="text-center mb-12 group">
         <div className="inline-block relative">
-          {/* Main Logo - Single layer, no blur */}
+          {/* Soft Glow Effect */}
+          <div className="absolute inset-0 blur-3xl opacity-30 bg-gradient-to-r from-blue-500/50 via-indigo-500/50 to-purple-500/50"></div>
+
+          {/* Main Logo */}
           <div className="relative">
-            <h1 className="text-7xl md:text-9xl font-black mb-2 bg-gradient-to-br from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent"
+            {/* CEMAL text with frosted glass styling */}
+            <h1 className="text-7xl md:text-9xl font-black relative mb-2"
                 style={{
                   fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
                   letterSpacing: '-0.04em',
                   fontWeight: '900'
                 }}>
-              CEMAL
+              {/* Subtle background glow */}
+              <span className="absolute inset-0 bg-gradient-to-br from-blue-400/80 via-indigo-400/80 to-purple-400/80 bg-clip-text text-transparent blur-[2px]">
+                CEMAL
+              </span>
+
+              {/* Main text with premium glass effect */}
+              <span className="relative bg-gradient-to-br from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent"
+                    style={{
+                      textShadow: '0 0 60px rgba(99, 102, 241, 0.4), 0 0 30px rgba(59, 130, 246, 0.3)',
+                      filter: 'drop-shadow(0 4px 16px rgba(79, 70, 229, 0.3))'
+                    }}>
+                CEMAL
+              </span>
+
+              {/* Soft top highlight */}
+              <span className="absolute inset-0 bg-gradient-to-b from-white/50 to-transparent bg-clip-text text-transparent">
+                CEMAL
+              </span>
             </h1>
 
-            {/* .online suffix */}
+            {/* .online suffix with glass effect */}
             <div className="flex items-center justify-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"></div>
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 animate-pulse shadow-lg shadow-blue-400/50"></div>
               <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent tracking-wide">
                 online
               </span>
             </div>
 
-            {/* Simple underline */}
-            <div className="mt-4 h-0.5 w-24 mx-auto bg-gradient-to-r from-transparent via-blue-400/60 to-transparent rounded-full"></div>
+            {/* Refined underline decoration */}
+            <div className="mt-4 flex justify-center gap-2">
+              <div className="h-0.5 w-16 bg-gradient-to-r from-transparent via-blue-400/60 to-transparent rounded-full"></div>
+              <div className="h-0.5 w-10 bg-gradient-to-r from-transparent via-indigo-400/60 to-transparent rounded-full"></div>
+              <div className="h-0.5 w-16 bg-gradient-to-r from-transparent via-purple-400/60 to-transparent rounded-full"></div>
+            </div>
+          </div>
+
+          {/* Minimal border frame */}
+          <div className="absolute -inset-8 pointer-events-none opacity-40">
+            <div className="absolute top-0 left-0 w-12 h-12 border-t border-l border-blue-400/20 rounded-tl-3xl"></div>
+            <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-indigo-400/20 rounded-tr-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-indigo-400/20 rounded-bl-3xl"></div>
+            <div className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-purple-400/20 rounded-br-3xl"></div>
           </div>
         </div>
       </div>
@@ -225,10 +257,14 @@ const Home = () => {
 
   return (
     <div className="space-y-12 relative overflow-hidden min-h-screen">
-      {/* Subtle Background Particles - Simplified */}
+      {/* Matrix Background - Faded */}
+      <canvas ref={canvasRef} className="fixed inset-0 opacity-5 pointer-events-none" style={{ zIndex: 0 }} />
+
+      {/* Animated Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
-        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Hero Section */}
@@ -238,13 +274,21 @@ const Home = () => {
         <SimpleTitle />
 
         <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-          <div className="inline-flex items-center gap-3 px-6 py-3 glass rounded-full mb-6 border border-cyan-400/30">
+          <div className="inline-flex items-center gap-3 px-6 py-3 glass rounded-full mb-6 border-2 border-cyan-400/30 animate-glow">
+            <Binary className="w-5 h-5 text-cyan-400 animate-spin-slow" />
             <span className="text-sm font-bold text-cyan-300 tracking-wider">💼 {t(language, 'home.hero.badge')}</span>
+            <Sparkles className="w-5 h-5 text-purple-400 animate-pulse" />
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-4">
+          <h1 className="text-5xl md:text-7xl font-black text-white drop-shadow-2xl mb-4">
             {t(language, 'home.hero.greeting')}{' '}
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            <span
+              className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]"
+              style={{
+                textShadow: '0 0 40px rgba(6, 182, 212, 0.5)',
+                animation: 'gradient 3s ease infinite, glow 2s ease-in-out infinite alternate'
+              }}
+            >
               {t(language, 'home.hero.name')}
             </span>
           </h1>
@@ -281,24 +325,24 @@ const Home = () => {
           </Link>
         </div>
 
-        {/* Tech Stack Badges - Simplified */}
+        {/* Tech Stack Badges - Animated */}
         <div className={`flex flex-wrap justify-center gap-3 pt-8 max-w-4xl mx-auto transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <span className="px-4 py-2 bg-gray-800/60 text-cyan-300 rounded-lg border border-cyan-500/30 font-mono text-sm cursor-default">
+          <span className="px-4 py-2 bg-gray-800/60 backdrop-blur-sm text-cyan-300 rounded-lg border border-cyan-500/30 font-mono text-sm hover:scale-110 transition-transform cursor-default shadow-lg hover:shadow-cyan-500/50">
             {t(language, 'home.techStack.react')}
           </span>
-          <span className="px-4 py-2 bg-gray-800/60 text-purple-300 rounded-lg border border-purple-500/30 font-mono text-sm cursor-default">
+          <span className="px-4 py-2 bg-gray-800/60 backdrop-blur-sm text-purple-300 rounded-lg border border-purple-500/30 font-mono text-sm hover:scale-110 transition-transform cursor-default shadow-lg hover:shadow-purple-500/50">
             {t(language, 'home.techStack.vite')}
           </span>
-          <span className="px-4 py-2 bg-gray-800/60 text-blue-300 rounded-lg border border-blue-500/30 font-mono text-sm cursor-default">
+          <span className="px-4 py-2 bg-gray-800/60 backdrop-blur-sm text-blue-300 rounded-lg border border-blue-500/30 font-mono text-sm hover:scale-110 transition-transform cursor-default shadow-lg hover:shadow-blue-500/50">
             {t(language, 'home.techStack.tailwind')}
           </span>
-          <span className="px-4 py-2 bg-gray-800/60 text-green-300 rounded-lg border border-green-500/30 font-mono text-sm cursor-default">
+          <span className="px-4 py-2 bg-gray-800/60 backdrop-blur-sm text-green-300 rounded-lg border border-green-500/30 font-mono text-sm hover:scale-110 transition-transform cursor-default shadow-lg hover:shadow-green-500/50">
             {t(language, 'home.techStack.redis')}
           </span>
-          <span className="px-4 py-2 bg-gray-800/60 text-orange-300 rounded-lg border border-orange-500/30 font-mono text-sm cursor-default">
+          <span className="px-4 py-2 bg-gray-800/60 backdrop-blur-sm text-orange-300 rounded-lg border border-orange-500/30 font-mono text-sm hover:scale-110 transition-transform cursor-default shadow-lg hover:shadow-orange-500/50">
             {t(language, 'home.techStack.vercel')}
           </span>
-          <span className="px-4 py-2 bg-gray-800/60 text-pink-300 rounded-lg border border-pink-500/30 font-mono text-sm cursor-default">
+          <span className="px-4 py-2 bg-gray-800/60 backdrop-blur-sm text-pink-300 rounded-lg border border-pink-500/30 font-mono text-sm hover:scale-110 transition-transform cursor-default shadow-lg hover:shadow-pink-500/50">
             {t(language, 'home.techStack.cemalAI')}
           </span>
         </div>
@@ -307,8 +351,8 @@ const Home = () => {
       {/* Premium AI Bots Section */}
       <div className={`max-w-7xl mx-auto px-4 mb-20 transition-all duration-1000 delay-650 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ zIndex: 2, position: 'relative' }}>
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600/20 to-purple-600/20 rounded-full border border-pink-500/30 mb-4">
-            <Sparkles className="w-5 h-5 text-pink-400" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600/20 to-purple-600/20 backdrop-blur-lg rounded-full border border-pink-500/30 mb-4">
+            <Sparkles className="w-5 h-5 text-pink-400 animate-pulse" />
             <span className="text-sm font-bold text-pink-300 tracking-wider">{t(language, 'home.aiBots.badge')}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
@@ -484,7 +528,7 @@ const Home = () => {
       <div className={`max-w-7xl mx-auto px-4 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ zIndex: 2, position: 'relative' }}>
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4 flex items-center justify-center gap-3">
-            <Sparkles className="w-10 h-10 text-cyan-400" />
+            <Sparkles className="w-10 h-10 text-cyan-400 animate-pulse" />
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               {t(language, 'home.features.title')}
             </span>
@@ -536,7 +580,7 @@ const Home = () => {
               <div className="flex-1">
                 <h3 className="text-2xl font-black text-white mb-2 flex items-center gap-2 flex-wrap">
                   {t(language, 'home.specialFeatures.glossary.title')}
-                  <span className="px-3 py-1 bg-purple-600 text-white text-xs font-bold rounded-full">{t(language, 'home.specialFeatures.glossary.badge')}</span>
+                  <span className="px-3 py-1 bg-purple-600 text-white text-xs font-bold rounded-full animate-pulse">{t(language, 'home.specialFeatures.glossary.badge')}</span>
                 </h3>
                 <p className="text-gray-400 mb-4">
                   {t(language, 'home.specialFeatures.glossary.description')}
@@ -571,7 +615,7 @@ const Home = () => {
                   {t(language, 'home.specialFeatures.juniorIT.description')}
                 </p>
                 <div className="flex items-center gap-2 text-cyan-400 font-bold">
-                  <Sparkles className="w-5 h-5" />
+                  <Sparkles className="w-5 h-5 animate-pulse" />
                   <span>{t(language, 'home.specialFeatures.juniorIT.cta')}</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                 </div>
@@ -613,6 +657,46 @@ const Home = () => {
         <QuickSpeedTest />
       </div>
 
+      <style jsx>{`
+        @keyframes spin3d {
+          0% {
+            transform: rotateY(0deg) rotateX(0deg);
+          }
+          50% {
+            transform: rotateY(180deg) rotateX(10deg);
+          }
+          100% {
+            transform: rotateY(360deg) rotateX(0deg);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
+        }
+
+        @keyframes gradient {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+
+        @keyframes glow {
+          0% {
+            filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.5));
+          }
+          100% {
+            filter: drop-shadow(0 0 40px rgba(6, 182, 212, 0.8));
+          }
+        }
+      `}</style>
     </div>
   )
 }
