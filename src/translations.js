@@ -31,21 +31,21 @@ export const translations = {
     // Home Page
     home: {
       hero: {
-        badge: 'IT & Security Professional',
+        badge: '8 Years IT, Zero Panic Attacks',
         greeting: "Hello, I'm",
         name: 'Cemal Demirci',
-        title: 'IT & Security Administrator | AI Lead Auditor',
-        subtitle: 'Professional tools collection to make your daily tasks easier.',
-        subtitleHighlight: 'All tools are completely free!',
-        exploreTools: 'Explore Tools',
-        servicesContact: 'Services & Contact'
+        title: 'IT & Security Administrator | AI Lead Auditor | Controlled Chaos Manager',
+        subtitle: 'The guy who drinks coffee while systems crash, trains AI, and fixes security holes in his sleep. Professional, but not boring – I crack jokes while coding.',
+        subtitleHighlight: '62+ tools, 17+ AI bots, infinite caffeine. All free, because I\'m not Google.',
+        exploreTools: 'Dive Into Tools 🚀',
+        servicesContact: 'Work With Me ☕'
       },
       boot: {
-        init: 'Initializing cemal.online',
+        init: 'Initializing cemal.online... (brewing coffee)',
         hackingNasa: 'Just kidding, no NASA hacking here',
-        toolsReady: '62+ Tools loaded',
-        botsAwake: '17+ AI Bots ready',
-        welcomeAboard: 'Welcome aboard'
+        toolsReady: 'Loading 62+ tools & unlimited sarcasm...',
+        botsAwake: 'Security protocols: ✓ | Coffee supply: ✓ | Sanity: debatable',
+        welcomeAboard: 'Welcome aboard 🎯'
       },
       features: {
         title: 'Professional Tools',
@@ -844,21 +844,21 @@ export const translations = {
     // Home Page
     home: {
       hero: {
-        badge: 'IT & Güvenlik Uzmanı',
+        badge: '8 Yıl IT, Sıfır Panik Atağı',
         greeting: 'Merhaba, ben',
         name: 'Cemal Demirci',
-        title: 'IT & Güvenlik Yöneticisi | AI Baş Denetçisi',
-        subtitle: 'Günlük işlerinizi kolaylaştıracak profesyonel araç koleksiyonu.',
-        subtitleHighlight: 'Tüm araçlar tamamen ücretsiz!',
-        exploreTools: 'Araçları Keşfet',
-        servicesContact: 'Hizmetler & İletişim'
+        title: 'IT & Güvenlik Yöneticisi | AI Baş Denetçisi | Kontrollü Kaos Müdürü',
+        subtitle: 'Sistemler çökerken kahve içen, AI\'yı eğiten, güvenlik açıklarını uyurken kapatan adam. Profesyonelim ama sıkıcı değilim – kod yazarken espri de yaparım.',
+        subtitleHighlight: '62+ araç, 17+ AI bot, sonsuz kafein. Hepsi bedava, çünkü Google değilim.',
+        exploreTools: 'Araçlara Daldır 🚀',
+        servicesContact: 'Benimle Çalış ☕'
       },
       boot: {
-        init: 'cemal.online başlatılıyor',
+        init: 'cemal.online başlatılıyor... (kahve hazırlanıyor)',
         hackingNasa: 'Şaka yapıyorum, NASA hackleme yok burada',
-        toolsReady: '62+ Araç yüklendi',
-        botsAwake: '17+ AI Bot hazır',
-        welcomeAboard: 'Hoş geldin'
+        toolsReady: '62+ araç & sınırsız sarkasm yükleniyor...',
+        botsAwake: 'Güvenlik protokolleri: ✓ | Kahve stoğu: ✓ | Akıl sağlığı: tartışmalı',
+        welcomeAboard: 'Hoş geldin 🎯'
       },
       features: {
         title: 'Profesyonel Araçlar',
