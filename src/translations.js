@@ -40,6 +40,120 @@ export const translations = {
         exploreTools: 'Explore Tools',
         servicesContact: 'Services & Contact'
       },
+      boot: {
+        init: 'Initializing cemal.online',
+        hackingNasa: 'Just kidding, no NASA hacking here',
+        toolsReady: '62+ Tools loaded',
+        botsAwake: '17+ AI Bots ready',
+        welcomeAboard: 'Welcome aboard'
+      },
+      features: {
+        title: 'Professional Tools',
+        subtitle: 'Everything you need for daily IT tasks',
+        explore: 'Explore',
+        categories: {
+          code: {
+            title: 'Code Tools',
+            description: 'JSON formatter, Base64, Regex tester & code minifier'
+          },
+          security: {
+            title: 'Security Tools',
+            description: 'Password generator, hash tools & encryption utilities'
+          },
+          text: {
+            title: 'Text Tools',
+            description: 'Markdown editor, word counter & text comparison'
+          },
+          design: {
+            title: 'Design Tools',
+            description: 'Color picker, gradient generator & CSS tools'
+          },
+          network: {
+            title: 'Network Tools',
+            description: 'DNS lookup, WHOIS, IP info & network diagnostics'
+          },
+          windows: {
+            title: 'Windows Tools',
+            description: 'Gaming optimizer, power management & bloatware remover'
+          },
+          utility: {
+            title: 'Utility Tools',
+            description: 'QR generator, timestamp converter & UUID tools'
+          }
+        }
+      },
+      techStack: {
+        react: 'React 18',
+        vite: 'Vite',
+        tailwind: 'Tailwind CSS',
+        redis: 'Redis',
+        vercel: 'Vercel',
+        cemalAI: 'Cemal AI'
+      },
+      aiBots: {
+        badge: 'AI Powered',
+        title: 'Meet Your AI Team',
+        subtitle: '17+ unique AI personalities powered by Cemal AI, Gemini & ChatGPT',
+        exploreAll: 'Explore All AI Bots',
+        bots: {
+          professorPosh: {
+            name: 'Professor Posh',
+            role: 'English Tutor',
+            quote: '"One does not simply learn English without proper etiquette, darling!"',
+            tag: 'Sophisticated Learning'
+          },
+          saulGoodman: {
+            name: 'Saul Goodman AI',
+            role: 'Legal Advisor',
+            quote: '"Better call Saul! I\'ll make your legal problems disappear... legally!"',
+            tag: 'Street-Smart Legal'
+          },
+          gordonHealthy: {
+            name: 'Gordon HealthyAI',
+            role: 'Health & Fitness Coach',
+            quote: '"THIS PROTEIN SHAKE IS RAW! Get your health together, you donkey!"',
+            tag: 'No-Nonsense Health'
+          },
+          sheldonNumbers: {
+            name: 'Sheldon Numbers',
+            role: 'Math & Science Tutor',
+            quote: '"Bazinga! Let me explain quantum physics... again, for the third time."',
+            tag: 'Genius Level Teaching'
+          },
+          drFreud: {
+            name: 'Dr. Freud AI',
+            role: 'Psychology Coach',
+            quote: '"Tell me about your childhood... and why you clicked on this bot."',
+            tag: 'Deep Mind Analysis'
+          },
+          harveySpecter: {
+            name: 'Harvey Specter AI',
+            role: 'Business Coach',
+            quote: '"Winners don\'t make excuses. Let\'s close this deal and move on!"',
+            tag: 'Winner Mentality'
+          }
+        }
+      },
+      specialFeatures: {
+        glossary: {
+          title: 'IT Glossary',
+          badge: 'Learning',
+          description: '1000+ IT terms explained in simple language for beginners',
+          cta: 'Start Learning'
+        },
+        juniorIT: {
+          title: 'Junior IT Guide',
+          badge: 'AI Powered',
+          description: 'Interactive AI tutor for IT fundamentals, networking, security & more',
+          cta: 'Get Started'
+        },
+        fileShare: {
+          title: 'QuantumDrop',
+          badge: 'P2P Transfer',
+          description: 'Secure, fast peer-to-peer file sharing with no size limits',
+          cta: 'Share Files'
+        }
+      },
       welcome: 'Welcome to My World',
       greeting: "Hello, I'm",
       name: 'Cemal Demirci',
@@ -738,6 +852,120 @@ export const translations = {
         subtitleHighlight: 'Tüm araçlar tamamen ücretsiz!',
         exploreTools: 'Araçları Keşfet',
         servicesContact: 'Hizmetler & İletişim'
+      },
+      boot: {
+        init: 'cemal.online başlatılıyor',
+        hackingNasa: 'Şaka yapıyorum, NASA hackleme yok burada',
+        toolsReady: '62+ Araç yüklendi',
+        botsAwake: '17+ AI Bot hazır',
+        welcomeAboard: 'Hoş geldin'
+      },
+      features: {
+        title: 'Profesyonel Araçlar',
+        subtitle: 'Günlük IT görevleri için ihtiyacınız olan her şey',
+        explore: 'Keşfet',
+        categories: {
+          code: {
+            title: 'Kod Araçları',
+            description: 'JSON biçimlendirici, Base64, Regex test edici & kod küçültücü'
+          },
+          security: {
+            title: 'Güvenlik Araçları',
+            description: 'Şifre oluşturucu, hash araçları & şifreleme yardımcıları'
+          },
+          text: {
+            title: 'Metin Araçları',
+            description: 'Markdown editör, kelime sayacı & metin karşılaştırma'
+          },
+          design: {
+            title: 'Tasarım Araçları',
+            description: 'Renk seçici, gradient oluşturucu & CSS araçları'
+          },
+          network: {
+            title: 'Ağ Araçları',
+            description: 'DNS sorguları, WHOIS, IP bilgi & ağ tanılama'
+          },
+          windows: {
+            title: 'Windows Araçları',
+            description: 'Oyun optimize edici, güç yönetimi & gereksiz yazılım kaldırıcı'
+          },
+          utility: {
+            title: 'Yardımcı Araçlar',
+            description: 'QR oluşturucu, zaman damgası çevirici & UUID araçları'
+          }
+        }
+      },
+      techStack: {
+        react: 'React 18',
+        vite: 'Vite',
+        tailwind: 'Tailwind CSS',
+        redis: 'Redis',
+        vercel: 'Vercel',
+        cemalAI: 'Cemal AI'
+      },
+      aiBots: {
+        badge: 'Yapay Zeka Destekli',
+        title: 'AI Ekibinizle Tanışın',
+        subtitle: '17+ benzersiz AI kişiliği, Cemal AI, Gemini & ChatGPT tarafından destekleniyor',
+        exploreAll: 'Tüm AI Botları Keşfet',
+        bots: {
+          professorPosh: {
+            name: 'Professor Posh',
+            role: 'İngilizce Öğretmeni',
+            quote: '"İngilizce öğrenmek görgü kuralları olmadan olmaz, sevgilim!"',
+            tag: 'Sofistike Öğrenme'
+          },
+          saulGoodman: {
+            name: 'Saul Goodman AI',
+            role: 'Hukuk Danışmanı',
+            quote: '"Saul\'ı ara! Yasal sorunlarını yasal olarak yok edeceğim!"',
+            tag: 'Sokak Akıllı Hukuk'
+          },
+          gordonHealthy: {
+            name: 'Gordon HealthyAI',
+            role: 'Sağlık & Fitness Koçu',
+            quote: '"BU PROTEİN ŞEYKI ÇİĞ! Sağlığını topla kendine gel, eşek!"',
+            tag: 'Saçmasız Sağlık'
+          },
+          sheldonNumbers: {
+            name: 'Sheldon Numbers',
+            role: 'Matematik & Bilim Öğretmeni',
+            quote: '"Bazinga! Kuantum fiziğini açıklayayım... yine, üçüncü kez."',
+            tag: 'Deha Seviyesi Öğretim'
+          },
+          drFreud: {
+            name: 'Dr. Freud AI',
+            role: 'Psikoloji Koçu',
+            quote: '"Çocukluğundan bahset... ve neden bu bota tıkladığını."',
+            tag: 'Derin Zihin Analizi'
+          },
+          harveySpecter: {
+            name: 'Harvey Specter AI',
+            role: 'İş Koçu',
+            quote: '"Kazananlar bahane üretmez. Hadi bu anlaşmayı kapat ve ilerle!"',
+            tag: 'Kazanan Mentalitesi'
+          }
+        }
+      },
+      specialFeatures: {
+        glossary: {
+          title: 'IT Sözlük',
+          badge: 'Öğrenme',
+          description: 'Yeni başlayanlar için basit dille açıklanmış 1000+ IT terimi',
+          cta: 'Öğrenmeye Başla'
+        },
+        juniorIT: {
+          title: 'Junior IT Rehberi',
+          badge: 'Yapay Zeka Destekli',
+          description: 'IT temelleri, ağ, güvenlik ve daha fazlası için interaktif AI öğretmen',
+          cta: 'Başla'
+        },
+        fileShare: {
+          title: 'QuantumDrop',
+          badge: 'P2P Transfer',
+          description: 'Boyut sınırı olmadan güvenli, hızlı eşler arası dosya paylaşımı',
+          cta: 'Dosya Paylaş'
+        }
       },
       welcome: 'Dünyama Hoş Geldin',
       greeting: 'Merhaba, ben',
