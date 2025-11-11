@@ -286,6 +286,13 @@ const Tools = () => {
           {t(language, 'tools.subtitle')}
         </p>
 
+        {/* Privacy Banner */}
+        <div className="max-w-2xl mx-auto mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+          <p className="text-sm text-blue-200 text-center">
+            🔒 <strong>{language === 'tr' ? 'Gizlilik:' : 'Privacy:'}</strong> {language === 'tr' ? 'Tüm araçlar tamamen browser\'ınızda çalışır. Hiçbir veri sunucuya gönderilmez. Çünkü ben Google değilim.' : 'All tools run completely in your browser. No data is sent to servers. Because I\'m not Google.'}
+          </p>
+        </div>
+
         {/* Floating Icons */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
           <Code className="absolute top-20 left-[10%] w-8 h-8 text-blue-500/10 animate-float" />

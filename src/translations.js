@@ -586,10 +586,12 @@ export const translations = {
 
       // Hero Section
       hero: {
-        intro: 'Freelance IT Consultant & Full-Stack Developer',
-        description1: 'With 8+ years of experience in information technology and broadcast engineering, I provide professional services across a wide range from enterprise IT infrastructure to web development, cybersecurity to cloud solutions.',
-        description2: 'I specialize in all areas of IT, from WordPress to enterprise Active Directory management, Azure cloud solutions to broadcast technologies. I hold certifications from Fortinet, AWS, Microsoft, and Cisco.',
-        description3: 'Currently working as IT & Security Administrator at a leading company in virtual production and real-time graphics solutions, while also providing freelance projects and IT consulting services.',
+        intro: 'IT & Security Administrator | 8 Years, Zero Panic Attacks',
+        description1: 'Hi, I\'m Cemal. For 8 years, I\'ve been the guy who prevents systems from crashing, and when they do crash, I fix them in 3 minutes.',
+        description2: 'I work as IT & Security Administrator at Zero Density – dealing with servers, networks, and cybersecurity protocols in the virtual production and broadcast world. 60% of my job is technology, 40% is asking people "Did you try Ctrl+Alt+Del?"',
+        description3: 'I\'m ISO 27001, Fortinet, MCSE certified. ISO 42001 Lead Auditor for AI governance – basically, my job is to prevent AIs from taking over the world (so far, I\'m succeeding).',
+        description4: 'I\'ve set up Proxmox clusters, managed Active Directories, configured firewalls. I sing while writing PowerShell scripts. My coffee consumption is industrial-level.',
+        description5: 'This site? A collection of tools I built at 3 AM thinking "this would be nice to have." All free, because I\'m not Google.',
         cta: 'Feel free to contact me for collaborations, consulting, and projects!'
       },
 
@@ -1399,10 +1401,12 @@ export const translations = {
 
       // Hero Section
       hero: {
-        intro: 'Freelance IT Danışmanı & Full-Stack Developer',
-        description1: '8+ yıllık bilgi teknolojileri ve yayıncılık mühendisliği deneyimiyle, kurumsal IT altyapılarından web geliştirmeye, siber güvenlikten cloud çözümlerine kadar geniş bir yelpazede profesyonel hizmetler sunuyorum.',
-        description2: 'WordPress\'ten kurumsal Active Directory yönetimine, Azure bulut çözümlerinden broadcast teknolojilerine kadar IT\'nin tüm alanlarında uzmanım. Fortinet, AWS, Microsoft ve Cisco sertifikalarına sahibim.',
-        description3: 'Şu anda sanal prodüksiyon ve gerçek zamanlı grafik çözümlerinde lider bir şirkette IT & Security Administrator olarak çalışırken, freelance projeler ve IT danışmanlık hizmetleri de veriyorum.',
+        intro: 'IT & Güvenlik Yöneticisi | 8 Yıl, Sıfır Panik Atağı',
+        description1: 'Merhaba, ben Cemal. 8 yıldır sistemlerin çökmesini engelleyen, çöktüğünde 3 dakikada kaldıran adamım.',
+        description2: 'Zero Density\'de IT & Security Administrator olarak çalışıyorum – sanal prodüksiyon ve broadcast dünyasında sunucular, network\'ler ve siber güvenlik protokolleriyle uğraşıyorum. İşimin %60\'ı teknoloji, %40\'ı insanlara "Ctrl+Alt+Del yaptın mı?" diye sormak.',
+        description3: 'ISO 27001, Fortinet, MCSE sertifikalıyım. AI governance konusunda ISO 42001 Lead Auditor\'üm – yani AI\'ların dünyayı ele geçirmesini engellemek benim işim (henüz başarılıyım).',
+        description4: 'Proxmox cluster\'ları kurdum, Active Directory\'leri yönettim, firewall\'ları configure ettim. PowerShell scriptleri yazarken şarkı söylerim. Kahve tüketimim endüstriyel seviyede.',
+        description5: 'Bu site? Gece 3\'te "böyle bir şey olsa güzel olurdu" dediğim araçların koleksiyonu. Hepsi bedava, çünkü ben Google değilim.',
         cta: 'İş birlikleri, danışmanlık ve projeler için benimle iletişime geçebilirsiniz!'
       },
 

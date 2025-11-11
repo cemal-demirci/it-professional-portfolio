@@ -630,6 +630,12 @@ const About = () => {
           <p>
             {t(language, 'about.hero.description3')}
           </p>
+          <p>
+            {t(language, 'about.hero.description4')}
+          </p>
+          <p className="italic text-blue-200">
+            {t(language, 'about.hero.description5')}
+          </p>
           <p className="text-blue-300 font-semibold">
             🚀 {t(language, 'about.hero.cta')}
           </p>
