@@ -229,11 +229,11 @@ const DigitalPassport = ({ isOpen, onClose }) => {
         }}
       >
         {/* Header */}
-        <div className="p-6 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-white/5 to-transparent">
-          <div className="flex items-center gap-4">
+        <div className="p-4 md:p-6 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-white/5 to-transparent">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             {/* Avatar */}
             <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shadow-lg"
+              className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-lg flex-shrink-0"
               style={{
                 background: `linear-gradient(135deg, ${passport.avatarColor.primary}, ${passport.avatarColor.secondary})`
               }}
@@ -242,31 +242,33 @@ const DigitalPassport = ({ isOpen, onClose }) => {
             </div>
 
             {/* Username & Level */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-bold text-white">{passport.username}</h2>
+                <h2 className="text-lg md:text-2xl font-bold text-white truncate">{passport.username}</h2>
                 <button
                   onClick={handleRegenerateUsername}
-                  className="p-1.5 hover:bg-white/10 rounded-lg transition-colors group"
+                  className="p-1.5 hover:bg-white/10 rounded-lg transition-colors group flex-shrink-0"
                   title={language === 'tr' ? 'Kullanıcı adını yenile' : 'Regenerate username'}
                 >
-                  <Shuffle className="w-4 h-4 text-gray-400 group-hover:text-white" />
+                  <Shuffle className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400 group-hover:text-white" />
                 </button>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <Star className="w-4 h-4" style={{ color: passport.avatarColor.accent }} />
-                <span>{t(language, 'digitalPassport.profile.level')} {passport.level}</span>
-                <span className="text-gray-500">•</span>
+              <div className="flex flex-wrap items-center gap-1.5 md:gap-2 text-xs md:text-sm text-gray-300">
+                <span className="flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 md:w-4 md:h-4" style={{ color: passport.avatarColor.accent }} />
+                  <span>{t(language, 'digitalPassport.profile.level')} {passport.level}</span>
+                </span>
+                <span className="text-gray-500 hidden sm:inline">•</span>
                 <span className="flex items-center gap-1">
                   {passport.unlimited ? (
                     <>
-                      <Infinity className="w-4 h-4 text-purple-400" />
+                      <Infinity className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-400" />
                       <span className="text-purple-400">{t(language, 'credits.unlimited')}</span>
                     </>
                   ) : (
                     <>
-                      <Zap className="w-4 h-4 text-yellow-400" />
-                      {passport.credits} {t(language, 'digitalPassport.profile.credits')}
+                      <Zap className="w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-400" />
+                      <span>{passport.credits} {t(language, 'digitalPassport.profile.credits')}</span>
                     </>
                   )}
                 </span>
@@ -276,17 +278,17 @@ const DigitalPassport = ({ isOpen, onClose }) => {
 
           <button
             onClick={onClose}
-            className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+            className="p-1.5 md:p-2 hover:bg-white/10 rounded-xl transition-colors flex-shrink-0 ml-2"
           >
-            <X className="w-6 h-6 text-gray-400" />
+            <X className="w-5 h-5 md:w-6 md:h-6 text-gray-400" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 px-6 pt-4 border-b border-white/10">
+        <div className="flex gap-1 md:gap-2 px-4 md:px-6 pt-3 md:pt-4 border-b border-white/10 overflow-x-auto">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`px-4 py-2 rounded-t-lg font-medium transition-all ${
+            className={`px-3 md:px-4 py-1.5 md:py-2 rounded-t-lg text-sm md:text-base font-medium transition-all whitespace-nowrap ${
               activeTab === 'overview'
                 ? 'bg-white/10 text-white border-b-2'
                 : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -297,44 +299,48 @@ const DigitalPassport = ({ isOpen, onClose }) => {
           </button>
           <button
             onClick={() => setActiveTab('achievements')}
-            className={`px-4 py-2 rounded-t-lg font-medium transition-all ${
+            className={`px-3 md:px-4 py-1.5 md:py-2 rounded-t-lg text-sm md:text-base font-medium transition-all whitespace-nowrap ${
               activeTab === 'achievements'
                 ? 'bg-white/10 text-white border-b-2'
                 : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
             style={{ borderColor: activeTab === 'achievements' ? passport.avatarColor.primary : 'transparent' }}
           >
-            <Award className="w-4 h-4 inline mr-1" />
-            {t(language, 'digitalPassport.tabs.achievements')} ({passport.achievements.length})
+            <Award className="w-3.5 h-3.5 md:w-4 md:h-4 inline mr-1" />
+            <span className="hidden sm:inline">{t(language, 'digitalPassport.tabs.achievements')}</span>
+            <span className="sm:hidden">{t(language, 'digitalPassport.tabs.achievements').substring(0, 8)}</span>
+            <span> ({passport.achievements.length})</span>
           </button>
           <button
             onClick={() => setActiveTab('stats')}
-            className={`px-4 py-2 rounded-t-lg font-medium transition-all ${
+            className={`px-3 md:px-4 py-1.5 md:py-2 rounded-t-lg text-sm md:text-base font-medium transition-all whitespace-nowrap ${
               activeTab === 'stats'
                 ? 'bg-white/10 text-white border-b-2'
                 : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
             style={{ borderColor: activeTab === 'stats' ? passport.avatarColor.primary : 'transparent' }}
           >
-            <TrendingUp className="w-4 h-4 inline mr-1" />
+            <TrendingUp className="w-3.5 h-3.5 md:w-4 md:h-4 inline mr-1" />
             {t(language, 'digitalPassport.tabs.stats')}
           </button>
           <button
             onClick={() => setActiveTab('conversations')}
-            className={`px-4 py-2 rounded-t-lg font-medium transition-all ${
+            className={`px-3 md:px-4 py-1.5 md:py-2 rounded-t-lg text-sm md:text-base font-medium transition-all whitespace-nowrap ${
               activeTab === 'conversations'
                 ? 'bg-white/10 text-white border-b-2'
                 : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
             style={{ borderColor: activeTab === 'conversations' ? passport.avatarColor.primary : 'transparent' }}
           >
-            <MessageSquare className="w-4 h-4 inline mr-1" />
-            {t(language, 'digitalPassport.tabs.conversations')} ({conversations.length})
+            <MessageSquare className="w-3.5 h-3.5 md:w-4 md:h-4 inline mr-1" />
+            <span className="hidden sm:inline">{t(language, 'digitalPassport.tabs.conversations')}</span>
+            <span className="sm:hidden">{t(language, 'digitalPassport.tabs.conversations').substring(0, 8)}</span>
+            <span> ({conversations.length})</span>
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6">
           {activeTab === 'overview' && (
             <>
               {/* XP Progress */}
