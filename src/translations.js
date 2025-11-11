@@ -8,7 +8,7 @@ export const translations = {
       settings: 'Settings',
       aiBots: 'AI Bots',
       fileShare: 'Pleiades Share',
-      juniorIT: 'Junior IT',
+      juniorIT: 'IT Glossary',
       aboutContact: 'About & Contact'
     },
 
@@ -707,7 +707,7 @@ export const translations = {
       settings: 'Ayarlar',
       aiBots: 'AI Botlar',
       fileShare: 'Pleiades Share',
-      juniorIT: 'Junior IT',
+      juniorIT: 'IT Glossary',
       aboutContact: 'Hakkımda & İletişim'
     },
 
@@ -940,7 +940,7 @@ export const translations = {
 
     // Junior IT Page
     juniorIT: {
-      title: 'Junior IT\'ler İçin',
+      title: 'IT Sözlük',
       welcome: 'IT dünyasına yeni mi başladın? Doğru yerdesin!',
       description: 'Cemal tarzında IT terimleri, AI destekli soru-cevap ve daha fazlası. Eğlenerek öğren!',
       features: {
@@ -1016,44 +1016,135 @@ export const translations = {
     // Settings Page
     settings: {
       title: 'Ayarlar',
-      subtitle: 'Akıllı özellikleri yönetin ve sınırsız erişimin kilidini açın 🚀',
-      aiConfig: 'Yapılandırma',
-      howItWorks: '🔐 Sınırsız Mod Nasıl Çalışır:',
-      freeTier: 'Ücretsiz Katman: Günde 10 AI isteği (24 saatlik sıfırlama süresi)',
-      unlimitedMode: 'Sınırsız Mod: Gizli anahtar ile tüm limitleri aş',
-      storage: 'Depolama: Anahtar tarayıcının localStorage\'ında saklanır (cihaza özel)',
-      scope: 'Kapsam: TÜM AI araçlarında çalışır (PowerShell Analyzer, Log Analyzer, Donanım Desteği, vb.)',
-      activation: 'Aktivasyon: Aşağıya gizli anahtarı girin → "Aktifleştir"e tıklayın → Sınırsız erişimin tadını çıkarın 🚀',
-      privacy: 'Gizlilik: Tüm işlemler yerel olarak gerçekleşir, harici sunuculara veri gönderilmez (Cemal AI hariç)',
-      secretKeyHint: '💡 Gizli anahtar aşağıdaki aktivasyon bölümünde görünür',
-      currentStatus: 'Mevcut Durum',
-      unlimitedActive: 'Sınırsız Mod Aktif',
-      freeTierActive: 'Ücretsiz Katman',
-      unlimitedDesc: 'Sınırsız AI isteğiniz var 🚀',
-      requestsRemaining: 'bugün kalan istek',
-      unlimited: 'Sınırsız',
-      active: 'Aktif',
-      depleted: 'Tükendi',
-      dailyLimitProgress: 'Günlük Limit İlerlemesi',
-      unlimitedModeTitle: 'Sınırsız Mod',
-      unlimitedModeActive: 'Sınırsız Mod Aktif!',
-      unlimitedModeActiveDesc: 'Sınırsız AI isteğiniz var. Günlük limit yok, bekleme yok! Keyfinize bakın! 🎉🚀',
-      deactivateUnlimited: 'Sınırsız Modu Devre Dışı Bırak',
-      secretKeyLabel: 'Gizli Sınırsız Anahtar',
-      enterSecretKey: 'Gizli anahtarınızı girin...',
-      activate: 'Aktifleştir',
-      unlimitedActivated: 'Sınırsız mod aktifleştirildi! 🎉',
-      invalidKey: 'Geçersiz anahtar! Tekrar deneyin.',
-      rateLimitInfo: 'Oran Limiti Bilgisi',
-      requestsPerDay: 'Günlük istek (Ücretsiz)',
-      remainingToday: 'Bugün kalan',
-      resetPeriod: 'Sıfırlama süresi',
-      proTips: 'Pro İpuçları:',
-      tip1: 'Ücretsiz katman size günde 10 AI isteği verir',
-      tip2: 'Oran limiti her 24 saatte bir otomatik olarak sıfırlanır',
-      tip3: 'Sınırsız mod tüm oran limitlerini atlar',
-      tip4: 'Gizli anahtarınız tarayıcınızda yerel olarak saklanır',
-      tip5: 'Sınırsız anahtara ihtiyacınız varsa yönetici ile iletişime geçin'
+      subtitle: 'Cemal AI kredilerinizi yönetin',
+      godModeActive: 'TANRI MODU AKTİF',
+      godModeMessage: 'HERŞEY TAM BEDAVA DOSTUM!',
+      unlimitedAI: 'Sınırsız AI',
+      unlimitedFileShare: 'Sınırsız Dosya Paylaşımı',
+      unlimitedRemote: 'Sınırsız Uzak Erişim',
+      godModeSubtitle: 'Tanrı Modu: Her Şey ÜCRETSİZ!',
+      manageCredits: 'Cemal AI kredilerinizi yönetin',
+      easterEggs: {
+        hideSecretFeatures: 'Gizli Özellikleri Gizle',
+        unlockHiddenFeatures: '🎮 Gizli Özelliklerin Kilidini Aç',
+        terminalTitle: '🎮 Gizli Easter Egg Terminali',
+        terminalSubtitle: 'Gizli özelliklerin kilidini açmak için gizli kodları girin',
+        enterCode: 'Easter egg kodunu girin...',
+        executeCode: 'Kodu Çalıştır',
+        secretCodes: '🔒 Gizli Kodlar - Kendin Bul!',
+        classicGamer: 'Klasik Oyuncu Hamlesi',
+        classicGamerHint: 'İpucu: ↑↑↓↓←→←→... sonra ne gelir?',
+        colorfulJourney: 'Renkli Yolculuk',
+        colorfulJourneyHint: 'İpucu: Yağmurdan sonra gökyüzü, ya da muhteşem yaşam tarzı?',
+        ultimatePower: 'Nihai Güç',
+        ultimatePowerHint: 'İpucu: Adım sessiz harfler olmadan... cml?',
+        backToThePast: 'Geçmişe Dönüş',
+        backToThePastHint: 'İpucu: Eski okul, vintage vibeler, 90lar tarzı',
+        celebrationTime: 'Kutlama Zamanı',
+        celebrationTimeHint: 'İpucu: Arkadaşlarınla ve müzikle ne yaparsın?',
+        commandLine: 'Komut Satırı Erişimi',
+        commandLineHint: 'İpucu: Hackerların komut yazdığı yer...',
+        codersParadise: 'Kodcunun Cenneti',
+        codersParadiseHint: 'İpucu: Developer kısaltması, 3 harf',
+        romanticSecret: 'Romantik Sır',
+        romanticSecretHint: 'İpucu: Türkçe argo, 5 harf, P ile başlar',
+        proTip: '🔍 Pro İpucu: Bu gizli kodları klavyenle de yazabilirsin! Bu terminale gerek yok.',
+        unknownCode: '❌ Bilinmeyen kod! Aşağıdaki ipuçlarını dikkatlice oku... 🔍'
+      },
+      creditBalance: {
+        title: 'Kredi Bakiyeniz',
+        credits: 'Kredi',
+        creditInfo: '1 kredi = 1 AI isteği',
+        status: 'Durum',
+        godMode: 'Tanrı Modu',
+        active: 'Aktif',
+        depleted: 'Tükendi',
+        unlimited: 'Sınırsız',
+        godModeUnlimited: '👑 Tanrı Modu: Sınırsız Her Şey!'
+      },
+      redeemCode: {
+        title: 'Kredi Kodunu Kullan',
+        description: 'Kredi kodunuz var mı? Hesabınıza kredi eklemek için aşağıya girin.',
+        placeholder: 'CEMAL-50-XXXXXXXX',
+        button: 'Kullan',
+        unlimitedActivated: '🎉 SINIRSIZ MOD AKTİFLEŞTİRİLDİ! Artık sınırsız AI isteğiniz var!',
+        creditsAdded: 'kredi eklendi! Yeni bakiye:',
+        creditsBalance: 'kredi'
+      },
+      creditRequest: {
+        title: 'Daha Fazla Krediye mi İhtiyacınız Var?',
+        aiMessage: '💬 Cemal AI diyor ki: AI maceralarınız için krediye mi ihtiyacınız var? Bana mesaj at! Sana özel bir kod vereceğim. Kurumsal saçmalık yok, sadece iyi vibeler. ✨',
+        disclaimer: '⚠️ Uyarı: Cemal AI, Cemal\'in homelab AI projesidir. Hata yapabilir (ChatGPT gibi), ama hey, Kumru da değil! 🥖 Dikkatli ve mizah anlayışıyla kullanın.',
+        yourName: 'Adınız',
+        namePlaceholder: 'Ahmet Yılmaz',
+        yourEmail: 'E-postanız',
+        emailPlaceholder: 'siz@ornek.com',
+        creditPackage: 'Kredi Paketi',
+        creditsLabel: 'Kredi',
+        message: 'Mesaj (opsiyonel)',
+        messagePlaceholder: 'Neden krediye ihtiyacınız olduğunu söyle, ya da sadece merhaba de! 😊',
+        requestButton: 'Kredi Talep Et',
+        fillNameEmail: 'Lütfen adınızı ve e-postanızı doldurun',
+        requestSent: 'Talep gönderildi! En kısa sürede sizinle iletişime geçeceğiz.'
+      },
+      admin: {
+        accessTitle: 'Yönetici Erişimi',
+        passwordPlaceholder: 'Yönetici şifresi',
+        loginButton: 'Giriş Yap',
+        invalidPassword: 'Geçersiz yönetici şifresi!',
+        panelTitle: 'Yönetici Paneli',
+        logoutButton: 'Çıkış Yap',
+        stats: {
+          totalCodes: 'Toplam Kod',
+          used: 'Kullanılmış',
+          unused: 'Kullanılmamış',
+          invalid: 'Geçersiz'
+        },
+        generateCodes: {
+          title: 'Kod Oluştur',
+          creditAmount: 'Kredi Miktarı',
+          numberOfCodes: 'Kod Sayısı',
+          generateButton: 'Oluştur',
+          creditsLabel: 'Kredi',
+          failedToGenerate: 'Kod oluşturulamadı: '
+        },
+        generatedCodes: {
+          title: 'Oluşturulan Kodlar',
+          noCodesYet: 'Henüz kod oluşturulmadı',
+          used: 'KULLANILDI',
+          invalid: 'GEÇERSİZ',
+          credits: 'kredi',
+          created: 'Oluşturuldu:',
+          usedAt: 'Kullanıldı:',
+          copyCode: 'Kodu kopyala',
+          invalidate: 'Geçersiz kıl',
+          delete: 'Sil',
+          deleteConfirm: 'Bu kodu silmek istediğinizden emin misiniz?',
+          invalidateConfirm: 'Bu kodu geçersiz kılmak istediğinizden emin misiniz?'
+        },
+        creditRequests: {
+          title: 'Kredi Talepleri',
+          noRequests: 'Henüz talep yok',
+          credits: 'kredi',
+          clearRequest: 'Talebi temizle',
+          clearConfirm: 'Bu talebi temizlemek istediğinizden emin misiniz?'
+        }
+      },
+      techStack: {
+        title: 'Modern Teknoloji ile Yapıldı',
+        frontend: 'Frontend Stack',
+        intelligence: 'Yapay Zeka',
+        backend: 'Backend & Veritabanı',
+        deployment: 'Deployment & CDN',
+        tools: 'Araçlar & Kütüphaneler',
+        security: 'Güvenlik & Performans',
+        openSource: 'Açık Kaynak Repository',
+        openSourceSubtitle: 'Tutku ile yapıldı, RedBull ile güçlendirildi 🔋',
+        githubButton: 'GitHub'
+      },
+      toast: {
+        codeCopied: 'Kod kopyalandı!'
+      }
     },
 
     // About Page
