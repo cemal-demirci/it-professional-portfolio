@@ -1,8 +1,17 @@
 // Credit System Service - Server-side API Version
 // Uses Redis via Vercel serverless functions
+// PRIVACY-FIRST: Uses Passport ID instead of IP tracking
+
+import { getOrCreatePassport } from '../utils/digitalPassport'
 
 const API_BASE = import.meta.env.VITE_API_BASE || ''
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'cemal2026' // Fallback for development
+
+// Helper: Get Passport ID from localStorage
+const getPassportId = () => {
+  const passport = getOrCreatePassport()
+  return passport.id
+}
 
 // Credit packages available
 export const CREDIT_PACKAGES = [
@@ -14,10 +23,15 @@ export const CREDIT_PACKAGES = [
 
 // ==================== USER FUNCTIONS ====================
 
-// Get user's current credit balance (IP-based)
+// Get user's current credit balance (Passport ID-based)
 export const getUserCredits = async () => {
   try {
-    const response = await fetch(`${API_BASE}/api/credits?action=balance`)
+    const passportId = getPassportId()
+    const response = await fetch(`${API_BASE}/api/credits?action=balance`, {
+      headers: {
+        'X-Passport-ID': passportId
+      }
+    })
     const data = await response.json()
 
     if (data.success) {
@@ -38,10 +52,12 @@ export const getUserCredits = async () => {
 // Redeem credit code
 export const redeemCreditCode = async (code) => {
   try {
+    const passportId = getPassportId()
     const response = await fetch(`${API_BASE}/api/credits?action=redeem`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Passport-ID': passportId
       },
       body: JSON.stringify({ code })
     })
@@ -87,10 +103,12 @@ export const redeemCreditCode = async (code) => {
 // Deduct credits (called when using AI features)
 export const deductCredits = async (amount = 1) => {
   try {
+    const passportId = getPassportId()
     const response = await fetch(`${API_BASE}/api/credits?action=deduct`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Passport-ID': passportId
       },
       body: JSON.stringify({ amount })
     })
@@ -120,10 +138,12 @@ export const deductCredits = async (amount = 1) => {
 // Send credit request email
 export const sendCreditRequest = async (email, name, message, requestedAmount) => {
   try {
+    const passportId = getPassportId()
     const response = await fetch(`${API_BASE}/api/credits?action=request`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Passport-ID': passportId
       },
       body: JSON.stringify({
         email,

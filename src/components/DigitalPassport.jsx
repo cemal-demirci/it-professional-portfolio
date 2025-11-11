@@ -37,8 +37,12 @@ const DigitalPassport = ({ isOpen, onClose }) => {
       const allConversations = getAllConversations()
       setConversations(allConversations)
 
-      // Fetch real credits from IP-based API to sync with Settings
-      fetch('/api/credits?action=balance')
+      // Fetch real credits from Passport ID-based API to sync with Settings
+      fetch('/api/credits?action=balance', {
+        headers: {
+          'X-Passport-ID': currentPassport.id
+        }
+      })
         .then(res => res.json())
         .then(data => {
           if (data.success) {

@@ -25,12 +25,21 @@ const generateRandomCode = (length = 8) => {
   return code
 }
 
-// Helper: Get client IP
-const getClientIP = (req) => {
-  return req.headers['x-forwarded-for']?.split(',')[0].trim() ||
-         req.headers['x-real-ip'] ||
-         req.connection?.remoteAddress ||
-         'unknown'
+// Helper: Get Passport ID from headers (Privacy-First!)
+const getPassportId = (req) => {
+  // NEW: Use Digital Passport ID instead of IP tracking
+  const passportId = req.headers['x-passport-id']
+
+  if (!passportId || passportId === 'undefined') {
+    // Fallback to IP for backwards compatibility (temporary migration period)
+    const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() ||
+               req.headers['x-real-ip'] ||
+               req.connection?.remoteAddress ||
+               'unknown'
+    return `ip:${ip}` // Prefix to distinguish IP-based from Passport-based
+  }
+
+  return passportId
 }
 
 export default async function handler(req, res) {
@@ -45,22 +54,22 @@ export default async function handler(req, res) {
   }
 
   const { action } = req.query
-  const clientIP = getClientIP(req)
+  const passportId = getPassportId(req)
 
   try {
     // ==================== GET BALANCE ====================
     if (req.method === 'GET' && action === 'balance') {
-      const balance = await redis.get(`credit:balance:${clientIP}`)
+      const balance = await redis.get(`credit:balance:${passportId}`)
       const credits = balance ? parseInt(balance) : 15 // Default 15 free credits
 
       // Check unlimited mode
-      const unlimited = await redis.get(`credit:unlimited:${clientIP}`)
+      const unlimited = await redis.get(`credit:unlimited:${passportId}`)
 
       return res.status(200).json({
         success: true,
         credits,
         unlimited: unlimited === 'true',
-        ip: clientIP
+        passportId
       })
     }
 
@@ -79,10 +88,10 @@ export default async function handler(req, res) {
 
       // Special code: CXMXL - Unlimited mode
       if (codeUpper === 'CXMXL') {
-        // Set unlimited flag for this IP
-        await redis.set(`credit:unlimited:${clientIP}`, 'true')
+        // Set unlimited flag for this Passport ID
+        await redis.set(`credit:unlimited:${passportId}`, 'true')
         // Also give 10000 credits as bonus
-        await redis.set(`credit:balance:${clientIP}`, '10000')
+        await redis.set(`credit:balance:${passportId}`, '10000')
 
         return res.status(200).json({
           success: true,
@@ -131,20 +140,20 @@ export default async function handler(req, res) {
 
       // Mark as used
       parsedCode.usedAt = new Date().toISOString()
-      parsedCode.usedBy = clientIP
+      parsedCode.usedBy = passportId
       await redis.set(`credit:code:${codeUpper}`, JSON.stringify(parsedCode))
 
       // Add credits to user balance
-      const currentBalance = await redis.get(`credit:balance:${clientIP}`)
+      const currentBalance = await redis.get(`credit:balance:${passportId}`)
       const currentCredits = currentBalance ? parseInt(currentBalance) : 15
       const newBalance = currentCredits + parsedCode.amount
-      await redis.set(`credit:balance:${clientIP}`, newBalance.toString())
+      await redis.set(`credit:balance:${passportId}`, newBalance.toString())
 
       // Log redemption
       await redis.lpush('credit:redemptions', JSON.stringify({
         code: codeUpper,
         amount: parsedCode.amount,
-        ip: clientIP,
+        passportId,
         timestamp: new Date().toISOString()
       }))
 
@@ -159,7 +168,7 @@ export default async function handler(req, res) {
     if (req.method === 'POST' && action === 'deduct') {
       const { amount = 1 } = req.body
 
-      const currentBalance = await redis.get(`credit:balance:${clientIP}`)
+      const currentBalance = await redis.get(`credit:balance:${passportId}`)
       const currentCredits = currentBalance ? parseInt(currentBalance) : 15
 
       if (currentCredits < amount) {
@@ -171,7 +180,7 @@ export default async function handler(req, res) {
       }
 
       const newBalance = currentCredits - amount
-      await redis.set(`credit:balance:${clientIP}`, newBalance.toString())
+      await redis.set(`credit:balance:${passportId}`, newBalance.toString())
 
       return res.status(200).json({
         success: true,
@@ -196,7 +205,7 @@ export default async function handler(req, res) {
         name,
         message,
         requestedAmount,
-        ip: clientIP,
+        passportId,
         timestamp: new Date().toISOString()
       }
 
