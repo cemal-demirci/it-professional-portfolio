@@ -30,6 +30,16 @@ export const translations = {
 
     // Home Page
     home: {
+      hero: {
+        badge: 'IT & Security Professional',
+        greeting: "Hello, I'm",
+        name: 'Cemal Demirci',
+        title: 'IT & Security Administrator | AI Lead Auditor',
+        subtitle: 'Professional tools collection to make your daily tasks easier.',
+        subtitleHighlight: 'All tools are completely free!',
+        exploreTools: 'Explore Tools',
+        servicesContact: 'Services & Contact'
+      },
       welcome: 'Welcome to My World',
       greeting: "Hello, I'm",
       name: 'Cemal Demirci',
@@ -719,6 +729,16 @@ export const translations = {
 
     // Home Page
     home: {
+      hero: {
+        badge: 'IT & Güvenlik Uzmanı',
+        greeting: 'Merhaba, ben',
+        name: 'Cemal Demirci',
+        title: 'IT & Güvenlik Yöneticisi | AI Baş Denetçisi',
+        subtitle: 'Günlük işlerinizi kolaylaştıracak profesyonel araç koleksiyonu.',
+        subtitleHighlight: 'Tüm araçlar tamamen ücretsiz!',
+        exploreTools: 'Araçları Keşfet',
+        servicesContact: 'Hizmetler & İletişim'
+      },
       welcome: 'Dünyama Hoş Geldin',
       greeting: 'Merhaba, ben',
       name: 'Cemal Demirci',
