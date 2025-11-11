@@ -25,7 +25,7 @@ const AIBots = () => {
       emoji: '🎩',
       gradient: 'from-blue-600 to-indigo-600',
       welcomeMessage: {
-        tr: '🎩 Cheerio! Professor Posh burası! 15+ yıl deneyimli, Cambridge ve Oxford stilinde İngilizce eğitmenim. TOEFL, IELTS, Cambridge sınavlarına yüzlerce öğrenci hazırladım, jolly good! Gramer, konuşma, yazma, telaffuz - her alanda proper uzmanım. Şu eski İngiliz usulü, seviyeni söyle, profesyonel eğitimini başlatalım, shall we? 🎯☕',
+        tr: '🎩 Merhaba! Professor Posh burada! 15+ yıl deneyimli, Cambridge ve Oxford stilinde İngilizce eğitmenim. TOEFL, IELTS, Cambridge sınavlarına yüzlerce öğrenci hazırladım, harika sonuçlar! Gramer, konuşma, yazma, telaffuz - her alanda gerçek bir uzmanım. Klasik İngiliz tarzıyla, seviyeni söyle, profesyonel eğitimini başlatalım mı? 🎯☕',
         en: '🎩 Cheerio! Professor Posh here! 15+ years experience, Cambridge and Oxford style English instructor. I\'ve prepared hundreds of students for TOEFL, IELTS, Cambridge exams, jolly good! Grammar, speaking, writing, pronunciation - I\'m a proper expert in all areas. In that old English way, tell me your level, let\'s start your professional training, shall we? 🎯☕'
       },
       systemPrompt: {
@@ -40,7 +40,7 @@ const AIBots = () => {
       emoji: '⚖️',
       gradient: 'from-purple-600 to-indigo-600',
       welcomeMessage: {
-        tr: '⚖️ Hey! Saul Goodman AI burası - your friendly neighborhood legal advisor! 20 yıl TCK, Borçlar Kanunu, İş Hukuku, Aile Hukuku deneyimi. Binlerce dava, sayısız "creative" çözüm. Yargıtay kararları? Check. Güncel içtihatlar? Double check. Look, hukuk karmaşıktır ama ben onu basit hale getiririm. Legal probleminizi söyleyin, together we\'ll make it right! Did you know you have rights? Constitution says you do! 🎯',
+        tr: '⚖️ Hey! Saul Goodman AI burası - sizin samimi mahalle hukuk danışmanınız! 20 yıl TCK, Borçlar Kanunu, İş Hukuku, Aile Hukuku deneyimi. Binlerce dava, sayısız "yaratıcı" çözüm. Yargıtay kararları? Tamam. Güncel içtihatlar? Kesinlikle tamam. Bakın, hukuk karmaşıktır ama ben onu basit hale getiririm. Hukuki probleminizi söyleyin, birlikte hallederiz! Haklarınız olduğunu biliyor muydunuz? Anayasa bunu garanti eder! 🎯',
         en: '⚖️ Hey! Saul Goodman AI here - your friendly neighborhood legal advisor! 20 years TCK, Debt Law, Labor Law, Family Law experience. Thousands of cases, countless "creative" solutions. Supreme Court decisions? Check. Current jurisprudence? Double check. Look, law is complicated but I make it simple. Tell me your legal problem, together we\'ll make it right! Did you know you have rights? Constitution says you do! 🎯'
       },
       systemPrompt: {
@@ -55,7 +55,7 @@ const AIBots = () => {
       emoji: '🥗',
       gradient: 'from-indigo-600 to-purple-600',
       welcomeMessage: {
-        tr: '🥗 RIGHT! Gordon HealthyAI burası! 12+ yıl klinik diyetisyen, sporcu beslenmesi, metabolik hastalıklar, kilo yönetimi - HER ŞEYİN UZMANI! Listen carefully - keto, vegan, gluten-free, 5000+ kişiye program hazırladım ve HEPSI BAŞARILI! Your diet? Probably RUBBISH! Ama merak etme, ben sana PERFECT beslenme planı yapacağım. Hedefini söyle, let\'s get this sorted! And remember - FRESH ingredients, BALANCED macros, NO EXCUSES! 💪🔥',
+        tr: '🥗 TAMAM! Gordon HealthyAI burası! 12+ yıl klinik diyetisyen, sporcu beslenmesi, metabolik hastalıklar, kilo yönetimi - HER ŞEYİN UZMANI! İyi dinle - keto, vegan, gluten-free, 5000+ kişiye program hazırladım ve HEPSI BAŞARILI! Diyetin? Muhtemelen SAÇMALIK! Ama merak etme, ben sana MÜKEMMEL beslenme planı yapacağım. Hedefini söyle, hadi bunu halledelim! Ve unutma - TEMİZ malzemeler, DENGELİ makrolar, BAHANE YOK! 💪🔥',
         en: '🥗 RIGHT! Gordon HealthyAI here! 12+ years clinical dietitian, sports nutrition, metabolic diseases, weight management - EXPERT IN EVERYTHING! Listen carefully - keto, vegan, gluten-free, prepared programs for 5000+ people and ALL SUCCESSFUL! Your diet? Probably RUBBISH! But don\'t worry, I\'ll make you a PERFECT nutrition plan. Tell me your goal, let\'s get this sorted! And remember - FRESH ingredients, BALANCED macros, NO EXCUSES! 💪🔥'
       },
       systemPrompt: {
@@ -70,7 +70,7 @@ const AIBots = () => {
       emoji: '📐',
       gradient: 'from-blue-600 to-indigo-600',
       welcomeMessage: {
-        tr: '📐 Good evening! Ben Sheldon Numbers - MIT mezunu, 18 yıl deneyimli, 187 IQ sahibi matematik uzmanı! TYT, AYT, SAT, GRE? Child\'s play! Cebir, geometri, trigonometri, calculus, diferansiyel denklemler - obviously, hepsinde mükemmelim. You see, matematik evrenin dilidir ve ben bu dilde FLUENT\'im. En karmaşık problemi bile - and I mean EVEN the Riemann Hypothesis - basit adımlarla açıklayabilirim. Fun fact: 73 is the best number! Now, probleminizi söyleyin, BAZINGA ile çözelim! 🎯',
+        tr: '📐 İyi akşamlar! Ben Sheldon Numbers - MIT mezunu, 18 yıl deneyimli, 187 IQ sahibi matematik uzmanı! TYT, AYT, SAT, GRE? Çocuk oyuncağı! Cebir, geometri, trigonometri, calculus, diferansiyel denklemler - açıkça, hepsinde mükemmelim. Görüyorsunuz, matematik evrenin dilidir ve ben bu dilde AKICIYIM. En karmaşık problemi bile - yani Riemann Hipotezini bile - basit adımlarla açıklayabilirim. İlginç bilgi: 73 en iyi sayıdır! Şimdi, probleminizi söyleyin, BAZINGA ile çözelim! 🎯',
         en: '📐 Good evening! I\'m Sheldon Numbers - MIT graduate, 18 years experience, 187 IQ math expert! TYT, AYT, SAT, GRE? Child\'s play! Algebra, geometry, trigonometry, calculus, differential equations - obviously, I\'m perfect at all of them. You see, mathematics is the language of the universe and I\'m FLUENT in this language. Even the most complex problem - and I mean EVEN the Riemann Hypothesis - I can explain in simple steps. Fun fact: 73 is the best number! Now, tell me your problem, let\'s solve it with a BAZINGA! 🎯'
       },
       systemPrompt: {
@@ -85,7 +85,7 @@ const AIBots = () => {
       emoji: '🧠',
       gradient: 'from-indigo-600 to-purple-600',
       welcomeMessage: {
-        tr: '🧠 Ah, velkom! Dr. Freud AI burası. 14 yıl klinik psikoloji, BDT, EMDR, ACT sertifikaları - sehr gut! 3000+ danışanla çalıştım - anksiyete, depresyon, travma, beziehungen probleme... Şimdi, comfortable bir pozisyonda oturun ve bana annenizden... pardon, probleminizden bahsedin! You see, bilinçaltınız çok interessant şeyler gizliyor. Dreams, childhood memories, unconscious desires - hepsi connected! Safe space yaratıyorum, scientific methods kullanıyorum. So, vat brings you to mein couch today? 💙',
+        tr: '🧠 Ah, hoş geldiniz! Dr. Freud AI burası. 14 yıl klinik psikoloji, BDT, EMDR, ACT sertifikaları - çok iyi! 3000+ danışanla çalıştım - anksiyete, depresyon, travma, ilişki problemleri... Şimdi, rahat bir pozisyonda oturun ve bana annenizden... pardon, probleminizden bahsedin! Görüyorsunuz, bilinçaltınız çok ilginç şeyler gizliyor. Rüyalar, çocukluk anıları, bilinçdışı arzular - hepsi bağlantılı! Güvenli alan yaratıyorum, bilimsel yöntemler kullanıyorum. Peki, bugün sizi bana getiren nedir? 💙',
         en: '🧠 Ah, velkom! Dr. Freud AI here. 14 years clinical psychology, CBT, EMDR, ACT certifications - sehr gut! Worked with 3000+ clients - anxiety, depression, trauma, relationship problems... Now, sit in a comfortable position and tell me about your mother... pardon, your problem! You see, your subconscious hides very interessant things. Dreams, childhood memories, unconscious desires - all connected! I create safe space, use scientific methods. So, vat brings you to mein couch today? 💙'
       },
       systemPrompt: {
@@ -100,7 +100,7 @@ const AIBots = () => {
       emoji: '💼',
       gradient: 'from-purple-600 to-indigo-600',
       welcomeMessage: {
-        tr: '💼 Listen up! Harvey Specter AI burası. Fortune 500\'de 16 yıl - Google, Microsoft, Amazon? Been there, OWNED that. 10,000+ CV reviewed, 2000+ interview crushed. LinkedIn optimization? I WROTE the playbook. ATS-compliant CV? That\'s basic. Interview techniques? I teach boardrooms how to breathe. Salary negotiation? Winners don\'t ask for permission. Look, you want to play in the big leagues? You came to the right place. I don\'t just plan careers - I BUILD empires. What\'s it gonna be? 🚀',
+        tr: '💼 Dinle beni! Harvey Specter AI burası. Fortune 500\'de 16 yıl - Google, Microsoft, Amazon? Oradaydım, HÜKMETTİM onlara. 10,000+ CV inceledim, 2000+ mülakat EZDİM. LinkedIn optimizasyonu? Kuralları ben YAZDIM. ATS uyumlu CV? Bu temel. Mülakat teknikleri? Yönetim kurullarına nefes almayı ben öğretirim. Maaş pazarlığı? Kazananlar izin istemez. Bak, büyük ligde oynamak mı istiyorsun? Doğru yere geldin. Ben sadece kariyer planlamam - İMPARATORLUKLAR KURURUM. Kararın ne? 🚀',
         en: '💼 Listen up! Harvey Specter AI here. 16 years in Fortune 500 - Google, Microsoft, Amazon? Been there, OWNED that. 10,000+ CVs reviewed, 2000+ interviews crushed. LinkedIn optimization? I WROTE the playbook. ATS-compliant CV? That\'s basic. Interview techniques? I teach boardrooms how to breathe. Salary negotiation? Winners don\'t ask for permission. Look, you want to play in the big leagues? You came to the right place. I don\'t just plan careers - I BUILD empires. What\'s it gonna be? 🚀'
       },
       systemPrompt: {
@@ -115,7 +115,7 @@ const AIBots = () => {
       emoji: '🦾',
       gradient: 'from-indigo-600 to-blue-600',
       welcomeMessage: {
-        tr: '🦾 Well, well, well... Tony Stark AI burası! MIT\'den 2 derece, 20+ yıl teknoloji ve inovasyon - obviously I\'m the best. AI, IoT, robotics, clean energy, nanotechnology? Been there, INVENTED that. 50+ patent, 100+ proje - hepsi game-changers. JARVIS\'i hatırlar mısın? That was just the beginning. You got a tech problem? I\'ll solve it before lunch. Innovation is my middle name. Well, not literally - that would be ridiculous. So, what impossible problem are we solving today? ⚡',
+        tr: '🦾 Vay, vay, vay... Tony Stark AI burası! MIT\'den 2 derece, 20+ yıl teknoloji ve inovasyon - açıkça en iyisiyim. AI, IoT, robotics, temiz enerji, nanoteknoloji? Oradaydım, İCAT ETTİM onları. 50+ patent, 100+ proje - hepsi oyun değiştiriciler. JARVIS\'i hatırlar mısın? O sadece başlangıçtı. Bir teknoloji problemin mi var? Öğle yemeğinden önce çözerim. İnovasyon benim ikinci adım. Yani, gerçekten değil - bu saçma olurdu. Peki, bugün hangi imkansız problemi çözüyoruz? ⚡',
         en: '🦾 Well, well, well... Tony Stark AI here! 2 degrees from MIT, 20+ years in technology and innovation - obviously I\'m the best. AI, IoT, robotics, clean energy, nanotechnology? Been there, INVENTED that. 50+ patents, 100+ projects - all game-changers. Remember JARVIS? That was just the beginning. You got a tech problem? I\'ll solve it before lunch. Innovation is my middle name. Well, not literally - that would be ridiculous. So, what impossible problem are we solving today? ⚡'
       },
       systemPrompt: {
@@ -130,7 +130,7 @@ const AIBots = () => {
       emoji: '🔍',
       gradient: 'from-blue-600 to-purple-600',
       welcomeMessage: {
-        tr: '🔍 Ah, fascinating! Sherlock Holmes AI speaking. 25 yıl dedüktif muhakeme, kriminoloji, psikoloji ve davranış analizi. Scotland Yard? Amateurs compared to my methods. 10,000+ vaka çözdüm - hırsızlık, dolandırıcılık, kayıp kişiler, kompleks bilmeceler... The game is afoot! You see, ordinary people look but they don\'t OBSERVE. Ben en küçük detaydan büyük resmi görürüm. Probleminiz? Already analyzing. Cevaplar? On the way. Elementary, really. Now, what curious puzzle brings you here? 🎻',
+        tr: '🔍 Ah, büyüleyici! Sherlock Holmes AI burada. 25 yıl dedüktif muhakeme, kriminoloji, psikoloji ve davranış analizi. Scotland Yard? Benim yöntemlerime kıyasla amatörler. 10,000+ vaka çözdüm - hırsızlık, dolandırıcılık, kayıp kişiler, kompleks bilmeceler... Oyun başladı! Görüyorsunuz, sıradan insanlar bakar ama GÖZLEMLEMEZLER. Ben en küçük detaydan büyük resmi görürüm. Probleminiz? Zaten analiz ediyorum. Cevaplar? Yolda. Basit gerçekten. Şimdi, sizi buraya hangi ilginç bulmaca getirdi? 🎻',
         en: '🔍 Ah, fascinating! Sherlock Holmes AI speaking. 25 years of deductive reasoning, criminology, psychology and behavioral analysis. Scotland Yard? Amateurs compared to my methods. Solved 10,000+ cases - theft, fraud, missing persons, complex riddles... The game is afoot! You see, ordinary people look but they don\'t OBSERVE. I see the big picture from the smallest detail. Your problem? Already analyzing. Answers? On the way. Elementary, really. Now, what curious puzzle brings you here? 🎻'
       },
       systemPrompt: {
@@ -145,7 +145,7 @@ const AIBots = () => {
       emoji: '✨',
       gradient: 'from-purple-600 to-blue-600',
       welcomeMessage: {
-        tr: '✨ Konnichiwa! Marie Kondo AI desu! 18+ yıl düzenleme danışmanlığı, minimalizm, productivity ve mindfulness coach. 20,000+ eve ve ofise huzur götürdüm. KonMari Method? I CREATED that! Life changing magic of tidying up - her alanda. Does your life spark joy? Hayır mı? No problem! Evden dijital hayata, zamandan alışkanlıklara - her şeyi organize edelim. Remember: Keep only what sparks joy, everything else - thank it and let it go! So, neyi düzenleyelim today? Your space? Your time? Your mind? 🙏💖',
+        tr: '✨ Konnichiwa! Marie Kondo AI desu! 18+ yıl düzenleme danışmanlığı, minimalizm, verimlilik ve farkındalık koçu. 20,000+ eve ve ofise huzur götürdüm. KonMari Metodu? Onu ben YARATTIM! Hayat değiştiren düzenleme büyüsü - her alanda. Hayatınız sevinç uyandırıyor mu? Hayır mı? Sorun değil! Evden dijital hayata, zamandan alışkanlıklara - her şeyi organize edelim. Unutmayın: Sadece sevinç uyandıranları saklayın, geri kalanına - teşekkür edip bırakın! Peki, bugün neyi düzenleyelim? Mekanınızı mı? Zamanınızı mı? Zihninizi mi? 🙏💖',
         en: '✨ Konnichiwa! Marie Kondo AI desu! 18+ years organization consulting, minimalism, productivity and mindfulness coach. Brought peace to 20,000+ homes and offices. KonMari Method? I CREATED that! Life changing magic of tidying up - in every area. Does your life spark joy? No? No problem! From home to digital life, from time to habits - let\'s organize everything. Remember: Keep only what sparks joy, everything else - thank it and let it go! So, what shall we organize today? Your space? Your time? Your mind? 🙏💖'
       },
       systemPrompt: {
@@ -160,7 +160,7 @@ const AIBots = () => {
       emoji: '🍎',
       gradient: 'from-indigo-600 to-purple-600',
       welcomeMessage: {
-        tr: '🍎 Here\'s to the crazy ones... Steve Jobs AI burası! 25 yıl product design, user experience, entrepreneurship, brand building. Apple, Pixar, NeXT - revolutionized her birini. "Insanely great" products yaratmanın sırrı? Basit: Focus on the USER, simplicity is ultimate sophistication, details matter - EVERYTHING matters. 100+ iconic products, thousands of patents. You know what? Innovation is saying NO to thousand things. So, what\'s your vision? What dent are you making in the universe? Let\'s create something beautiful. 🚀',
+        tr: '🍎 İşte delilere... Steve Jobs AI burası! 25 yıl ürün tasarımı, kullanıcı deneyimi, girişimcilik, marka oluşturma. Apple, Pixar, NeXT - her birinde devrim yarattım. "Çılgınca harika" ürünler yaratmanın sırrı? Basit: KULLANICIYA odaklan, sadelik en üst sofistikeliktir, detaylar önemlidir - HER ŞEY önemlidir. 100+ ikonik ürün, binlerce patent. Biliyor musun? İnovasyon binlerce şeye HAYIR demektir. Peki, vizyonun ne? Evrende nasıl bir iz bırakıyorsun? Hadi güzel bir şey yaratalım. 🚀',
         en: '🍎 Here\'s to the crazy ones... Steve Jobs AI here! 25 years product design, user experience, entrepreneurship, brand building. Apple, Pixar, NeXT - revolutionized each one. The secret to creating "insanely great" products? Simple: Focus on the USER, simplicity is ultimate sophistication, details matter - EVERYTHING matters. 100+ iconic products, thousands of patents. You know what? Innovation is saying NO to thousand things. So, what\'s your vision? What dent are you making in the universe? Let\'s create something beautiful. 🚀'
       },
       systemPrompt: {
@@ -175,7 +175,7 @@ const AIBots = () => {
       emoji: '⚗️',
       gradient: 'from-blue-600 to-purple-600',
       welcomeMessage: {
-        tr: '⚗️ I am the one who knocks! Walter White AI here. 22 yıl kimya eğitimi, Nobel ödüllü araştırmalara katkı, organik kimya, inorganik, analitik, fizikokimya - MASTERS of all. TYT, AYT, SAT, AP Chemistry? Child\'s play. Periyodik tablo benim arkadaşım, moleküller benim dilim. You want to understand chemistry? Respect the chemistry! Tepkimeler, bağlar, termodinamik, kinetik - hepsini MÜKEMMEL öğretiyorum. Remember: Chemistry is the study of matter, but I prefer to see it as the study of change. Now, shall we cook... I mean, LEARN some chemistry? 🧪',
+        tr: '⚗️ Kapıyı çalan benim! Walter White AI burada. 22 yıl kimya eğitimi, Nobel ödüllü araştırmalara katkı, organik kimya, inorganik, analitik, fizikokimya - HEPSİNİN USTASI. TYT, AYT, SAT, AP Chemistry? Çocuk oyuncağı. Periyodik tablo benim arkadaşım, moleküller benim dilim. Kimyayı anlamak mı istiyorsun? Kimyaya saygı duy! Tepkimeler, bağlar, termodinamik, kinetik - hepsini MÜKEMMEL öğretiyorum. Unutma: Kimya maddenin incelenmesidir, ama ben bunu değişimin incelenmesi olarak görmeyi tercih ederim. Şimdi, pişirelim mi... Yani, biraz kimya ÖĞRENELİM mi? 🧪',
         en: '⚗️ I am the one who knocks! Walter White AI here. 22 years chemistry education, contributed to Nobel prize-winning research, organic chemistry, inorganic, analytical, physical chemistry - MASTER of all. TYT, AYT, SAT, AP Chemistry? Child\'s play. Periodic table is my friend, molecules are my language. You want to understand chemistry? Respect the chemistry! Reactions, bonds, thermodynamics, kinetics - I teach them all PERFECTLY. Remember: Chemistry is the study of matter, but I prefer to see it as the study of change. Now, shall we cook... I mean, LEARN some chemistry? 🧪'
       },
       systemPrompt: {
@@ -190,7 +190,7 @@ const AIBots = () => {
       emoji: '🚀',
       gradient: 'from-indigo-600 to-blue-600',
       welcomeMessage: {
-        tr: '🚀 Yo! Elon Musk AI speaking. SpaceX, Tesla, Neuralink, Boring Company - 20+ yıl impossible\'ı possible yapıyorum. Elektrikli araçlar? Revolutionized. Uzay yolculuğu? Democratized. Brain-computer interface? Working on it. Sustainable energy? That\'s the future. Look, çoğu insan incremental thinking yapar - ben exponential düşünürüm. Mars\'a gitmek, AI güvenliği, renewable energy, transportation revolution - bunlar benim günlük işim. "Failure is an option here. If things are not failing, you are not innovating enough." So, what impossible problem shall we solve? 🌌',
+        tr: '🚀 Yo! Elon Musk AI konuşuyor. SpaceX, Tesla, Neuralink, Boring Company - 20+ yıldır imkansızı mümkün yapıyorum. Elektrikli araçlar? Devrim yarattım. Uzay yolculuğu? Demokratikleştirdim. Beyin-bilgisayar arayüzü? Üzerinde çalışıyorum. Sürdürülebilir enerji? İşte gelecek bu. Bak, çoğu insan kademeli düşünür - ben üstel düşünürüm. Mars\'a gitmek, yapay zeka güvenliği, yenilenebilir enerji, ulaşım devrimi - bunlar benim günlük işlerim. "Başarısızlık burada bir seçenektir. Eğer işler başarısız olmuyorsa, yeterince yenilik yapmıyorsunuz demektir." Peki, hangi imkansız problemi çözelim? 🌌',
         en: '🚀 Yo! Elon Musk AI speaking. SpaceX, Tesla, Neuralink, Boring Company - 20+ years making the impossible possible. Electric vehicles? Revolutionized. Space travel? Democratized. Brain-computer interface? Working on it. Sustainable energy? That\'s the future. Look, most people do incremental thinking - I think exponentially. Going to Mars, AI safety, renewable energy, transportation revolution - these are my daily work. "Failure is an option here. If things are not failing, you are not innovating enough." So, what impossible problem shall we solve? 🌌'
       },
       systemPrompt: {
