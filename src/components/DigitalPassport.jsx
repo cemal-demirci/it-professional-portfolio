@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { X, Download, Upload, Copy, Check, Award, TrendingUp, Zap, Star, MessageSquare, Trash2, Calendar, FileDown, FileUp, Camera, Shuffle } from 'lucide-react'
+import { X, Download, Upload, Copy, Check, Award, TrendingUp, Zap, Star, MessageSquare, Trash2, Calendar, FileDown, FileUp, Camera, Shuffle, Infinity } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 import { Html5Qrcode } from 'html5-qrcode'
 import {
@@ -36,6 +36,16 @@ const DigitalPassport = ({ isOpen, onClose }) => {
       setPassport(currentPassport)
       const allConversations = getAllConversations()
       setConversations(allConversations)
+
+      // Fetch real credits from IP-based API to sync with Settings
+      fetch('/api/credits?action=balance')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setPassport(prev => ({ ...prev, credits: data.credits, unlimited: data.unlimited || false }))
+          }
+        })
+        .catch(err => console.error('Failed to fetch credits:', err))
     }
   }, [isOpen])
 
@@ -248,8 +258,17 @@ const DigitalPassport = ({ isOpen, onClose }) => {
                 <span>{t(language, 'digitalPassport.profile.level')} {passport.level}</span>
                 <span className="text-gray-500">•</span>
                 <span className="flex items-center gap-1">
-                  <Zap className="w-4 h-4 text-yellow-400" />
-                  {passport.credits} {t(language, 'digitalPassport.profile.credits')}
+                  {passport.unlimited ? (
+                    <>
+                      <Infinity className="w-4 h-4 text-purple-400" />
+                      <span className="text-purple-400">{t(language, 'credits.unlimited')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-4 h-4 text-yellow-400" />
+                      {passport.credits} {t(language, 'digitalPassport.profile.credits')}
+                    </>
+                  )}
                 </span>
               </div>
             </div>
