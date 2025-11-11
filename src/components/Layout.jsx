@@ -91,12 +91,12 @@ const Layout = ({ children }) => {
     <div className={`min-h-screen relative overflow-hidden ${
       rainbowMode
         ? 'bg-black'
-        : 'bg-gradient-to-br from-gray-950 via-blue-950 to-purple-950'
+        : 'bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900'
     }`}>
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
 
       {/* Rainbow Mode Fabulous Message */}
