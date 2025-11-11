@@ -9,6 +9,7 @@ import Tools from './pages/Tools'
 import Admin from './pages/Admin'
 import Settings from './pages/Settings'
 import ZeroDensity from './pages/ZeroDensity'
+import NotFound from './pages/NotFound'
 import ZeroDensityAuth from './components/ZeroDensityAuth'
 import RainbowModeToolBlocker from './components/RainbowModeToolBlocker'
 
@@ -254,6 +255,9 @@ function AppContent() {
 
           {/* macOS Tools */}
           <Route path="/tools/macos-assistant" element={<MacOsAssistant />} />
+
+          {/* 404 Catch-all - MUST BE LAST */}
+          <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
   )

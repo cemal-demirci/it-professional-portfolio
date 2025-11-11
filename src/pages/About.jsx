@@ -1,4 +1,4 @@
-import { Mail, Github, Linkedin, Download, Award, Briefcase, GraduationCap, Send, CheckCircle, Sparkles } from 'lucide-react'
+import { Mail, Github, Linkedin, Download, Award, Briefcase, GraduationCap, Send, CheckCircle, Sparkles, Building2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -682,6 +682,38 @@ const About = () => {
           <p className="text-center text-lg text-white font-semibold">
             💡 {t(language, 'about.services.cta')}
           </p>
+        </div>
+      </div>
+
+      {/* Worked With Section */}
+      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-indigo-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '165ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 bg-gradient-to-r from-white via-indigo-50 to-purple-100 bg-clip-text text-transparent">
+          <Building2 className="w-8 h-8 text-indigo-400 animate-pulse" />
+          <span>
+            {t(language, 'about.workedWith.title')}
+          </span>
+        </h2>
+        <p className="relative text-blue-100/70 mb-8 text-lg italic">
+          {t(language, 'about.workedWith.subtitle')}
+        </p>
+
+        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white/5 backdrop-blur-xl border-l-4 border-blue-500 rounded-xl p-6 hover:bg-white/10 transition-all">
+            <h3 className="text-xl font-bold text-white mb-2">{t(language, 'about.workedWith.zeroDensity.title')}</h3>
+            <p className="text-blue-100/70 text-sm">{t(language, 'about.workedWith.zeroDensity.description')}</p>
+          </div>
+          <div className="bg-white/5 backdrop-blur-xl border-l-4 border-indigo-500 rounded-xl p-6 hover:bg-white/10 transition-all">
+            <h3 className="text-xl font-bold text-white mb-2">{t(language, 'about.workedWith.iso42001.title')}</h3>
+            <p className="text-blue-100/70 text-sm">{t(language, 'about.workedWith.iso42001.description')}</p>
+          </div>
+          <div className="bg-white/5 backdrop-blur-xl border-l-4 border-purple-500 rounded-xl p-6 hover:bg-white/10 transition-all">
+            <h3 className="text-xl font-bold text-white mb-2">{t(language, 'about.workedWith.acunmedya.title')}</h3>
+            <p className="text-blue-100/70 text-sm">{t(language, 'about.workedWith.acunmedya.description')}</p>
+          </div>
+          <div className="bg-white/5 backdrop-blur-xl border-l-4 border-pink-500 rounded-xl p-6 hover:bg-white/10 transition-all">
+            <h3 className="text-xl font-bold text-white mb-2">{t(language, 'about.workedWith.openSource.title')}</h3>
+            <p className="text-blue-100/70 text-sm">{t(language, 'about.workedWith.openSource.description')}</p>
+          </div>
         </div>
       </div>
 

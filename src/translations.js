@@ -595,6 +595,28 @@ export const translations = {
         cta: 'Feel free to contact me for collaborations, consulting, and projects!'
       },
 
+      // Worked With Section
+      workedWith: {
+        title: 'Worked With (and Survived)',
+        subtitle: 'Companies and projects I\'ve worked with – systems still running, sanity questionable',
+        zeroDensity: {
+          title: 'Zero Density',
+          description: 'Virtual production and broadcast systems IT infrastructure. Systems still up, I\'m still sane (mostly).'
+        },
+        iso42001: {
+          title: 'ISO 42001 Lead Auditor',
+          description: 'AI governance and compliance. Preventing AIs from world domination, one audit at a time.'
+        },
+        acunmedya: {
+          title: 'ACUNMEDYA Broadcast',
+          description: 'Survivor, Exatlon, UEFA Champions League – live broadcast server management. Adrenaline was free.'
+        },
+        openSource: {
+          title: 'Open Source Community',
+          description: 'This site + dozens of tools are open source. Sharing is caring, drowning in ads is not.'
+        }
+      },
+
       // Professional Services Section
       services: {
         title: 'Professional Services',
@@ -1408,6 +1430,28 @@ export const translations = {
         description4: 'Proxmox cluster\'ları kurdum, Active Directory\'leri yönettim, firewall\'ları configure ettim. PowerShell scriptleri yazarken şarkı söylerim. Kahve tüketimim endüstriyel seviyede.',
         description5: 'Bu site? Gece 3\'te "böyle bir şey olsa güzel olurdu" dediğim araçların koleksiyonu. Hepsi bedava, çünkü ben Google değilim.',
         cta: 'İş birlikleri, danışmanlık ve projeler için benimle iletişime geçebilirsiniz!'
+      },
+
+      // Worked With Section
+      workedWith: {
+        title: 'Beraber Çalıştıklarım (ve Hayatta Kalanlar)',
+        subtitle: 'Çalıştığım şirketler ve projeler – sistemler hala ayakta, ben de hala aklımda (çoğunlukla)',
+        zeroDensity: {
+          title: 'Zero Density',
+          description: 'Virtual production ve broadcast sistemleri için IT infrastructure. Sistemler hala ayakta, ben de hala aklımda (çoğunlukla).'
+        },
+        iso42001: {
+          title: 'ISO 42001 Lead Auditor',
+          description: 'AI governance ve compliance. AI\'ların dünyayı ele geçirmesini engellemek için sertifikalıyım.'
+        },
+        acunmedya: {
+          title: 'ACUNMEDYA Broadcast',
+          description: 'Survivor, Exatlon, UEFA Champions League – canlı yayınlarda server yönetimi. Adrenalin bedavaydı.'
+        },
+        openSource: {
+          title: 'Open Source Topluluğu',
+          description: 'Bu site dahil onlarca tool açık kaynak. Paylaşmak güzeldir, reklamlarla boğmak değil.'
+        }
       },
 
       // Professional Services Section

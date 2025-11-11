@@ -79,11 +79,12 @@ const Home = () => {
       return
     }
 
-    // Faster boot sequence for better performance
+    // Faster boot sequence for better performance (4 messages)
     const bootSequence = [
       { text: `> ${t(language, 'home.boot.init')} 🚀`, delay: 50 },
       { text: `> ✓ ${t(language, 'home.boot.toolsReady')}`, delay: 200 },
-      { text: `> ${t(language, 'home.boot.welcomeAboard')} 🎯`, delay: 350 },
+      { text: `> ✓ ${t(language, 'home.boot.botsAwake')}`, delay: 350 },
+      { text: `> ${t(language, 'home.boot.welcomeAboard')}`, delay: 500 },
     ]
 
     bootSequence.forEach(({ text, delay }) => {
@@ -92,14 +93,14 @@ const Home = () => {
       }, delay)
     })
 
-    // Much faster completion - 600ms total (was 2100ms)
+    // Completion at 650ms total
     setTimeout(() => {
       setBootComplete(true)
       sessionStorage.setItem('cemal_booted', 'true') // Mark as booted
       setTimeout(() => setShowContent(true), 100)
       setTimeout(() => setIsVisible(true), 150)
-    }, 500)
-  }, [language])
+    }, 650)
+  }, []) // Empty dependency - only run once on mount
 
   const features = [
     {
@@ -254,9 +255,9 @@ const Home = () => {
         <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center pt-8 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
           <Link
             to="/tools"
-            className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl font-bold text-lg shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1 overflow-hidden"
+            className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold text-lg shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1 overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <Rocket className="w-6 h-6 relative z-10 group-hover:rotate-12 transition-transform" />
             <span className="relative z-10">{t(language, 'home.hero.exploreTools')}</span>
             <ArrowRight className="w-6 h-6 relative z-10 group-hover:translate-x-2 transition-transform" />
