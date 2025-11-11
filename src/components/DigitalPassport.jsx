@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react'
-import { X, Download, Upload, Copy, Check, Award, TrendingUp, Zap, Star, MessageSquare, Trash2, Calendar } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { X, Download, Upload, Copy, Check, Award, TrendingUp, Zap, Star, MessageSquare, Trash2, Calendar, FileDown, FileUp, Camera, Shuffle } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
+import { Html5Qrcode } from 'html5-qrcode'
 import {
   getOrCreatePassport,
   importPassport,
   generateRecoveryPhrase,
   getAllConversations,
   deleteConversation,
+  exportPassportToFile,
+  importPassportFromFile,
+  regenerateUsername,
   ACHIEVEMENTS
 } from '../utils/digitalPassport'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -21,6 +25,10 @@ const DigitalPassport = ({ isOpen, onClose }) => {
   const [copiedPhrase, setCopiedPhrase] = useState(false)
   const [activeTab, setActiveTab] = useState('overview') // overview, achievements, stats, conversations
   const [conversations, setConversations] = useState([])
+  const [showQRScanner, setShowQRScanner] = useState(false)
+  const [scannerError, setScannerError] = useState(null)
+  const fileInputRef = useRef(null)
+  const qrScannerRef = useRef(null)
 
   useEffect(() => {
     if (isOpen) {
@@ -66,6 +74,97 @@ const DigitalPassport = ({ isOpen, onClose }) => {
       setConversations(allConversations)
     }
   }
+
+  const handleExportCML = () => {
+    const success = exportPassportToFile()
+    if (!success) {
+      alert('Failed to export passport')
+    }
+  }
+
+  const handleImportCML = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    try {
+      const imported = await importPassportFromFile(file)
+      setPassport(imported)
+      setShowImport(false)
+      alert(language === 'tr' ? 'Passport başarıyla içe aktarıldı!' : 'Passport imported successfully!')
+    } catch (error) {
+      alert(error.message)
+    }
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const handleRegenerateUsername = () => {
+    const updated = regenerateUsername()
+    if (updated) {
+      setPassport(updated)
+    }
+  }
+
+  const handleStartQRScanner = async () => {
+    setShowQRScanner(true)
+    setScannerError(null)
+
+    try {
+      const scanner = new Html5Qrcode('qr-scanner')
+      qrScannerRef.current = scanner
+
+      await scanner.start(
+        { facingMode: 'environment' },
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 }
+        },
+        (decodedText) => {
+          // QR code successfully scanned
+          handleStopQRScanner()
+          const imported = importPassport(decodedText)
+          if (imported) {
+            setPassport(imported)
+            setShowImport(false)
+            alert(language === 'tr' ? 'Passport başarıyla içe aktarıldı!' : 'Passport imported successfully!')
+          } else {
+            alert(language === 'tr' ? 'Geçersiz QR kodu' : 'Invalid QR code')
+          }
+        }
+      )
+    } catch (error) {
+      console.error('QR Scanner error:', error)
+      setScannerError(error.message || 'Failed to start camera')
+      setShowQRScanner(false)
+    }
+  }
+
+  const handleStopQRScanner = async () => {
+    if (qrScannerRef.current) {
+      try {
+        await qrScannerRef.current.stop()
+        qrScannerRef.current = null
+      } catch (error) {
+        console.error('Error stopping scanner:', error)
+      }
+    }
+    setShowQRScanner(false)
+    setScannerError(null)
+  }
+
+  // Cleanup QR scanner on unmount or modal close
+  useEffect(() => {
+    if (!isOpen && qrScannerRef.current) {
+      handleStopQRScanner()
+    }
+  }, [isOpen])
 
   const handleDownloadQR = () => {
     const svg = document.getElementById('passport-qr')
@@ -133,8 +232,17 @@ const DigitalPassport = ({ isOpen, onClose }) => {
             </div>
 
             {/* Username & Level */}
-            <div>
-              <h2 className="text-2xl font-bold text-white">{passport.username}</h2>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-white">{passport.username}</h2>
+                <button
+                  onClick={handleRegenerateUsername}
+                  className="p-1.5 hover:bg-white/10 rounded-lg transition-colors group"
+                  title={language === 'tr' ? 'Kullanıcı adını yenile' : 'Regenerate username'}
+                >
+                  <Shuffle className="w-4 h-4 text-gray-400 group-hover:text-white" />
+                </button>
+              </div>
               <div className="flex items-center gap-2 text-sm text-gray-300">
                 <Star className="w-4 h-4" style={{ color: passport.avatarColor.accent }} />
                 <span>{t(language, 'digitalPassport.profile.level')} {passport.level}</span>
@@ -264,20 +372,30 @@ const DigitalPassport = ({ isOpen, onClose }) => {
                       </div>
                     </div>
 
-                    <button
-                      onClick={handleDownloadQR}
-                      className="w-full px-4 py-3 rounded-xl font-medium text-white transition-all duration-300 hover:scale-105"
-                      style={{
-                        background: `linear-gradient(135deg, ${passport.avatarColor.primary}, ${passport.avatarColor.secondary})`
-                      }}
-                    >
-                      <Download className="w-4 h-4 inline mr-2" />
-                      {t(language, 'digitalPassport.profile.downloadQR')}
-                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={handleDownloadQR}
+                        className="px-4 py-2.5 rounded-xl font-medium text-white transition-all duration-300 hover:scale-105 text-sm"
+                        style={{
+                          background: `linear-gradient(135deg, ${passport.avatarColor.primary}, ${passport.avatarColor.secondary})`
+                        }}
+                      >
+                        <Download className="w-4 h-4 inline mr-1" />
+                        {language === 'tr' ? 'QR İndir' : 'Download QR'}
+                      </button>
+
+                      <button
+                        onClick={handleExportCML}
+                        className="px-4 py-2.5 rounded-xl font-medium text-white transition-all duration-300 hover:scale-105 text-sm bg-gradient-to-r from-green-600 to-emerald-600"
+                      >
+                        <FileDown className="w-4 h-4 inline mr-1" />
+                        {language === 'tr' ? '.cml İndir' : 'Export .cml'}
+                      </button>
+                    </div>
 
                     <button
                       onClick={() => setShowImport(!showImport)}
-                      className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-medium text-white transition-all"
+                      className="w-full px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-medium text-white transition-all text-sm"
                     >
                       <Upload className="w-4 h-4 inline mr-2" />
                       {t(language, 'digitalPassport.profile.importPassport')}
@@ -285,28 +403,76 @@ const DigitalPassport = ({ isOpen, onClose }) => {
                   </div>
                 </div>
 
+                {/* Hidden file input for .cml import */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".cml"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+
                 {/* Import Section */}
                 {showImport && (
-                  <div className="mt-6 pt-6 border-t border-white/10">
-                    <label className="text-gray-400 text-sm mb-2 block">{t(language, 'digitalPassport.profile.enterPassportId')}</label>
+                  <div className="mt-6 pt-6 border-t border-white/10 space-y-4">
+                    {/* UUID Import */}
+                    <div>
+                      <label className="text-gray-400 text-sm mb-2 block">
+                        {t(language, 'digitalPassport.profile.enterPassportId')}
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={importCode}
+                          onChange={(e) => setImportCode(e.target.value)}
+                          placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                          className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-white/40 text-sm"
+                        />
+                        <button
+                          onClick={handleImport}
+                          className="px-6 py-2 rounded-xl font-medium text-white text-sm"
+                          style={{
+                            background: `linear-gradient(135deg, ${passport.avatarColor.primary}, ${passport.avatarColor.secondary})`
+                          }}
+                        >
+                          {t(language, 'digitalPassport.profile.import')}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* File & QR Import */}
                     <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={importCode}
-                        onChange={(e) => setImportCode(e.target.value)}
-                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                        className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-white/40"
-                      />
                       <button
-                        onClick={handleImport}
-                        className="px-6 py-2 rounded-xl font-medium text-white"
-                        style={{
-                          background: `linear-gradient(135deg, ${passport.avatarColor.primary}, ${passport.avatarColor.secondary})`
-                        }}
+                        onClick={handleImportCML}
+                        className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl font-medium text-white transition-all text-sm"
                       >
-                        {t(language, 'digitalPassport.profile.import')}
+                        <FileUp className="w-4 h-4 inline mr-2" />
+                        {language === 'tr' ? '.cml Dosya Yükle' : 'Upload .cml File'}
+                      </button>
+
+                      <button
+                        onClick={showQRScanner ? handleStopQRScanner : handleStartQRScanner}
+                        className="flex-1 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-medium text-white transition-all text-sm"
+                      >
+                        <Camera className="w-4 h-4 inline mr-2" />
+                        {showQRScanner
+                          ? (language === 'tr' ? 'Kamerayı Kapat' : 'Stop Camera')
+                          : (language === 'tr' ? 'QR Kodu Tara' : 'Scan QR Code')
+                        }
                       </button>
                     </div>
+
+                    {/* QR Scanner */}
+                    {showQRScanner && (
+                      <div className="bg-black rounded-xl overflow-hidden">
+                        <div id="qr-scanner" className="w-full"></div>
+                        {scannerError && (
+                          <div className="p-4 text-center text-red-400 text-sm">
+                            {language === 'tr' ? 'Kamera hatası: ' : 'Camera error: '}{scannerError}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

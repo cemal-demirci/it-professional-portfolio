@@ -5,27 +5,32 @@ export const generatePassportId = () => {
   return uuidv4()
 }
 
-// Generate AI-style username from ID
-export const generateUsername = (passportId) => {
+// Generate funny random username from ID
+export const generateUsername = (passportId, customSeed = null) => {
   const adjectives = [
-    'Cyber', 'Quantum', 'Digital', 'Neon', 'Phantom', 'Shadow', 'Electric', 'Cosmic',
-    'Neural', 'Binary', 'Matrix', 'Crypto', 'Virtual', 'Pixel', 'Data', 'Cloud',
-    'Sonic', 'Turbo', 'Ultra', 'Mega', 'Hyper', 'Super', 'Dark', 'Bright'
+    // Komik sıfatlar
+    'Dans Eden', 'Uçan', 'Yüzen', 'Zıplayan', 'Koşan', 'Dönen', 'Parlayan', 'Gülen',
+    'Şaşkın', 'Neşeli', 'Tembel', 'Hızlı', 'Yavaş', 'Komik', 'Garip', 'Şirin',
+    'Kocaman', 'Minik', 'Sevimli', 'Karizmatik', 'Efsane', 'Süper', 'Mega', 'Ultra'
   ]
 
   const nouns = [
-    'Ninja', 'Dragon', 'Phoenix', 'Wolf', 'Tiger', 'Falcon', 'Eagle', 'Hawk',
-    'Warrior', 'Knight', 'Samurai', 'Wizard', 'Mage', 'Hunter', 'Rider', 'Seeker',
-    'Dreamer', 'Hacker', 'Coder', 'Genius', 'Master', 'Legend', 'Hero', 'Ghost'
+    // Komik isimler
+    'Patates', 'Domates', 'Limon', 'Muz', 'Elma', 'Pizza', 'Börek', 'Tost',
+    'Panda', 'Koala', 'Penguen', 'Kedi', 'Köpek', 'Tavşan', 'Sincap', 'Kuş',
+    'Robot', 'Roket', 'Yıldız', 'Bulut', 'Şimşek', 'Gökkuşağı', 'Ay', 'Güneş'
   ]
 
-  // Use passport ID to deterministically pick adjective and noun
+  // Use passport ID + custom seed to deterministically pick adjective and noun
   const idHash = passportId.split('-').join('')
-  const adjIndex = parseInt(idHash.substring(0, 8), 16) % adjectives.length
-  const nounIndex = parseInt(idHash.substring(8, 16), 16) % nouns.length
-  const suffix = idHash.substring(16, 20).toUpperCase()
+  const seed = customSeed !== null ? customSeed.toString() : ''
+  const combinedHash = idHash + seed
 
-  return `${adjectives[adjIndex]}${nouns[nounIndex]}#${suffix}`
+  const adjIndex = parseInt(combinedHash.substring(0, 8), 16) % adjectives.length
+  const nounIndex = parseInt(combinedHash.substring(8, 16), 16) % nouns.length
+  const suffix = combinedHash.substring(16, 20).toUpperCase()
+
+  return `${adjectives[adjIndex]} ${nouns[nounIndex]}#${suffix}`
 }
 
 // Generate deterministic avatar color from ID
@@ -73,9 +78,11 @@ export const loadPassport = () => {
 // Create new passport
 export const createPassport = () => {
   const id = generatePassportId()
+  const usernameSeed = null // No custom seed for new passports
   const passport = {
     id,
-    username: generateUsername(id),
+    username: generateUsername(id, usernameSeed),
+    usernameSeed, // Store seed for consistency
     avatarColor: generateAvatarColor(id),
     avatarPattern: generateAvatarPattern(id),
     credits: 15, // Starting credits
@@ -95,7 +102,7 @@ export const createPassport = () => {
   return passport
 }
 
-// Import passport from code
+// Import passport from code (UUID only)
 export const importPassport = (passportId) => {
   try {
     // Validate UUID format
@@ -104,9 +111,11 @@ export const importPassport = (passportId) => {
       throw new Error('Invalid passport format')
     }
 
+    const usernameSeed = null
     const passport = {
       id: passportId,
-      username: generateUsername(passportId),
+      username: generateUsername(passportId, usernameSeed),
+      usernameSeed,
       avatarColor: generateAvatarColor(passportId),
       avatarPattern: generateAvatarPattern(passportId),
       credits: 15, // Reset credits for imported passport
@@ -133,7 +142,17 @@ export const importPassport = (passportId) => {
 // Get or create passport
 export const getOrCreatePassport = () => {
   const existing = loadPassport()
-  if (existing) return existing
+  if (existing) {
+    // If passport exists but doesn't have usernameSeed property, add it
+    if (!existing.hasOwnProperty('usernameSeed')) {
+      existing.usernameSeed = null
+    }
+    // Regenerate username with stored seed to ensure consistency
+    if (existing.usernameSeed !== undefined) {
+      existing.username = generateUsername(existing.id, existing.usernameSeed)
+    }
+    return existing
+  }
   return createPassport()
 }
 
@@ -365,6 +384,99 @@ export const clearBotConversations = (botId) => {
   if (passport.conversations[botId]) {
     delete passport.conversations[botId]
   }
+
+  savePassport(passport)
+  return passport
+}
+
+// Export passport to .cml file (client-side only, no server storage)
+export const exportPassportToFile = () => {
+  const passport = loadPassport()
+  if (!passport) return null
+
+  // Create file content with metadata
+  const fileData = {
+    version: '1.0',
+    type: 'cemal_license',
+    exportDate: new Date().toISOString(),
+    passport: passport
+  }
+
+  // Convert to JSON string
+  const jsonString = JSON.stringify(fileData, null, 2)
+
+  // Create blob
+  const blob = new Blob([jsonString], { type: 'application/json' })
+
+  // Create download link
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `cemal-passport-${passport.username.replace(/[^a-zA-Z0-9]/g, '_')}.cml`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+
+  return true
+}
+
+// Import passport from .cml file
+export const importPassportFromFile = (file) => {
+  return new Promise((resolve, reject) => {
+    // Check file extension
+    if (!file.name.endsWith('.cml')) {
+      reject(new Error('Invalid file type. Please select a .cml file'))
+      return
+    }
+
+    const reader = new FileReader()
+
+    reader.onload = (event) => {
+      try {
+        const fileData = JSON.parse(event.target.result)
+
+        // Validate file format
+        if (fileData.type !== 'cemal_license' || !fileData.passport) {
+          reject(new Error('Invalid .cml file format'))
+          return
+        }
+
+        // Validate passport data
+        const importedPassport = fileData.passport
+        if (!importedPassport.id || !importedPassport.username) {
+          reject(new Error('Invalid passport data'))
+          return
+        }
+
+        // Save imported passport
+        savePassport(importedPassport)
+        resolve(importedPassport)
+      } catch (error) {
+        reject(new Error('Failed to read .cml file'))
+      }
+    }
+
+    reader.onerror = () => {
+      reject(new Error('Failed to read file'))
+    }
+
+    reader.readAsText(file)
+  })
+}
+
+// Regenerate username with new seed
+export const regenerateUsername = () => {
+  const passport = loadPassport()
+  if (!passport) return null
+
+  // Generate new seed based on current timestamp
+  const newSeed = Date.now()
+  const newUsername = generateUsername(passport.id, newSeed)
+
+  passport.username = newUsername
+  // Store the seed so username stays consistent
+  passport.usernameSeed = newSeed
 
   savePassport(passport)
   return passport
