@@ -1,13 +1,22 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Code, Shield, FileText, Palette, Network, Wrench, Monitor, Sparkles, Zap, Rocket, GraduationCap, BookOpen, MessageSquare, Share2, Globe, Lock, Infinity, Terminal, Binary } from 'lucide-react'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, lazy, Suspense } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useRainbow } from '../contexts/RainbowContext'
 import { t } from '../translations'
-import ServiceStatus from '../components/ServiceStatus'
-import QuickSpeedTest from '../components/QuickSpeedTest'
 import RainbowModeToolBlocker from '../components/RainbowModeToolBlocker'
 import CemalLogo from '../components/CemalLogo'
+
+// Lazy load heavy components for better performance
+const ServiceStatus = lazy(() => import('../components/ServiceStatus'))
+const QuickSpeedTest = lazy(() => import('../components/QuickSpeedTest'))
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center py-8">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+  </div>
+)
 
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -58,7 +67,7 @@ const Home = () => {
     return () => clearInterval(interval)
   }, [])
 
-  // Terminal Boot Sequence - Only once per session
+  // Terminal Boot Sequence - Fast & lightweight version
   useEffect(() => {
     const hasBooted = sessionStorage.getItem('cemal_booted')
 
@@ -70,12 +79,11 @@ const Home = () => {
       return
     }
 
+    // Faster boot sequence for better performance
     const bootSequence = [
-      { text: `> ${t(language, 'home.boot.init')} 🚀`, delay: 100 },
-      { text: `> ${t(language, 'home.boot.hackingNasa')} 😄`, delay: 400 },
-      { text: `> ✓ ${t(language, 'home.boot.toolsReady')}`, delay: 700 },
-      { text: `> ✓ ${t(language, 'home.boot.botsAwake')}`, delay: 900 },
-      { text: `> ${t(language, 'home.boot.welcomeAboard')} 🎯`, delay: 1100 },
+      { text: `> ${t(language, 'home.boot.init')} 🚀`, delay: 50 },
+      { text: `> ✓ ${t(language, 'home.boot.toolsReady')}`, delay: 200 },
+      { text: `> ${t(language, 'home.boot.welcomeAboard')} 🎯`, delay: 350 },
     ]
 
     bootSequence.forEach(({ text, delay }) => {
@@ -84,12 +92,13 @@ const Home = () => {
       }, delay)
     })
 
+    // Much faster completion - 600ms total (was 2100ms)
     setTimeout(() => {
       setBootComplete(true)
       sessionStorage.setItem('cemal_booted', 'true') // Mark as booted
-      setTimeout(() => setShowContent(true), 300)
-      setTimeout(() => setIsVisible(true), 500)
-    }, 1300)
+      setTimeout(() => setShowContent(true), 100)
+      setTimeout(() => setIsVisible(true), 150)
+    }, 500)
   }, [language])
 
   const features = [
@@ -590,8 +599,10 @@ const Home = () => {
 
       {/* Service Status & Speed Test */}
       <div className={`max-w-7xl mx-auto px-4 space-y-6 pb-12 transition-all duration-1000 delay-1200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ zIndex: 2, position: 'relative' }}>
-        <ServiceStatus />
-        <QuickSpeedTest />
+        <Suspense fallback={<LoadingFallback />}>
+          <ServiceStatus />
+          <QuickSpeedTest />
+        </Suspense>
       </div>
 
       <style jsx>{`
