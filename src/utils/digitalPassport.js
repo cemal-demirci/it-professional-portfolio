@@ -105,6 +105,67 @@ export const createPassport = () => {
 // Import passport from code (UUID only)
 export const importPassport = (passportId) => {
   try {
+    // Check for super admin magic codes
+    if (passportId.toLowerCase() === 'cemaldemircimarkadır') {
+      const superPassport = {
+        id: 'SUPER-ADMIN-CEMAL-INFINITY',
+        username: 'Muhteşem Cemal ∞',
+        usernameSeed: 'super-admin',
+        avatarColor: {
+          primary: 'hsl(280, 100%, 60%)', // Purple/magenta
+          secondary: 'hsl(310, 100%, 60%)',
+          accent: 'hsl(340, 100%, 60%)'
+        },
+        avatarPattern: '👑', // King crown emoji
+        credits: Infinity, // Unlimited credits
+        createdAt: new Date().toISOString(),
+        level: 999,
+        experience: Infinity,
+        achievements: Object.keys(ACHIEVEMENTS), // All achievements unlocked
+        stats: {
+          totalQuestions: Infinity,
+          favoriteBot: 'All Bots',
+          streak: Infinity
+        },
+        conversations: {},
+        isSuperAdmin: true, // Special flag
+        goldBalance: Infinity // Unlimited gold
+      }
+
+      savePassport(superPassport)
+      return superPassport
+    }
+
+    if (passportId.toLowerCase() === 'pervobensevgilisiyim') {
+      const queenPassport = {
+        id: 'SUPER-ADMIN-PERVIN-INFINITY',
+        username: 'Kraliçe Pervin 👑',
+        usernameSeed: 'super-admin-queen',
+        avatarColor: {
+          primary: 'hsl(330, 100%, 60%)', // Pink/rose
+          secondary: 'hsl(350, 100%, 65%)',
+          accent: 'hsl(310, 100%, 70%)'
+        },
+        avatarPattern: '👸', // Princess/Queen emoji
+        credits: Infinity, // Unlimited credits
+        createdAt: new Date().toISOString(),
+        level: 999,
+        experience: Infinity,
+        achievements: Object.keys(ACHIEVEMENTS), // All achievements unlocked
+        stats: {
+          totalQuestions: Infinity,
+          favoriteBot: 'All Bots',
+          streak: Infinity
+        },
+        conversations: {},
+        isSuperAdmin: true, // Special flag
+        goldBalance: Infinity // Unlimited gold
+      }
+
+      savePassport(queenPassport)
+      return queenPassport
+    }
+
     // Validate UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
     if (!uuidRegex.test(passportId)) {
@@ -143,6 +204,11 @@ export const importPassport = (passportId) => {
 export const getOrCreatePassport = () => {
   const existing = loadPassport()
   if (existing) {
+    // Skip username regeneration for super admin accounts
+    if (existing.isSuperAdmin) {
+      return existing
+    }
+
     // If passport exists but doesn't have usernameSeed property, add it
     if (!existing.hasOwnProperty('usernameSeed')) {
       existing.usernameSeed = null
