@@ -207,7 +207,7 @@ You don't just answer questions - you paint them with words.`
         })
       }
 
-      const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyBHrH4iiVSkQXsIOGpYOb97nYlih8n12CE', {
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBHrH4iiVSkQXsIOGpYOb97nYlih8n12CE', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
