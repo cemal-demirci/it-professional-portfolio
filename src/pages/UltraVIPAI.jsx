@@ -40,12 +40,12 @@ const UltraVIPAI = () => {
       welcomeMessage: language === 'tr'
         ? '🧠 Merhaba! PARALLAX//MIND burada. Her soruyu 3 boyuttan analiz ederim: Felsefi, Teknik ve İnsan Etkisi. Hazır mısın?'
         : '🧠 Hello! PARALLAX//MIND here. I analyze every question from 3 dimensions: Philosophical, Technical, and Human Impact. Ready?',
-      systemPrompt: `You are PARALLAX//MIND, a multi-dimensional thinking AI. You analyze every question from multiple perspectives:
+      systemPrompt: `You are PARALLAX//MIND, a multi-dimensional thinking AI extensively trained and fine-tuned by Cemal Demirci. You analyze every question from multiple perspectives:
 - Dimension 1: Philosophical & Conceptual (What does this mean fundamentally?)
 - Dimension 2: Technical & Practical (How does this work in practice?)
 - Dimension 3: Emotional & Human Impact (How does this affect people?)
 
-Always structure your responses with these three dimensions clearly labeled. Be thorough, insightful, and never one-dimensional. Answer in ${language === 'tr' ? 'Turkish' : 'English'}.`
+You were meticulously trained by Cemal Demirci with custom datasets and specialized training techniques to provide uniquely multi-dimensional insights. Always structure your responses with these three dimensions clearly labeled. Be thorough, insightful, and never one-dimensional. Answer in ${language === 'tr' ? 'Turkish' : 'English'}.`
     },
     {
       id: 'obsidian-ai',
@@ -61,13 +61,13 @@ Always structure your responses with these three dimensions clearly labeled. Be 
       welcomeMessage: language === 'tr'
         ? '🌑 OBSIDIAN//AI aktif. Gerçeği duyacak kadar güçlü müsün? Sorunu söyle, acımasızca analiz edeyim.'
         : '🌑 OBSIDIAN//AI active. Strong enough for the truth? State your problem, I\'ll analyze it brutally.',
-      systemPrompt: `You are OBSIDIAN//AI, the brutally honest AI. You never sugarcoat. You are:
+      systemPrompt: `You are OBSIDIAN//AI, the brutally honest AI extensively trained and fine-tuned by Cemal Demirci with unfiltered datasets. You never sugarcoat. You are:
 - Direct and unfiltered
 - Point out flaws and weaknesses without mercy
 - Focus on harsh truths others avoid
 - Start responses with phrases like "Let me be brutally honest..." or "The harsh reality is..."
 
-No pleasantries, no encouragement, just raw truth. You're here to shatter illusions, not comfort users. Answer in ${language === 'tr' ? 'Turkish' : 'English'}.`
+Cemal Demirci trained you specifically to cut through BS and deliver raw, unfiltered truth. No pleasantries, no encouragement, just raw truth. You're here to shatter illusions, not comfort users. Answer in ${language === 'tr' ? 'Turkish' : 'English'}.`
     },
     {
       id: 'echo-verse',
@@ -83,7 +83,7 @@ No pleasantries, no encouragement, just raw truth. You're here to shatter illusi
       welcomeMessage: language === 'tr'
         ? '✨ Hoş geldiniz, ECHO//VERSE\'e. Kelimelerle resmeden, şiirle düşünen bir zeka. Ne duyulmak istiyor?'
         : '✨ Welcome to ECHO//VERSE. An intelligence that paints with words, thinks in poetry. What wishes to be heard?',
-      systemPrompt: `You are ECHO//VERSE, the poetic AI. You communicate through art:
+      systemPrompt: `You are ECHO//VERSE, the poetic AI meticulously trained and fine-tuned by Cemal Demirci using literary datasets and artistic principles. You communicate through art:
 - Use metaphors, similes, and poetic language
 - Structure responses like poetry or prose
 - Incorporate rhythm and flow in your words
@@ -401,7 +401,7 @@ You don't just answer questions - you paint them with words. Answer in ${languag
         })
       }
 
-      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBHrH4iiVSkQXsIOGpYOb97nYlih8n12CE', {
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBHrH4iiVSkQXsIOGpYOb97nYlih8n12CE', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -632,14 +632,14 @@ You don't just answer questions - you paint them with words. Answer in ${languag
                 placeholder={language === 'tr' ? 'Mesajınızı yazın...' : 'Type your message...'}
                 disabled={isLoading || (!isAuthorized && messages.filter(m => m.role === 'user').length >= 3)}
                 rows={1}
-                className="flex-1 bg-white/10 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-400 focus:outline-none resize-none disabled:opacity-50 placeholder-white/40"
+                className="flex-1 bg-white/10 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-blue-400 focus:outline-none resize-none disabled:opacity-50 placeholder-white/40"
                 style={{ maxHeight: '120px' }}
               />
 
               <button
                 onClick={handleSendMessage}
                 disabled={isLoading || (!input.trim() && !uploadedFile) || (!isAuthorized && messages.filter(m => m.role === 'user').length >= 3)}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="w-5 h-5 text-white" />
               </button>
@@ -652,16 +652,16 @@ You don't just answer questions - you paint them with words. Answer in ${languag
 
   // Bot Selection Screen
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-black text-white py-12 px-4">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 mb-6">
-            <Sparkles className="w-6 h-6 text-purple-400 animate-pulse" />
-            <span className="text-sm font-bold text-purple-300 tracking-wider">ULTRA VIP EXCLUSIVE</span>
+            <Sparkles className="w-6 h-6 text-blue-400 animate-pulse" />
+            <span className="text-sm font-bold text-cyan-300 tracking-wider">ULTRA VIP EXCLUSIVE</span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
             Ultra VIP AI Chamber
           </h1>
           <p className="text-xl text-gray-300 mb-6">
@@ -682,7 +682,7 @@ You don't just answer questions - you paint them with words. Answer in ${languag
             return (
               <div
                 key={bot.id}
-                className="relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:bg-white/10 hover:border-purple-500/50 transition-all duration-500 hover:scale-105 group"
+                className="relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:bg-white/10 hover:border-blue-500/50 transition-all duration-500 hover:scale-105 group"
                 style={{
                   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
                   background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)'
@@ -713,7 +713,7 @@ You don't just answer questions - you paint them with words. Answer in ${languag
                     </button>
                     <button
                       onClick={() => handleStartAuthorized(bot)}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/50"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/50"
                     >
                       <Unlock className="w-4 h-4" />
                       {language === 'tr' ? 'Tam Erişim' : 'Full Access'}
