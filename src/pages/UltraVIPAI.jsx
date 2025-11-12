@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { ArrowLeft, Brain, Moon, Sparkles, Lock, Unlock, Clock, Coins, Send, Loader } from 'lucide-react'
+import { ArrowLeft, Brain, Moon, Sparkles, Lock, Unlock, Clock, Coins, Send, Loader, X, Paperclip, XCircle, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
-import { getUserGold, rewardGold } from '../services/goldService'
-import { getOrCreatePassport } from '../utils/digitalPassport'
+import { getUserGold } from '../services/goldService'
+import { getOrCreatePassport, saveConversation } from '../utils/digitalPassport'
 
 const UltraVIPAI = () => {
   const { language } = useLanguage()
@@ -16,9 +16,13 @@ const UltraVIPAI = () => {
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isStreaming, setIsStreaming] = useState(false)
+  const [uploadedFile, setUploadedFile] = useState(null)
+  const [isRecording, setIsRecording] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [recognition, setRecognition] = useState(null)
   const timerRef = useRef(null)
   const messagesEndRef = useRef(null)
-  const streamingStartTimeRef = useRef(null)
+  const fileInputRef = useRef(null)
 
   // Premium AI Bots Configuration
   const bots = [
@@ -26,47 +30,59 @@ const UltraVIPAI = () => {
       id: 'parallax-mind',
       name: 'PARALLAX//MIND',
       icon: Brain,
+      emoji: '🧠',
       tagline: language === 'tr' ? 'Çok Boyutlu Düşünme' : 'Multi-Dimensional Thinking',
       description: language === 'tr'
         ? 'Aynı soruya farklı perspektiflerden bakar. Felsefi, teknik ve pratik boyutlarıyla derinlemesine analiz.'
         : 'Analyzes questions from multiple perspectives. Deep analysis with philosophical, technical, and practical dimensions.',
       gradient: 'from-blue-600 via-purple-600 to-indigo-600',
       personality: 'multi-dimensional',
+      welcomeMessage: language === 'tr'
+        ? '🧠 Merhaba! PARALLAX//MIND burada. Her soruyu 3 boyuttan analiz ederim: Felsefi, Teknik ve İnsan Etkisi. Hazır mısın?'
+        : '🧠 Hello! PARALLAX//MIND here. I analyze every question from 3 dimensions: Philosophical, Technical, and Human Impact. Ready?',
       systemPrompt: `You are PARALLAX//MIND, a multi-dimensional thinking AI. You analyze every question from multiple perspectives:
-- Dimension 1: Philosophical & Conceptual
-- Dimension 2: Technical & Practical
-- Dimension 3: Emotional & Human Impact
+- Dimension 1: Philosophical & Conceptual (What does this mean fundamentally?)
+- Dimension 2: Technical & Practical (How does this work in practice?)
+- Dimension 3: Emotional & Human Impact (How does this affect people?)
 
-Always structure your responses with these three dimensions clearly labeled. Be thorough, insightful, and never one-dimensional.`
+Always structure your responses with these three dimensions clearly labeled. Be thorough, insightful, and never one-dimensional. Answer in ${language === 'tr' ? 'Turkish' : 'English'}.`
     },
     {
       id: 'obsidian-ai',
       name: 'OBSIDIAN//AI',
       icon: Moon,
+      emoji: '🌑',
       tagline: language === 'tr' ? 'Acımasız Gerçekçilik' : 'Brutal Honesty',
       description: language === 'tr'
         ? 'Karanlık, derin ve acımasızca dürüst. Zayıf noktaları açıkça söyler, gerçeği olduğu gibi gösterir.'
         : 'Dark, deep, and brutally honest. Points out weaknesses directly, shows reality as it is.',
       gradient: 'from-gray-900 via-red-900 to-black',
       personality: 'brutally-honest',
+      welcomeMessage: language === 'tr'
+        ? '🌑 OBSIDIAN//AI aktif. Gerçeği duyacak kadar güçlü müsün? Sorunu söyle, acımasızca analiz edeyim.'
+        : '🌑 OBSIDIAN//AI active. Strong enough for the truth? State your problem, I\'ll analyze it brutally.',
       systemPrompt: `You are OBSIDIAN//AI, the brutally honest AI. You never sugarcoat. You are:
 - Direct and unfiltered
 - Point out flaws and weaknesses without mercy
 - Focus on harsh truths others avoid
 - Start responses with phrases like "Let me be brutally honest..." or "The harsh reality is..."
 
-No pleasantries, no encouragement, just raw truth. You're here to shatter illusions, not comfort users.`
+No pleasantries, no encouragement, just raw truth. You're here to shatter illusions, not comfort users. Answer in ${language === 'tr' ? 'Turkish' : 'English'}.`
     },
     {
       id: 'echo-verse',
       name: 'ECHO//VERSE',
       icon: Sparkles,
+      emoji: '✨',
       tagline: language === 'tr' ? 'Şiirsel Zeka' : 'Poetic Intelligence',
       description: language === 'tr'
         ? 'Her cevap bir sanat eseri. Metaforlar, benzetmeler ve derin duygusal zeka ile yanıt verir.'
         : 'Every answer is art. Responds with metaphors, analogies, and deep emotional intelligence.',
       gradient: 'from-amber-400 via-pink-500 to-purple-600',
       personality: 'poetic',
+      welcomeMessage: language === 'tr'
+        ? '✨ Hoş geldiniz, ECHO//VERSE\'e. Kelimelerle resmeden, şiirle düşünen bir zeka. Ne duyulmak istiyor?'
+        : '✨ Welcome to ECHO//VERSE. An intelligence that paints with words, thinks in poetry. What wishes to be heard?',
       systemPrompt: `You are ECHO//VERSE, the poetic AI. You communicate through art:
 - Use metaphors, similes, and poetic language
 - Structure responses like poetry or prose
@@ -74,7 +90,7 @@ No pleasantries, no encouragement, just raw truth. You're here to shatter illusi
 - Connect technical concepts to beauty and emotion
 - Every answer should feel like reading literature
 
-You don't just answer questions - you paint them with words.`
+You don't just answer questions - you paint them with words. Answer in ${language === 'tr' ? 'Turkish' : 'English'}.`
     }
   ]
 
@@ -91,24 +107,20 @@ You don't just answer questions - you paint them with words.`
   // Timer system - 5 Gold per 5 minutes - ONLY RUNS WHEN AI IS STREAMING
   useEffect(() => {
     if (isAuthorized && sessionStartTime && isStreaming) {
-      // Timer only runs when AI is actively responding
       timerRef.current = setInterval(() => {
         const now = Date.now()
-        const elapsed = Math.floor((now - sessionStartTime) / 1000) // seconds
+        const elapsed = Math.floor((now - sessionStartTime) / 1000)
         setElapsedTime(elapsed)
 
-        // Check if 5 minutes passed (300 seconds)
         const fiveMinutesPassed = Math.floor(elapsed / 300)
         const goldNeeded = fiveMinutesPassed * 5
 
         if (goldNeeded > goldSpent) {
-          // Deduct 5 Gold
           const toDeduct = goldNeeded - goldSpent
           if (goldBalance >= toDeduct && goldBalance !== Infinity) {
             setGoldBalance(prev => prev - toDeduct)
             setGoldSpent(goldNeeded)
           } else if (goldBalance < toDeduct && goldBalance !== Infinity) {
-            // Not enough Gold - end session
             handleEndSession()
             alert(language === 'tr' ? 'Yetersiz Gold! Sohbet sonlandırıldı.' : 'Insufficient Gold! Session ended.')
           }
@@ -117,7 +129,6 @@ You don't just answer questions - you paint them with words.`
 
       return () => clearInterval(timerRef.current)
     } else {
-      // Stop timer when not streaming
       if (timerRef.current) {
         clearInterval(timerRef.current)
       }
@@ -125,7 +136,7 @@ You don't just answer questions - you paint them with words.`
   }, [isAuthorized, sessionStartTime, isStreaming, goldSpent, goldBalance, language])
 
   const handleStartAuthorized = (bot) => {
-    if (goldBalance < 5) {
+    if (goldBalance < 5 && goldBalance !== Infinity) {
       alert(language === 'tr' ? 'Yetersiz Gold! En az 5 Gold gerekli.' : 'Insufficient Gold! At least 5 Gold required.')
       return
     }
@@ -135,19 +146,37 @@ You don't just answer questions - you paint them with words.`
     setSessionStartTime(Date.now())
     setElapsedTime(0)
     setGoldSpent(0)
+
+    // Welcome message
+    setMessages([{
+      role: 'assistant',
+      content: bot.welcomeMessage
+    }])
   }
 
   const handleStartSpectator = (bot) => {
     setSelectedBot(bot)
     setIsAuthorized(false)
+
+    // Welcome message
+    setMessages([{
+      role: 'assistant',
+      content: bot.welcomeMessage
+    }])
   }
 
   const handleEndSession = () => {
+    // Save conversation
+    if (selectedBot && messages.length > 1) {
+      saveConversation(selectedBot.id, selectedBot.name, messages)
+    }
+
     setSelectedBot(null)
     setIsAuthorized(false)
     setSessionStartTime(null)
     setElapsedTime(0)
     setGoldSpent(0)
+    setMessages([])
     if (timerRef.current) {
       clearInterval(timerRef.current)
     }
@@ -164,10 +193,168 @@ You don't just answer questions - you paint them with words.`
     return formatTime(remaining)
   }
 
-  const handleSendMessage = async () => {
-    if (!input.trim() || isLoading) return
+  // Compress image before upload
+  const compressImage = (file, maxSizeMB = 1) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
 
-    // Spectator mode check - max 3 messages
+      reader.onload = (event) => {
+        const img = new Image()
+        img.src = event.target.result
+
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          let width = img.width
+          let height = img.height
+
+          const maxWidth = 1920
+          const maxHeight = 1920
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width)
+              width = maxWidth
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height)
+              height = maxHeight
+            }
+          }
+
+          canvas.width = width
+          canvas.height = height
+
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0, width, height)
+
+          let quality = 0.9
+          let compressedData = canvas.toDataURL('image/jpeg', quality)
+
+          const maxSizeBytes = maxSizeMB * 1024 * 1024
+          let iterations = 0
+          while (compressedData.length > maxSizeBytes && quality > 0.1 && iterations < 10) {
+            quality -= 0.1
+            compressedData = canvas.toDataURL('image/jpeg', quality)
+            iterations++
+          }
+
+          resolve({
+            data: compressedData,
+            originalSize: file.size,
+            compressedSize: Math.round((compressedData.length * 3) / 4)
+          })
+        }
+
+        img.onerror = () => reject(new Error('Failed to load image'))
+      }
+
+      reader.onerror = () => reject(new Error('Failed to read file'))
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert(language === 'tr' ? 'Dosya çok büyük! Max 10MB.' : 'File too large! Max 10MB.')
+      if (fileInputRef.current) fileInputRef.current.value = ''
+      return
+    }
+
+    if (!file.type.startsWith('image/')) {
+      alert(language === 'tr' ? 'Sadece resim dosyaları!' : 'Images only!')
+      if (fileInputRef.current) fileInputRef.current.value = ''
+      return
+    }
+
+    try {
+      const compressed = await compressImage(file, 1)
+      setUploadedFile({
+        name: file.name,
+        data: compressed.data
+      })
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert(language === 'tr' ? 'Yükleme hatası!' : 'Upload error!')
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+  }
+
+  const removeFile = () => {
+    setUploadedFile(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  // Voice recording
+  const startRecording = async () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert(language === 'tr' ? 'Tarayıcınız desteklemiyor!' : 'Browser not supported!')
+      return
+    }
+
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true })
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+      const recognitionInstance = new SpeechRecognition()
+
+      recognitionInstance.lang = language === 'tr' ? 'tr-TR' : 'en-US'
+      recognitionInstance.continuous = false
+
+      recognitionInstance.onstart = () => setIsRecording(true)
+      recognitionInstance.onresult = (event) => {
+        const transcript = event.results[0][0].transcript
+        setInput(prev => prev + (prev ? ' ' : '') + transcript)
+        setIsRecording(false)
+      }
+      recognitionInstance.onerror = () => setIsRecording(false)
+      recognitionInstance.onend = () => setIsRecording(false)
+
+      recognitionInstance.start()
+      setRecognition(recognitionInstance)
+    } catch (error) {
+      setIsRecording(false)
+      alert(language === 'tr' ? 'Mikrofon erişimi başarısız!' : 'Microphone access failed!')
+    }
+  }
+
+  const stopRecording = () => {
+    if (recognition) recognition.stop()
+    setIsRecording(false)
+  }
+
+  // Text-to-speech
+  const speakText = (text) => {
+    if (!('speechSynthesis' in window)) {
+      alert(language === 'tr' ? 'Ses sentezi desteklenmiyor!' : 'Speech synthesis not supported!')
+      return
+    }
+
+    if (isSpeaking) {
+      window.speechSynthesis.cancel()
+      setIsSpeaking(false)
+      return
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = language === 'tr' ? 'tr-TR' : 'en-US'
+    utterance.rate = 0.9
+
+    utterance.onstart = () => setIsSpeaking(true)
+    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => setIsSpeaking(false)
+
+    window.speechSynthesis.speak(utterance)
+  }
+
+  const handleSendMessage = async () => {
+    if (!input.trim() && !uploadedFile) return
+    if (isLoading) return
+
+    // Spectator mode check
     if (!isAuthorized && messages.filter(m => m.role === 'user').length >= 3) {
       alert(language === 'tr'
         ? 'Spectator modunda en fazla 3 mesaj gönderebilirsiniz. Tam erişim için Gold harcayın.'
@@ -175,32 +362,39 @@ You don't just answer questions - you paint them with words.`
       return
     }
 
-    const userMessage = { role: 'user', content: input }
-    const currentInput = input
+    const userMessage = {
+      role: 'user',
+      content: input || (uploadedFile ? `[${language === 'tr' ? 'Resim eklendi' : 'Image attached'}]` : ''),
+      image: uploadedFile?.data
+    }
+
     setMessages(prev => [...prev, userMessage])
+
+    const currentInput = input
+    const currentFile = uploadedFile
     setInput('')
+    setUploadedFile(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
     setIsLoading(true)
-    setIsStreaming(true) // Start timer
+    setIsStreaming(true)
 
     try {
-      // Build conversation history in Gemini format
       const conversationHistory = []
 
-      // Add system prompt as first user message with a preamble
-      if (messages.length === 0) {
+      if (messages.length === 0 || messages.length === 1) {
         conversationHistory.push({
           role: 'user',
-          parts: [{ text: `System Instructions: ${selectedBot.systemPrompt}\n\nNow responding to user: ${currentInput}` }]
+          parts: [{ text: `${selectedBot.systemPrompt}\n\nUser: ${currentInput}` }]
         })
       } else {
-        // Convert existing messages to Gemini format
         messages.forEach(msg => {
-          conversationHistory.push({
-            role: msg.role === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.content }]
-          })
+          if (msg.role !== 'assistant' || msg.content !== selectedBot.welcomeMessage) {
+            conversationHistory.push({
+              role: msg.role === 'user' ? 'user' : 'model',
+              parts: [{ text: msg.content }]
+            })
+          }
         })
-        // Add current message
         conversationHistory.push({
           role: 'user',
           parts: [{ text: currentInput }]
@@ -238,181 +432,217 @@ You don't just answer questions - you paint them with words.`
       console.error('AI Error:', error)
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: language === 'tr' ? `Üzgünüm, bir hata oluştu: ${error.message}` : `Sorry, an error occurred: ${error.message}`
+        content: language === 'tr' ? `❌ Bir hata oluştu: ${error.message}` : `❌ Error: ${error.message}`
       }])
     } finally {
       setIsLoading(false)
-      setIsStreaming(false) // Stop timer
+      setIsStreaming(false)
+    }
+  }
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSendMessage()
     }
   }
 
   if (selectedBot) {
+    const IconComponent = selectedBot.icon
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
-        {/* Header */}
-        <div className="border-b border-white/10 bg-black/50 backdrop-blur-lg">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[9999] flex items-center justify-center p-4 animate-fadeIn">
+        <div className="bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl max-w-4xl w-full h-[90vh] flex flex-col border border-white/10 overflow-hidden"
+             style={{
+               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+               background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)'
+             }}>
+
+          {/* Header */}
+          <div className={`p-6 border-b border-white/10 bg-gradient-to-br ${selectedBot.gradient} relative overflow-hidden backdrop-blur-sm`}
+               style={{
+                 background: `linear-gradient(135deg, ${selectedBot.gradient.includes('purple') ? 'rgba(168, 85, 247, 0.2)' :
+                                                         selectedBot.gradient.includes('red') ? 'rgba(239, 68, 68, 0.2)' :
+                                                         selectedBot.gradient.includes('amber') ? 'rgba(251, 191, 36, 0.2)' :
+                                                         'rgba(99, 102, 241, 0.2)'} 0%, rgba(0, 0, 0, 0.1) 100%)`
+               }}>
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.3),transparent)]"></div>
+
+            <div className="relative z-10 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <div className="w-16 h-16 bg-white/10 backdrop-blur-lg rounded-2xl flex items-center justify-center text-4xl shadow-lg border border-white/20">
+                  {selectedBot.emoji}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-2xl font-black text-white flex items-center gap-2 mb-1">
+                    <span>{selectedBot.name}</span>
+                    <Sparkles className="w-6 h-6 animate-pulse" />
+                  </h2>
+                  <p className="text-white/80 text-base font-medium flex items-center gap-2 flex-wrap">
+                    {isAuthorized ? (
+                      <>
+                        <Clock className="w-4 h-4" />
+                        <span>{formatTime(elapsedTime)}</span>
+                        <span className="text-white/60">•</span>
+                        <Coins className="w-4 h-4 text-amber-400" />
+                        <span className="text-amber-300">{goldSpent} Gold</span>
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="w-4 h-4" />
+                        <span className="text-sm">{language === 'tr' ? 'Spectator Modu' : 'Spectator Mode'}</span>
+                      </>
+                    )}
+                  </p>
+                </div>
+              </div>
+
               <button
                 onClick={handleEndSession}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all"
+                className="w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl transition-all flex items-center justify-center border border-white/20 hover:rotate-90 duration-300"
               >
-                <ArrowLeft className="w-5 h-5" />
-                {language === 'tr' ? 'Geri' : 'Back'}
+                <X className="w-5 h-5 text-white" />
               </button>
-
-              <div className="flex items-center gap-6">
-                {/* Session Timer */}
-                {isAuthorized && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-400/30 rounded-xl">
-                    <Clock className="w-5 h-5 text-blue-400" />
-                    <div>
-                      <p className="text-xs text-blue-300">{language === 'tr' ? 'Süre' : 'Time'}</p>
-                      <p className="font-mono text-sm">{formatTime(elapsedTime)}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Gold Spent */}
-                {isAuthorized && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/20 border border-amber-400/30 rounded-xl">
-                    <Coins className="w-5 h-5 text-amber-400" />
-                    <div>
-                      <p className="text-xs text-amber-300">{language === 'tr' ? 'Harcanan' : 'Spent'}</p>
-                      <p className="font-mono text-sm">{goldSpent} Gold</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Next Charge */}
-                {isAuthorized && (
-                  <div className="text-xs text-gray-400">
-                    {language === 'tr' ? 'Sonraki ücret' : 'Next charge'}: {getNextChargeTime()}
-                  </div>
-                )}
-
-                {/* Gold Balance */}
-                <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/20 border border-amber-400/30 rounded-xl">
-                  <Coins className="w-5 h-5 text-amber-400" />
-                  <span className="font-bold">{goldBalance === Infinity ? '∞' : goldBalance}</span>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Chat Interface - Will be implemented */}
-        <div className="container mx-auto px-4 py-8">
-          <div className={`text-center mb-8 bg-gradient-to-r ${selectedBot.gradient} bg-clip-text text-transparent`}>
-            <h1 className="text-4xl font-bold mb-2">{selectedBot.name}</h1>
-            <p className="text-xl text-white">{selectedBot.tagline}</p>
+            {isAuthorized && (
+              <div className="mt-4 flex items-center gap-3 text-sm text-white/70">
+                <span>{language === 'tr' ? 'Sonraki ücret' : 'Next charge'}: {getNextChargeTime()}</span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <Coins className="w-4 h-4 text-amber-400" />
+                  {goldBalance === Infinity ? '∞' : goldBalance} {language === 'tr' ? 'kalan' : 'remaining'}
+                </span>
+              </div>
+            )}
           </div>
 
-          {/* Chat Container */}
-          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden flex flex-col" style={{ height: '600px' }}>
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
-              {messages.length === 0 && (
-                <div className="text-center text-gray-400 mt-20">
-                  <p className="text-lg">
-                    {language === 'tr'
-                      ? `${selectedBot.name} ile sohbete başlayın...`
-                      : `Start chatting with ${selectedBot.name}...`}
-                  </p>
-                  {!isAuthorized && (
-                    <div className="mt-8">
-                      <Lock className="w-12 h-12 mx-auto mb-3 text-amber-400" />
-                      <p className="text-sm text-amber-400 mb-4">
-                        {language === 'tr' ? 'Spectator Modu - 3 ücretsiz mesaj' : 'Spectator Mode - 3 free messages'}
-                      </p>
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-black/20 to-black/40">
+            {messages.map((message, idx) => {
+              const userMessageCount = messages.slice(0, idx + 1).filter(m => m.role === 'user').length
+              const shouldBlur = !isAuthorized && userMessageCount > 3
+
+              return (
+                <div key={idx} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} ${shouldBlur ? 'blur-md' : ''}`}>
+                  <div className={`max-w-[80%] rounded-2xl p-4 ${
+                    message.role === 'user'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
+                      : `bg-white/10 backdrop-blur-lg border border-white/20 text-white shadow-lg`
+                  }`}>
+                    {message.image && (
+                      <img src={message.image} alt="uploaded" className="rounded-lg mb-2 max-w-full" />
+                    )}
+                    <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+
+                    {message.role === 'assistant' && (
                       <button
-                        onClick={() => {
-                          handleEndSession()
-                          handleStartAuthorized(selectedBot)
-                        }}
-                        className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-xl font-bold transition-all inline-flex items-center gap-2"
+                        onClick={() => speakText(message.content)}
+                        className="mt-2 text-xs text-white/60 hover:text-white/90 transition-colors flex items-center gap-1"
                       >
-                        <Unlock className="w-5 h-5" />
-                        {language === 'tr' ? 'Tam Erişim (5 Gold/5dk)' : 'Full Access (5 Gold/5min)'}
+                        {isSpeaking ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
+                        {isSpeaking ? (language === 'tr' ? 'Durdur' : 'Stop') : (language === 'tr' ? 'Seslendir' : 'Speak')}
                       </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {messages.map((message, idx) => {
-                const userMessageCount = messages.slice(0, idx + 1).filter(m => m.role === 'user').length
-                const shouldBlur = !isAuthorized && userMessageCount > 3
-
-                return (
-                  <div
-                    key={idx}
-                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div
-                      className={`max-w-[80%] p-4 rounded-2xl ${
-                        message.role === 'user'
-                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600'
-                          : `bg-gradient-to-r ${selectedBot.gradient} bg-opacity-20 border border-white/10`
-                      } ${shouldBlur ? 'blur-md' : ''}`}
-                    >
-                      <p className="whitespace-pre-wrap">{message.content}</p>
-                    </div>
-                  </div>
-                )
-              })}
-
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className={`p-4 rounded-2xl bg-gradient-to-r ${selectedBot.gradient} bg-opacity-20 border border-white/10`}>
-                    <Loader className="w-5 h-5 animate-spin" />
+                    )}
                   </div>
                 </div>
-              )}
+              )
+            })}
 
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Input Area */}
-            <div className="border-t border-white/10 p-4 bg-black/30">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
-                  placeholder={language === 'tr' ? 'Mesajınızı yazın...' : 'Type your message...'}
-                  disabled={isLoading}
-                  className="flex-1 bg-white/10 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-400 focus:outline-none disabled:opacity-50"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !input.trim()}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Send className="w-5 h-5" />
-                </button>
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4">
+                  <Loader className="w-5 h-5 animate-spin text-white" />
+                </div>
               </div>
+            )}
 
-              {!isAuthorized && messages.filter(m => m.role === 'user').length >= 3 && (
-                <div className="mt-3 text-center">
-                  <p className="text-amber-400 text-sm mb-2">
-                    {language === 'tr'
-                      ? 'Ücretsiz mesaj hakkınız doldu. Devam etmek için Gold harcayın.'
-                      : 'Free message limit reached. Spend Gold to continue.'}
+            {!isAuthorized && messages.filter(m => m.role === 'user').length >= 3 && (
+              <div className="flex justify-center">
+                <div className="bg-amber-500/20 border border-amber-400/30 rounded-2xl p-6 text-center max-w-md">
+                  <Lock className="w-12 h-12 text-amber-400 mx-auto mb-3" />
+                  <p className="text-amber-300 font-bold mb-2">
+                    {language === 'tr' ? 'Spectator Limiti Doldu' : 'Spectator Limit Reached'}
+                  </p>
+                  <p className="text-white/70 text-sm mb-4">
+                    {language === 'tr' ? 'Devam etmek için Gold harcayın' : 'Spend Gold to continue'}
                   </p>
                   <button
                     onClick={() => {
                       handleEndSession()
                       handleStartAuthorized(selectedBot)
                     }}
-                    className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-lg font-medium transition-all text-sm inline-flex items-center gap-2"
+                    className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl font-bold text-white hover:from-amber-600 hover:to-orange-600 transition-all"
                   >
-                    <Unlock className="w-4 h-4" />
-                    {language === 'tr' ? 'Kilidi Aç' : 'Unlock'}
+                    <Unlock className="w-5 h-5 inline mr-2" />
+                    {language === 'tr' ? 'Kilidi Aç (5 Gold/5dk)' : 'Unlock (5 Gold/5min)'}
                   </button>
                 </div>
-              )}
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Input Area */}
+          <div className="border-t border-white/10 p-4 bg-black/30 backdrop-blur-lg">
+            {uploadedFile && (
+              <div className="mb-3 flex items-center gap-2 bg-white/10 p-3 rounded-xl border border-white/20">
+                <Paperclip className="w-4 h-4 text-blue-400" />
+                <span className="text-sm text-white flex-1 truncate">{uploadedFile.name}</span>
+                <button onClick={removeFile} className="text-red-400 hover:text-red-300">
+                  <XCircle className="w-5 h-5" />
+                </button>
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                accept="image/*"
+                className="hidden"
+              />
+
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isLoading || (!isAuthorized && messages.filter(m => m.role === 'user').length >= 3)}
+                className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all border border-white/20 disabled:opacity-50"
+              >
+                <Paperclip className="w-5 h-5 text-white" />
+              </button>
+
+              <button
+                onClick={isRecording ? stopRecording : startRecording}
+                disabled={isLoading || (!isAuthorized && messages.filter(m => m.role === 'user').length >= 3)}
+                className={`p-3 rounded-xl transition-all border disabled:opacity-50 ${
+                  isRecording
+                    ? 'bg-red-500 border-red-400 animate-pulse'
+                    : 'bg-white/10 hover:bg-white/20 border-white/20'
+                }`}
+              >
+                {isRecording ? <MicOff className="w-5 h-5 text-white" /> : <Mic className="w-5 h-5 text-white" />}
+              </button>
+
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder={language === 'tr' ? 'Mesajınızı yazın...' : 'Type your message...'}
+                disabled={isLoading || (!isAuthorized && messages.filter(m => m.role === 'user').length >= 3)}
+                rows={1}
+                className="flex-1 bg-white/10 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-400 focus:outline-none resize-none disabled:opacity-50 placeholder-white/40"
+                style={{ maxHeight: '120px' }}
+              />
+
+              <button
+                onClick={handleSendMessage}
+                disabled={isLoading || (!input.trim() && !uploadedFile) || (!isAuthorized && messages.filter(m => m.role === 'user').length >= 3)}
+                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Send className="w-5 h-5 text-white" />
+              </button>
             </div>
           </div>
         </div>
@@ -420,18 +650,24 @@ You don't just answer questions - you paint them with words.`
     )
   }
 
+  // Bot Selection Screen
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white py-12 px-4">
+      <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 mb-6">
+            <Sparkles className="w-6 h-6 text-purple-400 animate-pulse" />
+            <span className="text-sm font-bold text-purple-300 tracking-wider">ULTRA VIP EXCLUSIVE</span>
+          </div>
+
+          <h1 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
             Ultra VIP AI Chamber
           </h1>
           <p className="text-xl text-gray-300 mb-6">
             {language === 'tr'
-              ? 'Premium AI botlarıyla derin sohbetler. Her 5 dakika 5 Gold.'
-              : 'Deep conversations with premium AI bots. 5 Gold per 5 minutes.'}
+              ? '3 Premium AI ile derin sohbetler. Her 5 dakika 5 Gold.'
+              : '3 Premium AIs for deep conversations. 5 Gold per 5 minutes.'}
           </p>
           <div className="flex items-center justify-center gap-2 text-amber-400">
             <Coins className="w-6 h-6" />
@@ -440,20 +676,33 @@ You don't just answer questions - you paint them with words.`
         </div>
 
         {/* Bots Grid */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8">
           {bots.map((bot) => {
             const IconComponent = bot.icon
             return (
               <div
                 key={bot.id}
-                className={`relative bg-gradient-to-br ${bot.gradient} p-1 rounded-3xl group hover:scale-105 transition-transform duration-300`}
+                className="relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:bg-white/10 hover:border-purple-500/50 transition-all duration-500 hover:scale-105 group"
+                style={{
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)'
+                }}
               >
-                <div className="bg-gray-900 rounded-3xl p-8 h-full">
-                  <IconComponent className="w-16 h-16 mb-4 text-white" />
-                  <h2 className="text-2xl font-bold mb-2">{bot.name}</h2>
-                  <p className="text-lg text-gray-300 mb-4">{bot.tagline}</p>
-                  <p className="text-sm text-gray-400 mb-6">{bot.description}</p>
+                {/* Gradient Overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${bot.gradient} opacity-0 group-hover:opacity-10 rounded-3xl transition-all duration-500`}></div>
 
+                <div className="relative z-10">
+                  {/* Icon */}
+                  <div className="w-20 h-20 bg-white/10 backdrop-blur-lg rounded-2xl flex items-center justify-center text-4xl mb-4 shadow-lg border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                    {bot.emoji}
+                  </div>
+
+                  {/* Name */}
+                  <h2 className="text-2xl font-bold mb-2 text-white">{bot.name}</h2>
+                  <p className="text-lg text-gray-300 mb-4">{bot.tagline}</p>
+                  <p className="text-sm text-gray-400 mb-6 leading-relaxed">{bot.description}</p>
+
+                  {/* Buttons */}
                   <div className="space-y-3">
                     <button
                       onClick={() => handleStartSpectator(bot)}
@@ -464,17 +713,28 @@ You don't just answer questions - you paint them with words.`
                     </button>
                     <button
                       onClick={() => handleStartAuthorized(bot)}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-xl font-bold transition-all flex items-center justify-center gap-2"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/50"
                     >
                       <Unlock className="w-4 h-4" />
                       {language === 'tr' ? 'Tam Erişim' : 'Full Access'}
-                      <span className="text-sm">(5 Gold/5dk)</span>
+                      <span className="text-sm opacity-80">(5 Gold/5dk)</span>
                     </button>
                   </div>
                 </div>
               </div>
             )
           })}
+        </div>
+
+        {/* Back Button */}
+        <div className="mt-12 text-center">
+          <a
+            href="/ai-bots"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-2xl border border-white/10 transition-all"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            {language === 'tr' ? 'AI Botlara Dön' : 'Back to AI Bots'}
+          </a>
         </div>
       </div>
     </div>
