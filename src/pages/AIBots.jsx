@@ -256,6 +256,49 @@ const AIBots = () => {
           </div>
         </div>
 
+        {/* Ultra VIP AI Chamber Banner */}
+        <Link to="/ai-bots/ultra-vip" className="block mb-12">
+          <div className="relative group bg-gradient-to-r from-purple-900/50 via-pink-900/50 to-amber-900/50 backdrop-blur-xl rounded-3xl p-8 border-2 border-purple-500/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-[1.02] overflow-hidden">
+            {/* Animated Background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-pink-600/10 to-amber-600/10 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+
+            {/* Sparkle Effects */}
+            <div className="absolute top-4 right-4">
+              <Sparkles className="w-8 h-8 text-amber-400 animate-pulse" />
+            </div>
+            <div className="absolute bottom-4 left-4">
+              <Sparkles className="w-6 h-6 text-purple-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
+            </div>
+
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-sm rounded-full border border-amber-400/30 mb-4">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span className="text-sm font-bold text-amber-300 tracking-wider">
+                    PREMIUM EXCLUSIVE
+                  </span>
+                </div>
+
+                <h2 className="text-4xl md:text-5xl font-black mb-3 bg-gradient-to-r from-purple-300 via-pink-300 to-amber-300 bg-clip-text text-transparent">
+                  Ultra VIP AI Chamber
+                </h2>
+
+                <p className="text-xl text-gray-300">
+                  {language === 'tr'
+                    ? '3 Premium AI ile derin sohbetler. Çok boyutlu düşünme, acımasız gerçekçilik ve şiirsel zeka.'
+                    : '3 Premium AIs for deep conversations. Multi-dimensional thinking, brutal honesty, and poetic intelligence.'}
+                </p>
+              </div>
+
+              <div className="flex-shrink-0">
+                <div className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 group-hover:from-purple-500 group-hover:to-pink-500 rounded-2xl font-bold text-white text-lg transition-all duration-300 transform group-hover:scale-105 shadow-lg shadow-purple-500/50">
+                  {language === 'tr' ? 'Keşfet →' : 'Explore →'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Link>
+
         {/* Bots Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Object.entries(premiumBots).map(([botKey, bot], idx) => (
