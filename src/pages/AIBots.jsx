@@ -1,25 +1,67 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Sparkles, ArrowLeft, Mic, Upload, MessageCircle } from 'lucide-react'
+import { Sparkles, ArrowLeft, Mic, Upload, MessageCircle, Crown, Clock, MessageSquare } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useRainbow } from '../contexts/RainbowContext'
 import { t } from '../translations'
 import CemalLogo from '../components/CemalLogo'
 import PremiumChatbot from '../components/PremiumChatbot'
+import { getOrCreatePassport, getAllConversations } from '../utils/digitalPassport'
 
 const AIBots = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [activeBot, setActiveBot] = useState(null)
+  const [passport, setPassport] = useState(null)
+  const [botStats, setBotStats] = useState({})
   const { language } = useLanguage()
   const { rainbowMode } = useRainbow()
 
   useEffect(() => {
     setIsVisible(true)
+
+    // Load passport data
+    const currentPassport = getOrCreatePassport()
+    setPassport(currentPassport)
+
+    // Calculate bot statistics
+    if (currentPassport.conversations) {
+      const stats = {}
+      Object.entries(currentPassport.conversations).forEach(([botId, conversations]) => {
+        if (conversations.length > 0) {
+          const lastConv = conversations[0] // Most recent
+          stats[botId] = {
+            count: conversations.length,
+            lastUsed: lastConv.timestamp,
+            totalMessages: conversations.reduce((sum, conv) => sum + conv.messageCount, 0)
+          }
+        }
+      })
+      setBotStats(stats)
+    }
   }, [])
+
+  // Helper function to format relative time
+  const getRelativeTime = (timestamp) => {
+    const now = new Date()
+    const then = new Date(timestamp)
+    const diffMs = now - then
+    const diffMins = Math.floor(diffMs / 60000)
+    const diffHours = Math.floor(diffMs / 3600000)
+    const diffDays = Math.floor(diffMs / 86400000)
+
+    if (diffMins < 60) {
+      return language === 'tr' ? `${diffMins} dk önce` : `${diffMins}m ago`
+    } else if (diffHours < 24) {
+      return language === 'tr' ? `${diffHours} sa önce` : `${diffHours}h ago`
+    } else {
+      return language === 'tr' ? `${diffDays} gün önce` : `${diffDays}d ago`
+    }
+  }
 
   // Premium AI Bots Configuration
   const premiumBots = {
     englishTeacher: {
+      id: 'english-teacher',
       name: { tr: 'Professor Posh', en: 'Professor Posh' },
       title: { tr: 'Cemal AI\'ın İngilizce Ustası', en: 'Cemal AI\'s British English Master' },
       tagline: { tr: 'Keep calm and learn English, mate!', en: 'Keep calm and learn English, mate!' },
@@ -35,6 +77,7 @@ const AIBots = () => {
       }
     },
     legalConsultant: {
+      id: 'legal-consultant',
       name: { tr: 'Saul Goodman AI', en: 'Saul Goodman AI' },
       title: { tr: 'Cemal AI\'ın Hukuk Stratejisti', en: 'Cemal AI\'s Legal Strategist' },
       tagline: { tr: 'Better Call Saul... AI! ⚖️', en: 'Better Call Saul... AI! ⚖️' },
@@ -50,6 +93,7 @@ const AIBots = () => {
       }
     },
     dietitian: {
+      id: 'dietitian',
       name: { tr: 'Gordon HealthyAI', en: 'Gordon HealthyAI' },
       title: { tr: 'Cemal AI\'ın Beslenme Şefi', en: 'Cemal AI\'s Nutrition Chef' },
       tagline: { tr: 'WHERE\'S THE NUTRITION?! 🔥', en: 'WHERE\'S THE NUTRITION?! 🔥' },
@@ -65,6 +109,7 @@ const AIBots = () => {
       }
     },
     mathTeacher: {
+      id: 'math-teacher',
       name: { tr: 'Sheldon Numbers', en: 'Sheldon Numbers' },
       title: { tr: 'Cemal AI\'ın Matematik Dehası', en: 'Cemal AI\'s Math Genius' },
       tagline: { tr: 'Bazinga! Math is FUN! 🧮', en: 'Bazinga! Math is FUN! 🧮' },
@@ -80,6 +125,7 @@ const AIBots = () => {
       }
     },
     psychology: {
+      id: 'psychology',
       name: { tr: 'Dr. Freud AI', en: 'Dr. Freud AI' },
       title: { tr: 'Cemal AI\'ın Ruh Doktoru', en: 'Cemal AI\'s Mind Doctor' },
       tagline: { tr: 'Tell me about your mother... 🛋️', en: 'Tell me about your mother... 🛋️' },
@@ -95,6 +141,7 @@ const AIBots = () => {
       }
     },
     career: {
+      id: 'career',
       name: { tr: 'Harvey Specter AI', en: 'Harvey Specter AI' },
       title: { tr: 'Cemal AI\'ın Kariyer Closer\'ı', en: 'Cemal AI\'s Career Closer' },
       tagline: { tr: 'I don\'t get lucky, I MAKE my own luck! 💼', en: 'I don\'t get lucky, I MAKE my own luck! 💼' },
@@ -110,6 +157,7 @@ const AIBots = () => {
       }
     },
     techInnovator: {
+      id: 'tech-innovator',
       name: { tr: 'Tony Stark AI', en: 'Tony Stark AI' },
       title: { tr: 'Cemal AI\'ın Teknoloji Dehasıs', en: 'Cemal AI\'s Tech Genius' },
       tagline: { tr: 'Genius, Billionaire, Playboy, Philanthropist 🦾', en: 'Genius, Billionaire, Playboy, Philanthropist 🦾' },
@@ -125,6 +173,7 @@ const AIBots = () => {
       }
     },
     detective: {
+      id: 'detective',
       name: { tr: 'Sherlock Holmes AI', en: 'Sherlock Holmes AI' },
       title: { tr: 'Cemal AI\'ın Dedektif Dehası', en: 'Cemal AI\'s Detective Genius' },
       tagline: { tr: 'Elementary, my dear Watson! 🔍', en: 'Elementary, my dear Watson! 🔍' },
@@ -140,6 +189,7 @@ const AIBots = () => {
       }
     },
     organizer: {
+      id: 'organizer',
       name: { tr: 'Marie Kondo AI', en: 'Marie Kondo AI' },
       title: { tr: 'Cemal AI\'ın Organize Uzmanı', en: 'Cemal AI\'s Organization Expert' },
       tagline: { tr: 'Does it spark joy? ✨🏡', en: 'Does it spark joy? ✨🏡' },
@@ -155,6 +205,7 @@ const AIBots = () => {
       }
     },
     entrepreneur: {
+      id: 'entrepreneur',
       name: { tr: 'Steve Jobs AI', en: 'Steve Jobs AI' },
       title: { tr: 'Cemal AI\'ın İnovasyon Lideri', en: 'Cemal AI\'s Innovation Leader' },
       tagline: { tr: 'Stay Hungry, Stay Foolish 🍎', en: 'Stay Hungry, Stay Foolish 🍎' },
@@ -170,6 +221,7 @@ const AIBots = () => {
       }
     },
     chemTeacher: {
+      id: 'chem-teacher',
       name: { tr: 'Walter White AI', en: 'Walter White AI' },
       title: { tr: 'Cemal AI\'ın Kimya Profesörü', en: 'Cemal AI\'s Chemistry Professor' },
       tagline: { tr: 'Science, bitch! ⚗️', en: 'Science, bitch! ⚗️' },
@@ -185,6 +237,7 @@ const AIBots = () => {
       }
     },
     futurist: {
+      id: 'futurist',
       name: { tr: 'Elon Musk AI', en: 'Elon Musk AI' },
       title: { tr: 'Cemal AI\'ın Gelecek Vizyoneri', en: 'Cemal AI\'s Future Visionary' },
       tagline: { tr: 'Making life multiplanetary 🚀', en: 'Making life multiplanetary 🚀' },
@@ -322,6 +375,31 @@ const AIBots = () => {
                 <div className="text-6xl mb-4 group-hover:scale-110 transition-all duration-300">
                   {bot.emoji}
                 </div>
+
+                {/* User Stats for this Bot */}
+                {botStats[bot.id] && (
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {/* Conversation Count */}
+                    <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/20 border border-blue-400/30 rounded-lg text-xs">
+                      <MessageSquare className="w-3 h-3 text-blue-400" />
+                      <span className="text-blue-300 font-medium">{botStats[bot.id].count}</span>
+                    </div>
+
+                    {/* Last Used */}
+                    <div className="flex items-center gap-1 px-2 py-1 bg-purple-500/20 border border-purple-400/30 rounded-lg text-xs">
+                      <Clock className="w-3 h-3 text-purple-400" />
+                      <span className="text-purple-300 font-medium">{getRelativeTime(botStats[bot.id].lastUsed)}</span>
+                    </div>
+
+                    {/* Favorite Bot Badge */}
+                    {passport?.stats?.favoriteBot === bot.name[language] && (
+                      <div className="flex items-center gap-1 px-2 py-1 bg-amber-500/20 border border-amber-400/30 rounded-lg text-xs">
+                        <Crown className="w-3 h-3 text-amber-400" />
+                        <span className="text-amber-300 font-medium">{language === 'tr' ? 'Favori' : 'Favorite'}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Bot Name */}
                 <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif' }}>
