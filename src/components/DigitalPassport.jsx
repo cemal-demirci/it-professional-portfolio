@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { X, Download, Upload, Copy, Check, Award, TrendingUp, Zap, Star, MessageSquare, Trash2, Calendar, FileDown, FileUp, Camera, Shuffle, Infinity } from 'lucide-react'
+import { X, Download, Upload, Copy, Check, Award, TrendingUp, Zap, Star, MessageSquare, Trash2, Calendar, FileDown, FileUp, Camera, Shuffle, Infinity, Coins, Flame, Send, Gift } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 import { Html5Qrcode } from 'html5-qrcode'
 import {
@@ -15,6 +15,7 @@ import {
 } from '../utils/digitalPassport'
 import { useLanguage } from '../contexts/LanguageContext'
 import { t } from '../translations'
+import { getUserGold, transferGold, checkLoginStreak, getStreakInfo, formatTimeRemaining, redeemGoldCode } from '../services/goldService'
 
 const DigitalPassport = ({ isOpen, onClose }) => {
   const { language } = useLanguage()
@@ -30,10 +31,42 @@ const DigitalPassport = ({ isOpen, onClose }) => {
   const fileInputRef = useRef(null)
   const qrScannerRef = useRef(null)
 
+  // Gold states
+  const [goldBalance, setGoldBalance] = useState(0)
+  const [streakInfo, setStreakInfo] = useState(null)
+  const [showTransfer, setShowTransfer] = useState(false)
+  const [transferTo, setTransferTo] = useState('')
+  const [transferAmount, setTransferAmount] = useState('')
+  const [transferError, setTransferError] = useState('')
+  const [showStreakNotif, setShowStreakNotif] = useState(false)
+  const [streakReward, setStreakReward] = useState(null)
+  const [goldCode, setGoldCode] = useState('')
+  const [goldCodeStatus, setGoldCodeStatus] = useState(null)
+  const [showWelcome, setShowWelcome] = useState(false)
+  const [welcomeMessage, setWelcomeMessage] = useState('')
+
   useEffect(() => {
     if (isOpen) {
       const currentPassport = getOrCreatePassport()
       setPassport(currentPassport)
+
+      // Special welcome for Kraliçe Pervin
+      if (currentPassport.username === 'Kraliçe Pervin 👑') {
+        const compliments = [
+          '🌹 Hoş geldiniz Kraliçemiz! Güzelliğiniz dijital alemde bile parlıyor.',
+          '👑 Ah, Kraliçe Pervin! Varlığınız bu platformu şereflendiriyor.',
+          '💎 Kraliçemiz, sitenin en değerli hazinesi sizsiniz.',
+          '✨ Hoş geldiniz! Güzelliğiniz ve zaratetiniz her yeri aydınlatıyor.',
+          '🌺 Kraliçe Pervin, muhteşem varlığınızla bizi onurlandırdınız.',
+          '💖 Sitenin tek gerçek kraliçesi! Hoş geldiniz efendimiz.',
+          '🦋 Her girişiniz bahar gibi, hoş geldiniz Kraliçemiz!',
+          '🌟 Varlığınız yıldızları bile kıskandırıyor, hoş geldiniz!'
+        ]
+        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)]
+        setWelcomeMessage(randomCompliment)
+        setShowWelcome(true)
+        setTimeout(() => setShowWelcome(false), 5000)
+      }
       const allConversations = getAllConversations()
       setConversations(allConversations)
 
@@ -50,6 +83,28 @@ const DigitalPassport = ({ isOpen, onClose }) => {
           }
         })
         .catch(err => console.error('Failed to fetch credits:', err))
+
+      // Fetch Gold balance
+      getUserGold().then(gold => setGoldBalance(gold))
+
+      // Fetch and check streak
+      checkLoginStreak().then(result => {
+        if (result.success) {
+          if (result.newStrike || result.goldRewarded > 0) {
+            setStreakReward(result)
+            setShowStreakNotif(true)
+            setTimeout(() => setShowStreakNotif(false), 5000)
+
+            // Refresh Gold balance if rewarded
+            if (result.goldRewarded > 0) {
+              getUserGold().then(gold => setGoldBalance(gold))
+            }
+          }
+        }
+      })
+
+      // Get streak info
+      getStreakInfo().then(info => setStreakInfo(info))
     }
   }, [isOpen])
 
@@ -221,6 +276,65 @@ const DigitalPassport = ({ isOpen, onClose }) => {
     return (xpIntoCurrentLevel / 100) * 100
   }
 
+  const handleTransferGold = async () => {
+    setTransferError('')
+
+    if (!transferTo || !transferAmount) {
+      setTransferError(language === 'tr' ? 'Lütfen tüm alanları doldurun' : 'Please fill all fields')
+      return
+    }
+
+    const amount = parseInt(transferAmount)
+    if (isNaN(amount) || amount <= 0) {
+      setTransferError(language === 'tr' ? 'Geçerli bir miktar girin' : 'Enter a valid amount')
+      return
+    }
+
+    if (goldBalance !== Infinity && amount > goldBalance) {
+      setTransferError(language === 'tr' ? 'Yetersiz Gold bakiyesi' : 'Insufficient Gold balance')
+      return
+    }
+
+    try {
+      const result = await transferGold(transferTo.trim(), amount)
+      if (result.success) {
+        setGoldBalance(result.newBalance)
+        setTransferTo('')
+        setTransferAmount('')
+        setShowTransfer(false)
+        alert(language === 'tr' ? `${amount} Gold başarıyla transfer edildi!` : `${amount} Gold transferred successfully!`)
+      }
+    } catch (error) {
+      setTransferError(error.message || (language === 'tr' ? 'Transfer başarısız' : 'Transfer failed'))
+    }
+  }
+
+  const handleRedeemGoldCode = async () => {
+    if (!goldCode.trim()) {
+      setGoldCodeStatus({ type: 'error', message: language === 'tr' ? 'Kod giriniz' : 'Enter code' })
+      return
+    }
+
+    try {
+      const result = await redeemGoldCode(goldCode.trim())
+      setGoldCodeStatus({
+        type: 'success',
+        message: language === 'tr'
+          ? `+${result.amount} Gold! Yeni bakiye: ${result.newBalance}`
+          : `+${result.amount} Gold! New balance: ${result.newBalance}`
+      })
+      setGoldBalance(result.newBalance)
+      setGoldCode('')
+      setTimeout(() => setGoldCodeStatus(null), 3000)
+    } catch (error) {
+      setGoldCodeStatus({
+        type: 'error',
+        message: error.message || (language === 'tr' ? 'Geçersiz kod' : 'Invalid code')
+      })
+      setTimeout(() => setGoldCodeStatus(null), 3000)
+    }
+  }
+
   if (!isOpen || !passport) return null
 
   return (
@@ -272,9 +386,18 @@ const DigitalPassport = ({ isOpen, onClose }) => {
                   ) : (
                     <>
                       <Zap className="w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-400" />
-                      <span>{passport.credits} {t(language, 'digitalPassport.profile.credits')}</span>
+                      <span>
+                        {passport.credits === Infinity ? '∞' : passport.credits} {t(language, 'digitalPassport.profile.credits')}
+                      </span>
                     </>
                   )}
+                </span>
+                <span className="text-gray-500 hidden sm:inline">•</span>
+                <span className="flex items-center gap-1">
+                  <Coins className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-400" />
+                  <span className="text-amber-400">
+                    {goldBalance === Infinity ? '∞' : goldBalance} Gold
+                  </span>
                 </span>
               </div>
             </div>
@@ -363,6 +486,180 @@ const DigitalPassport = ({ isOpen, onClose }) => {
                   ></div>
                 </div>
                 <p className="text-gray-400 text-sm mt-2">{passport.experience} / {passport.level * 100} XP</p>
+              </div>
+
+              {/* Login Streak Progress */}
+              {streakInfo && (
+                <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 backdrop-blur-lg rounded-2xl p-6 border border-amber-500/20">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-white font-bold flex items-center gap-2">
+                      <Flame className="w-5 h-5 text-orange-400" />
+                      {language === 'tr' ? 'Giriş Serisi' : 'Login Streak'}
+                    </h3>
+                    <span className="text-sm text-gray-400">
+                      {streakInfo.canClaimStrike
+                        ? (language === 'tr' ? 'Hazır!' : 'Ready!')
+                        : formatTimeRemaining(streakInfo.timeUntilNextStrike)}
+                    </span>
+                  </div>
+
+                  {/* Streak Progress Bars */}
+                  <div className="flex gap-2 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <div
+                        key={i}
+                        className={`flex-1 h-3 rounded-full transition-all duration-300 ${
+                          i < streakInfo.strikes
+                            ? 'bg-gradient-to-r from-amber-400 to-orange-400 shadow-lg shadow-amber-500/50'
+                            : 'bg-white/10'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-300">
+                      {streakInfo.strikes}/5 {language === 'tr' ? 'Strike' : 'Strikes'}
+                    </span>
+                    <span className="text-amber-400 font-bold">
+                      {streakInfo.strikes >= 5
+                        ? (language === 'tr' ? '✓ 10 Gold Kazandınız!' : '✓ Earned 10 Gold!')
+                        : `${5 - streakInfo.strikes} ${language === 'tr' ? 'strike kaldı → 10 Gold' : 'strikes left → 10 Gold'}`
+                      }
+                    </span>
+                  </div>
+
+                  {/* Streak Stats */}
+                  <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-xs text-gray-400">
+                    <span>{language === 'tr' ? 'Toplam Kazanılan' : 'Total Earned'}: {streakInfo.totalGoldEarned} Gold</span>
+                    <span>{language === 'tr' ? 'Seri Sayısı' : 'Streak Count'}: {streakInfo.streakCount}</span>
+                  </div>
+
+                  <p className="text-xs text-gray-400 mt-2">
+                    💡 {language === 'tr'
+                      ? 'Her 2 saatte bir giriş yaparak strike kazanın. 5 strike = 10 Gold!'
+                      : 'Login every 2 hours to earn strikes. 5 strikes = 10 Gold!'}
+                  </p>
+                </div>
+              )}
+
+              {/* Gold Transfer */}
+              <div className="bg-gradient-to-br from-amber-600/10 to-yellow-600/10 backdrop-blur-lg rounded-2xl p-6 border border-amber-500/20">
+                <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+                  <Send className="w-5 h-5 text-amber-400" />
+                  {language === 'tr' ? 'Gold Transfer' : 'Transfer Gold'}
+                </h3>
+
+                {!showTransfer ? (
+                  <button
+                    onClick={() => setShowTransfer(true)}
+                    className="w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 rounded-xl font-medium text-white transition-all"
+                  >
+                    {language === 'tr' ? 'Gold Gönder' : 'Send Gold'}
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-gray-300 text-sm mb-1 block">
+                        {language === 'tr' ? 'Alıcı Passport ID' : 'Recipient Passport ID'}
+                      </label>
+                      <input
+                        type="text"
+                        value={transferTo}
+                        onChange={(e) => setTransferTo(e.target.value)}
+                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                        className="w-full bg-white/10 text-white px-3 py-2 rounded-lg text-sm font-mono border border-white/10 focus:border-amber-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-gray-300 text-sm mb-1 block">
+                        {language === 'tr' ? 'Miktar' : 'Amount'}
+                      </label>
+                      <input
+                        type="number"
+                        value={transferAmount}
+                        onChange={(e) => setTransferAmount(e.target.value)}
+                        placeholder="0"
+                        min="1"
+                        max={goldBalance === Infinity ? undefined : goldBalance}
+                        className="w-full bg-white/10 text-white px-3 py-2 rounded-lg text-sm border border-white/10 focus:border-amber-400 focus:outline-none"
+                      />
+                    </div>
+
+                    {transferError && (
+                      <p className="text-red-400 text-sm">{transferError}</p>
+                    )}
+
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleTransferGold}
+                        className="flex-1 px-4 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 rounded-xl font-medium text-white transition-all"
+                      >
+                        {language === 'tr' ? 'Gönder' : 'Send'}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowTransfer(false)
+                          setTransferError('')
+                          setTransferTo('')
+                          setTransferAmount('')
+                        }}
+                        className="px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-medium text-white transition-all"
+                      >
+                        {language === 'tr' ? 'İptal' : 'Cancel'}
+                      </button>
+                    </div>
+
+                    <p className="text-xs text-gray-400">
+                      💡 {language === 'tr'
+                        ? 'Pasaport ID\'sini kopyalayıp göndermek istediğiniz kişiye verin.'
+                        : 'Copy your Passport ID and share it with the person you want to receive Gold from.'}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Gold Code Redemption */}
+              <div className="bg-gradient-to-br from-amber-600/10 to-yellow-600/10 backdrop-blur-lg rounded-2xl p-6 border border-amber-500/20">
+                <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+                  <Gift className="w-5 h-5 text-amber-400" />
+                  {language === 'tr' ? 'Gold Kodu Kullan' : 'Redeem Gold Code'}
+                </h3>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-gray-300 text-sm mb-1 block">
+                      {language === 'tr' ? 'Gold Kodu' : 'Gold Code'}
+                    </label>
+                    <input
+                      type="text"
+                      value={goldCode}
+                      onChange={(e) => setGoldCode(e.target.value.toUpperCase())}
+                      placeholder="GOLD-100-XXXXXXXX"
+                      className="w-full bg-white/10 text-white px-3 py-2 rounded-lg text-sm font-mono border border-white/10 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
+
+                  {goldCodeStatus && (
+                    <p className={`text-sm ${goldCodeStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                      {goldCodeStatus.message}
+                    </p>
+                  )}
+
+                  <button
+                    onClick={handleRedeemGoldCode}
+                    className="w-full px-4 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 rounded-xl font-medium text-white transition-all"
+                  >
+                    {language === 'tr' ? 'Kodu Kullan' : 'Redeem Code'}
+                  </button>
+
+                  <p className="text-xs text-gray-400">
+                    💡 {language === 'tr'
+                      ? 'Admin panelinden üretilen Gold kodlarını buradan kullanabilirsiniz.'
+                      : 'You can redeem Gold codes generated from admin panel here.'}
+                  </p>
+                </div>
               </div>
 
               {/* QR Code */}
@@ -632,6 +929,40 @@ const DigitalPassport = ({ isOpen, onClose }) => {
           )}
         </div>
       </div>
+
+      {/* Welcome Notification for Kraliçe Pervin */}
+      {showWelcome && welcomeMessage && (
+        <div className="fixed top-4 right-4 z-[10001] bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 text-white px-6 py-4 rounded-2xl shadow-2xl shadow-pink-500/50 animate-slideDown flex items-center gap-3 max-w-md border-2 border-pink-300/50">
+          <div className="text-4xl animate-bounce">👑</div>
+          <div>
+            <p className="font-bold text-lg leading-relaxed">
+              {welcomeMessage}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Streak Notification */}
+      {showStreakNotif && streakReward && (
+        <div className="fixed top-4 right-4 z-[10001] bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-4 rounded-2xl shadow-2xl shadow-amber-500/50 animate-slideDown flex items-center gap-3 max-w-sm">
+          <Flame className="w-8 h-8 animate-pulse" />
+          <div>
+            {streakReward.newStrike && (
+              <p className="font-bold">
+                {language === 'tr' ? '🔥 Yeni Strike!' : '🔥 New Strike!'}
+              </p>
+            )}
+            {streakReward.goldRewarded > 0 && (
+              <p className="font-bold text-xl">
+                💰 +{streakReward.goldRewarded} Gold!
+              </p>
+            )}
+            <p className="text-sm opacity-90">
+              {language === 'tr' ? 'Giriş seriniz devam ediyor!' : 'Login streak continues!'}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

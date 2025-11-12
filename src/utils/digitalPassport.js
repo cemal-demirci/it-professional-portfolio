@@ -85,7 +85,8 @@ export const createPassport = () => {
     usernameSeed, // Store seed for consistency
     avatarColor: generateAvatarColor(id),
     avatarPattern: generateAvatarPattern(id),
-    credits: 15, // Starting credits
+    credits: 15, // Starting credits (DEPRECATED - use goldBalance)
+    goldBalance: 10, // Starting gold - NEW unified currency
     createdAt: new Date().toISOString(),
     level: 1,
     experience: 0,
@@ -179,7 +180,8 @@ export const importPassport = (passportId) => {
       usernameSeed,
       avatarColor: generateAvatarColor(passportId),
       avatarPattern: generateAvatarPattern(passportId),
-      credits: 15, // Reset credits for imported passport
+      credits: 15, // Reset credits for imported passport (DEPRECATED)
+      goldBalance: 10, // Starting gold for imported passport
       createdAt: new Date().toISOString(),
       level: 1,
       experience: 0,
@@ -217,17 +219,111 @@ export const getOrCreatePassport = () => {
     if (existing.usernameSeed !== undefined) {
       existing.username = generateUsername(existing.id, existing.usernameSeed)
     }
+
+    // Initialize goldBalance for existing users who don't have it
+    if (!existing.hasOwnProperty('goldBalance')) {
+      existing.goldBalance = 10 // Give existing users 10 starting gold
+      savePassport(existing)
+    }
+
     return existing
   }
   return createPassport()
 }
 
-// Update passport credits
+// Update passport credits (DEPRECATED - use updateGoldBalance)
 export const updateCredits = (amount) => {
   const passport = loadPassport()
   if (!passport) return null
 
   passport.credits = Math.max(0, passport.credits + amount)
+  savePassport(passport)
+  return passport
+}
+
+// ==================== GOLD BALANCE SYSTEM ====================
+
+// Get user's Gold balance from Digital Passport
+export const getUserGoldBalance = () => {
+  const passport = loadPassport()
+  if (!passport) return 0
+
+  // Super admins have infinite gold
+  if (passport.isSuperAdmin || passport.goldBalance === Infinity) {
+    return Infinity
+  }
+
+  // Ensure goldBalance exists
+  if (!passport.hasOwnProperty('goldBalance')) {
+    passport.goldBalance = 10 // Default starting gold
+    savePassport(passport)
+  }
+
+  return passport.goldBalance
+}
+
+// Update Gold balance (add or subtract)
+export const updateGoldBalance = (amount) => {
+  const passport = loadPassport()
+  if (!passport) return null
+
+  // Super admins always have infinite gold
+  if (passport.isSuperAdmin || passport.goldBalance === Infinity) {
+    return passport
+  }
+
+  // Ensure goldBalance exists
+  if (!passport.hasOwnProperty('goldBalance')) {
+    passport.goldBalance = 10
+  }
+
+  // Update balance (can't go below 0)
+  passport.goldBalance = Math.max(0, passport.goldBalance + amount)
+  savePassport(passport)
+  return passport
+}
+
+// Deduct Gold (for spending) - returns new balance or throws error
+export const deductGold = (amount) => {
+  const passport = loadPassport()
+  if (!passport) throw new Error('No passport found')
+
+  // Super admins have unlimited gold
+  if (passport.isSuperAdmin || passport.goldBalance === Infinity) {
+    return Infinity
+  }
+
+  // Ensure goldBalance exists
+  if (!passport.hasOwnProperty('goldBalance')) {
+    passport.goldBalance = 10
+  }
+
+  // Check if user has enough gold
+  if (passport.goldBalance < amount) {
+    throw new Error('Insufficient gold balance')
+  }
+
+  passport.goldBalance -= amount
+  savePassport(passport)
+  return passport.goldBalance
+}
+
+// Add Gold (for earning rewards)
+export const addGold = (amount, reason = 'Reward') => {
+  const passport = loadPassport()
+  if (!passport) return null
+
+  // Super admins always have infinite
+  if (passport.isSuperAdmin || passport.goldBalance === Infinity) {
+    return passport
+  }
+
+  // Ensure goldBalance exists
+  if (!passport.hasOwnProperty('goldBalance')) {
+    passport.goldBalance = 10
+  }
+
+  passport.goldBalance += amount
   savePassport(passport)
   return passport
 }

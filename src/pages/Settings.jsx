@@ -3,7 +3,7 @@ import {
   Settings as SettingsIcon, Key, Zap, Clock, CheckCircle, XCircle,
   Shield, Info, Sparkles, Rocket, CreditCard, Gift, Mail, Copy,
   Trash2, Eye, EyeOff, Lock, Unlock, DollarSign, Send, BarChart3, Crown, Infinity,
-  Ghost, PartyPopper
+  Ghost, PartyPopper, Coins
 } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useRainbow } from '../contexts/RainbowContext'
@@ -12,6 +12,11 @@ import CemalLogo from '../components/CemalLogo'
 import { useGodMode } from '../contexts/GodModeContext'
 import RainbowModeToolBlocker from '../components/RainbowModeToolBlocker'
 import EasterEggs from '../components/EasterEggs'
+import {
+  getOrCreatePassport,
+  getUserGoldBalance,
+  updateGoldBalance
+} from '../utils/digitalPassport'
 import {
   getUserCredits,
   redeemCreditCode,
@@ -27,13 +32,23 @@ import {
   getCodeStatistics,
   clearCreditRequest
 } from '../services/creditService'
+import {
+  getUserGold,
+  generateGoldCodes,
+  getGeneratedGoldCodes,
+  deleteGoldCode,
+  invalidateGoldCode,
+  getGoldCodeStatistics,
+  redeemGoldCode
+} from '../services/goldService'
 
 const Settings = () => {
   const { godMode } = useGodMode()
   const { rainbowMode } = useRainbow()
 
   // User states
-  const [credits, setCredits] = useState(15)
+  const [passport, setPassport] = useState(null)
+  const [goldBalance, setGoldBalance] = useState(10)
   const [codeInput, setCodeInput] = useState('')
   const [redeemStatus, setRedeemStatus] = useState(null)
   const [requestEmail, setRequestEmail] = useState('')
@@ -52,6 +67,13 @@ const Settings = () => {
   const [creditRequests, setCreditRequests] = useState([])
   const [stats, setStats] = useState(null)
 
+  // Gold admin states
+  const [goldAmount, setGoldAmount] = useState(10)
+  const [goldCodeCount, setGoldCodeCount] = useState(1)
+  const [generatedGoldCodes, setGeneratedGoldCodes] = useState([])
+  const [goldStats, setGoldStats] = useState(null)
+  const [showGoldTab, setShowGoldTab] = useState(false)
+
   // UI states
   const [isVisible, setIsVisible] = useState(false)
   const [copiedCode, setCopiedCode] = useState(null)
@@ -64,7 +86,12 @@ const Settings = () => {
 
   useEffect(() => {
     setIsVisible(true)
-    updateCredits()
+
+    // Load passport and Gold balance from Digital Passport
+    const currentPassport = getOrCreatePassport()
+    setPassport(currentPassport)
+    const currentGold = getUserGoldBalance()
+    setGoldBalance(currentGold)
 
     // Check if admin is already logged in
     const adminStatus = localStorage.getItem('isAdminLoggedIn')
@@ -128,9 +155,13 @@ const Settings = () => {
     }
   }
 
-  const updateCredits = async () => {
-    const currentCredits = await getUserCredits()
-    setCredits(currentCredits)
+  const updateGoldBalanceState = () => {
+    const currentGold = getUserGoldBalance()
+    setGoldBalance(currentGold)
+
+    // Also update passport to get latest data
+    const currentPassport = getOrCreatePassport()
+    setPassport(currentPassport)
   }
 
   const loadAdminData = async () => {
@@ -141,21 +172,30 @@ const Settings = () => {
     setGeneratedCodes(codes)
     setCreditRequests(requests)
     setStats(statistics)
+
+    // Load Gold data
+    const goldCodes = await getGeneratedGoldCodes()
+    const goldStatistics = await getGoldCodeStatistics()
+
+    setGeneratedGoldCodes(goldCodes)
+    setGoldStats(goldStatistics)
   }
 
   const handleRedeemCode = async () => {
     try {
-      const result = await redeemCreditCode(codeInput.trim().toUpperCase())
+      // Try to redeem Gold code
+      const result = await redeemGoldCode(codeInput.trim().toUpperCase())
+
+      // Update Digital Passport with new Gold
+      updateGoldBalance(result.amount)
 
       setRedeemStatus({
         type: 'success',
-        message: result.unlimited
-          ? t(language, 'settings.redeemCode.unlimitedActivated')
-          : `${result.amount} ${t(language, 'settings.redeemCode.creditsAdded')} ${result.newBalance} ${t(language, 'settings.redeemCode.creditsBalance')}`
+        message: `+${result.amount} Gold! ${language === 'tr' ? 'Yeni bakiye' : 'New balance'}: ${result.newBalance}`
       })
 
       setCodeInput('')
-      await updateCredits()
+      updateGoldBalanceState()
 
       setTimeout(() => setRedeemStatus(null), 5000)
     } catch (error) {
@@ -261,6 +301,39 @@ const Settings = () => {
         await loadAdminData()
       } catch (error) {
         console.error('Error clearing request:', error)
+      }
+    }
+  }
+
+  // Gold handlers
+  const handleGenerateGoldCodes = async () => {
+    try {
+      await generateGoldCodes(goldAmount, goldCodeCount)
+      await loadAdminData()
+    } catch (error) {
+      console.error('Error generating gold codes:', error)
+      alert('Failed to generate gold codes: ' + error.message)
+    }
+  }
+
+  const handleDeleteGoldCode = async (code) => {
+    if (confirm('Delete this Gold code?')) {
+      try {
+        await deleteGoldCode(code)
+        await loadAdminData()
+      } catch (error) {
+        console.error('Error deleting gold code:', error)
+      }
+    }
+  }
+
+  const handleInvalidateGoldCode = async (code) => {
+    if (confirm('Invalidate this Gold code?')) {
+      try {
+        await invalidateGoldCode(code)
+        await loadAdminData()
+      } catch (error) {
+        console.error('Error invalidating gold code:', error)
       }
     }
   }
@@ -476,32 +549,35 @@ const Settings = () => {
         </div>
       )}
 
-      {/* Credit Balance - Simplified */}
-      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 md:p-6 text-white transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
+      {/* Gold Balance - From Digital Passport */}
+      <div className={`bg-gradient-to-br from-amber-600/10 to-yellow-600/10 backdrop-blur-xl border border-amber-500/20 rounded-2xl p-4 md:p-6 text-white transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-              <CreditCard className="w-6 h-6 md:w-7 md:h-7 text-blue-300" />
+            <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Coins className="w-6 h-6 md:w-7 md:h-7 text-amber-300" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs md:text-sm text-blue-200/70">{t(language, 'settings.creditBalance.title')}</p>
-              <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent truncate" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
-                {godMode ? (
+              <p className="text-xs md:text-sm text-amber-200/70">{language === 'tr' ? 'Gold Bakiyesi' : 'Gold Balance'}</p>
+              <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-2 bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-400 bg-clip-text text-transparent truncate" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                {godMode || goldBalance === Infinity ? (
                   <>
-                    <Infinity className="w-6 h-6 md:w-8 md:h-8 text-blue-300 flex-shrink-0" />
+                    <Infinity className="w-6 h-6 md:w-8 md:h-8 text-amber-300 flex-shrink-0" />
                     <span className="truncate">{t(language, 'settings.creditBalance.unlimited')}</span>
                   </>
                 ) : (
-                  credits
+                  <>
+                    <Coins className="w-6 h-6 text-amber-400 flex-shrink-0" />
+                    {goldBalance}
+                  </>
                 )}
               </h2>
             </div>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
-            {godMode || credits > 0 ? (
+          <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-amber-500/20">
+            {godMode || goldBalance > 0 ? (
               <>
-                <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-blue-400 flex-shrink-0" />
-                <span className="font-semibold text-sm md:text-base text-blue-100 whitespace-nowrap">{godMode ? t(language, 'settings.creditBalance.godMode') : t(language, 'settings.creditBalance.active')}</span>
+                <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-amber-400 flex-shrink-0" />
+                <span className="font-semibold text-sm md:text-base text-amber-100 whitespace-nowrap">{godMode ? t(language, 'settings.creditBalance.godMode') : t(language, 'settings.creditBalance.active')}</span>
               </>
             ) : (
               <>
@@ -513,11 +589,11 @@ const Settings = () => {
         </div>
       </div>
 
-      {/* Redeem Code Section - Simplified */}
-      <div className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 md:p-6 space-y-3 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
+      {/* Redeem Gold Code Section */}
+      <div className={`bg-gradient-to-br from-amber-600/10 to-yellow-600/10 backdrop-blur-xl border border-amber-500/20 rounded-2xl p-4 md:p-6 space-y-3 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
         <div className="flex items-center gap-2">
-          <Gift className="w-5 h-5 text-blue-400" />
-          <h2 className="text-lg font-bold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'settings.redeemCode.title')}</h2>
+          <Gift className="w-5 h-5 text-amber-400" />
+          <h2 className="text-lg font-bold bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-400 bg-clip-text text-transparent" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{language === 'tr' ? 'Gold Kodu Kullan' : 'Redeem Gold Code'}</h2>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2">
@@ -525,16 +601,16 @@ const Settings = () => {
             type="text"
             value={codeInput}
             onChange={(e) => setCodeInput(e.target.value.toUpperCase())}
-            placeholder={t(language, 'settings.redeemCode.placeholder')}
-            className="flex-1 px-4 py-2.5 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 bg-white/5 text-white uppercase transition-all text-sm placeholder-gray-500"
+            placeholder={language === 'tr' ? 'GOLD-XXX-XXXXXXXX' : 'GOLD-XXX-XXXXXXXX'}
+            className="flex-1 px-4 py-2.5 border border-amber-500/30 rounded-xl focus:ring-2 focus:ring-amber-500/50 bg-white/5 text-white uppercase transition-all text-sm placeholder-gray-500"
           />
           <button
             onClick={handleRedeemCode}
             disabled={!codeInput.trim()}
-            className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-semibold text-sm whitespace-nowrap"
+            className="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-semibold text-sm whitespace-nowrap"
           >
             <Zap className="w-4 h-4" />
-            {t(language, 'settings.redeemCode.button')}
+            {language === 'tr' ? 'Kullan' : 'Redeem'}
           </button>
         </div>
 
@@ -837,6 +913,135 @@ const Settings = () => {
                   </div>
                 ))
               )}
+            </div>
+          </div>
+
+          {/* Gold Code Generation Section */}
+          <div className="bg-gradient-to-br from-amber-600/10 to-yellow-600/10 rounded-xl p-5 border border-amber-500/20">
+            <h2 className="text-xl font-bold bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent mb-4 flex items-center gap-2">
+              <Coins className="w-6 h-6 text-amber-400" />
+              Gold Credit System
+            </h2>
+
+            {/* Gold Statistics */}
+            {goldStats && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+                <div className="bg-white/5 rounded-xl p-4 border border-amber-500/20">
+                  <p className="text-amber-200/70 text-sm">Total Gold Codes</p>
+                  <p className="text-2xl font-bold text-white">{goldStats.total}</p>
+                </div>
+                <div className="bg-white/5 rounded-xl p-4 border border-amber-500/20">
+                  <p className="text-amber-200/70 text-sm">Used</p>
+                  <p className="text-2xl font-bold text-amber-300">{goldStats.used}</p>
+                </div>
+                <div className="bg-white/5 rounded-xl p-4 border border-amber-500/20">
+                  <p className="text-amber-200/70 text-sm">Unused</p>
+                  <p className="text-2xl font-bold text-yellow-300">{goldStats.unused}</p>
+                </div>
+                <div className="bg-white/5 rounded-xl p-4 border border-amber-500/20">
+                  <p className="text-amber-200/70 text-sm">Invalid</p>
+                  <p className="text-2xl font-bold text-red-400">{goldStats.invalid}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Gold Code Generation */}
+            <div className="bg-white/5 rounded-xl p-5 border border-amber-500/20 mb-5">
+              <h3 className="text-lg font-bold text-amber-300 mb-4">Generate Gold Codes</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm text-amber-200/70 mb-2">Gold Amount</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="1000"
+                    value={goldAmount}
+                    onChange={(e) => setGoldAmount(Math.max(1, Math.min(1000, Number(e.target.value))))}
+                    className="w-full px-4 py-2 bg-white/5 border border-amber-500/30 rounded-xl text-white transition-all focus:ring-2 focus:ring-amber-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-amber-200/70 mb-2">Number of Codes</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={goldCodeCount}
+                    onChange={(e) => setGoldCodeCount(Math.max(1, Math.min(100, Number(e.target.value))))}
+                    className="w-full px-4 py-2 bg-white/5 border border-amber-500/30 rounded-xl text-white transition-all focus:ring-2 focus:ring-amber-500/50"
+                  />
+                </div>
+                <div className="flex items-end">
+                  <button
+                    onClick={handleGenerateGoldCodes}
+                    className="w-full px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:shadow-lg text-white rounded-xl transition-all font-semibold"
+                  >
+                    Generate Gold Codes
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Generated Gold Codes List */}
+            <div className="bg-white/5 rounded-xl p-5 border border-amber-500/20">
+              <h3 className="text-lg font-bold text-amber-300 mb-4">Generated Gold Codes ({generatedGoldCodes.length})</h3>
+              <div className="max-h-96 overflow-y-auto space-y-2">
+                {generatedGoldCodes.length === 0 ? (
+                  <p className="text-amber-200/70 text-center py-8">No Gold codes generated yet</p>
+                ) : (
+                  generatedGoldCodes.map((codeObj, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
+                        codeObj.usedAt
+                          ? 'bg-amber-500/10 border-amber-500/30'
+                          : !codeObj.isValid
+                          ? 'bg-red-500/10 border-red-500/30'
+                          : 'bg-white/5 border-amber-500/20'
+                      }`}
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <code className="text-white font-mono text-sm">{codeObj.code}</code>
+                          {codeObj.usedAt && <span className="text-xs bg-amber-600 text-white px-2 py-0.5 rounded-full">Used</span>}
+                          {!codeObj.isValid && <span className="text-xs bg-red-600 text-white px-2 py-0.5 rounded-full">Invalid</span>}
+                        </div>
+                        <p className="text-xs text-amber-200/60 mt-1">
+                          {codeObj.amount} Gold • Created {new Date(codeObj.createdAt).toLocaleString()}
+                          {codeObj.usedAt && ` • Used ${new Date(codeObj.usedAt).toLocaleString()}`}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleCopyCode(codeObj.code)}
+                          className="p-2 hover:bg-amber-500/20 rounded-lg transition-all"
+                          title="Copy code"
+                        >
+                          <Copy className="w-4 h-4 text-amber-300" />
+                        </button>
+                        {!codeObj.usedAt && codeObj.isValid && (
+                          <>
+                            <button
+                              onClick={() => handleInvalidateGoldCode(codeObj.code)}
+                              className="p-2 hover:bg-red-500/20 rounded-lg transition-all"
+                              title="Invalidate code"
+                            >
+                              <XCircle className="w-4 h-4 text-red-400" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteGoldCode(codeObj.code)}
+                              className="p-2 hover:bg-red-500/20 rounded-lg transition-all"
+                              title="Delete code"
+                            >
+                              <Trash2 className="w-4 h-4 text-red-400" />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>

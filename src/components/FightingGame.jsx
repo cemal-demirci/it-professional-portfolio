@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
-import { Zap, Shield, Skull, Heart } from 'lucide-react'
+import { Zap, Shield, Skull, Heart, Brain, Lock, Trophy } from 'lucide-react'
+import { rewardGold as rewardGoldService } from '../services/goldService'
 
 const FightingGame = ({ onClose }) => {
+  // Game states
   const [playerHealth, setPlayerHealth] = useState(100)
   const [enemyHealth, setEnemyHealth] = useState(100)
   const [playerAction, setPlayerAction] = useState('idle')
@@ -13,23 +15,89 @@ const FightingGame = ({ onClose }) => {
   const [playerBlocking, setPlayerBlocking] = useState(false)
   const gameLoopRef = useRef(null)
 
+  // Puzzle states
+  const [puzzleMode, setPuzzleMode] = useState(true)
+  const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(0)
+  const [puzzleAnswer, setPuzzleAnswer] = useState('')
+  const [puzzlesSolved, setPuzzlesSolved] = useState(0)
+  const [puzzleError, setPuzzleError] = useState('')
+  const [selectedPuzzles, setSelectedPuzzles] = useState([])
+
+  // Gold reward states
+  const [goldRewarded, setGoldRewarded] = useState(false)
+  const [showGoldReward, setShowGoldReward] = useState(false)
+
+  // Puzzle database - rastgele 3 tanesi seçilecek
+  const puzzles = [
+    {
+      question: "🧮 Matematik: 7 × 8 + 12 - 5 = ?",
+      answer: "63",
+      hint: "Önce çarpma, sonra toplama, en son çıkarma"
+    },
+    {
+      question: "🔢 Dizi: 2, 4, 8, 16, __ ?",
+      answer: "32",
+      hint: "Her sayı bir öncekinin 2 katı"
+    },
+    {
+      question: "🧩 Mantık: Bir kelimede 5 harf var, ilk 2 harfi 'CE' ise ve IT ile ilgiliyse, bu site?",
+      answer: "CEMAL",
+      hint: "Bu sitenin sahibinin adı..."
+    },
+    {
+      question: "💻 Kod: Binary '1010' = Decimal ?",
+      answer: "10",
+      hint: "8+0+2+0 = ?"
+    },
+    {
+      question: "🎯 Matematik: 3³ + 5² - 10 = ?",
+      answer: "42",
+      hint: "27 + 25 - 10"
+    },
+    {
+      question: "🔐 Şifre: 'CEMAL'.length + 'AI'.length = ?",
+      answer: "7",
+      hint: "Harf sayılarını topla"
+    },
+    {
+      question: "🎲 Sıra: 1, 1, 2, 3, 5, 8, __ ?",
+      answer: "13",
+      hint: "Fibonacci: son iki sayıyı topla"
+    },
+    {
+      question: "⚡ Hız: 100 krediye 3 soru sorabiliyorsan, 1 sorunun maliyeti?",
+      answer: "33",
+      hint: "100 / 3 = ?"
+    }
+  ]
+
+  // Select 3 random puzzles on mount
+  useEffect(() => {
+    const shuffled = [...puzzles].sort(() => Math.random() - 0.5)
+    setSelectedPuzzles(shuffled.slice(0, 3))
+  }, [])
+
   // Sound effects using Web Audio API
   const playSound = (frequency, duration) => {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)()
-    const oscillator = audioContext.createOscillator()
-    const gainNode = audioContext.createGain()
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+      const oscillator = audioContext.createOscillator()
+      const gainNode = audioContext.createGain()
 
-    oscillator.connect(gainNode)
-    gainNode.connect(audioContext.destination)
+      oscillator.connect(gainNode)
+      gainNode.connect(audioContext.destination)
 
-    oscillator.frequency.value = frequency
-    oscillator.type = 'square'
+      oscillator.frequency.value = frequency
+      oscillator.type = 'square'
 
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration)
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration)
 
-    oscillator.start(audioContext.currentTime)
-    oscillator.stop(audioContext.currentTime + duration)
+      oscillator.start(audioContext.currentTime)
+      oscillator.stop(audioContext.currentTime + duration)
+    } catch (error) {
+      console.log('Audio not supported')
+    }
   }
 
   // Komik mesajlar
@@ -88,6 +156,60 @@ const FightingGame = ({ onClose }) => {
     setTimeout(() => setMessage(''), 1500)
   }
 
+  // Puzzle handling
+  const handlePuzzleSubmit = (e) => {
+    e.preventDefault()
+
+    if (!selectedPuzzles[currentPuzzleIndex]) return
+
+    const correctAnswer = selectedPuzzles[currentPuzzleIndex].answer.toLowerCase().trim()
+    const userAnswer = puzzleAnswer.toLowerCase().trim()
+
+    if (userAnswer === correctAnswer) {
+      playSound(400, 0.3)
+      setPuzzlesSolved(prev => prev + 1)
+      setPuzzleError('')
+      setPuzzleAnswer('')
+
+      if (currentPuzzleIndex < 2) {
+        // Next puzzle
+        setTimeout(() => {
+          setCurrentPuzzleIndex(prev => prev + 1)
+        }, 500)
+      } else {
+        // All puzzles solved, start game
+        setTimeout(() => {
+          setPuzzleMode(false)
+        }, 1000)
+      }
+    } else {
+      playSound(100, 0.2)
+      setPuzzleError('❌ Yanlış! Tekrar dene.')
+      setTimeout(() => setPuzzleError(''), 2000)
+    }
+  }
+
+  // Reward Gold when player wins
+  const rewardGold = async () => {
+    if (goldRewarded) return
+
+    try {
+      const result = await rewardGoldService(1, 'Fighting Game Victory')
+
+      if (result.success) {
+        setGoldRewarded(true)
+        setShowGoldReward(true)
+        playSound(600, 0.5)
+
+        setTimeout(() => {
+          setShowGoldReward(false)
+        }, 5000)
+      }
+    } catch (error) {
+      console.error('Gold reward error:', error)
+    }
+  }
+
   // Player attacks
   const attack = () => {
     if (gameOver || playerAction !== 'idle') return
@@ -139,7 +261,7 @@ const FightingGame = ({ onClose }) => {
 
   // Enemy AI
   useEffect(() => {
-    if (gameOver) return
+    if (gameOver || puzzleMode) return
 
     const enemyAI = setInterval(() => {
       const random = Math.random()
@@ -179,7 +301,7 @@ const FightingGame = ({ onClose }) => {
 
     gameLoopRef.current = enemyAI
     return () => clearInterval(enemyAI)
-  }, [gameOver, playerBlocking, enemyHealth])
+  }, [gameOver, playerBlocking, enemyHealth, puzzleMode])
 
   // Check game over
   useEffect(() => {
@@ -193,14 +315,19 @@ const FightingGame = ({ onClose }) => {
       setWinner('player')
       playSound(500, 1)
       if (gameLoopRef.current) clearInterval(gameLoopRef.current)
+
+      // Reward Gold for victory
+      setTimeout(() => {
+        rewardGold()
+      }, 1500)
     }
   }, [playerHealth, enemyHealth])
 
   // Keyboard controls
   useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (gameOver) return
+    if (gameOver || puzzleMode) return
 
+    const handleKeyPress = (e) => {
       switch (e.key.toLowerCase()) {
         case 'a':
           attack()
@@ -216,10 +343,114 @@ const FightingGame = ({ onClose }) => {
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [gameOver, playerAction, combo])
+  }, [gameOver, playerAction, combo, puzzleMode])
 
+  // Puzzle screen
+  if (puzzleMode) {
+    const currentPuzzle = selectedPuzzles[currentPuzzleIndex]
+
+    if (!currentPuzzle) {
+      return <div className="fixed inset-0 z-[10001] bg-black flex items-center justify-center">
+        <div className="text-white">Loading puzzles...</div>
+      </div>
+    }
+
+    return (
+      <div className="fixed inset-0 z-[10001] bg-gradient-to-br from-purple-900 via-black to-indigo-900 flex items-center justify-center">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold z-10"
+        >
+          EXIT (ESC)
+        </button>
+
+        <div className="max-w-2xl mx-4 w-full">
+          {/* Progress */}
+          <div className="mb-8 flex justify-center gap-4">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold border-4 transition-all ${
+                  i < puzzlesSolved
+                    ? 'bg-green-500 border-green-300'
+                    : i === currentPuzzleIndex
+                    ? 'bg-yellow-500 border-yellow-300 animate-pulse'
+                    : 'bg-gray-700 border-gray-600'
+                }`}
+              >
+                {i < puzzlesSolved ? '✓' : i + 1}
+              </div>
+            ))}
+          </div>
+
+          {/* Puzzle card */}
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border-2 border-purple-500/50 shadow-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <Brain className="w-8 h-8 text-purple-400" />
+              <h2 className="text-3xl font-black text-white">
+                Bulmaca {currentPuzzleIndex + 1}/3
+              </h2>
+            </div>
+
+            <div className="bg-black/30 rounded-xl p-6 mb-6">
+              <p className="text-white text-2xl font-bold text-center">
+                {currentPuzzle.question}
+              </p>
+            </div>
+
+            <form onSubmit={handlePuzzleSubmit} className="space-y-4">
+              <input
+                type="text"
+                value={puzzleAnswer}
+                onChange={(e) => setPuzzleAnswer(e.target.value)}
+                placeholder="Cevabını buraya yaz..."
+                className="w-full px-6 py-4 bg-white/20 border-2 border-purple-500/50 rounded-xl text-white text-xl font-bold placeholder-gray-400 focus:outline-none focus:border-purple-400"
+                autoFocus
+              />
+
+              {puzzleError && (
+                <div className="text-red-400 text-center font-bold text-lg animate-pulse">
+                  {puzzleError}
+                </div>
+              )}
+
+              <div className="bg-blue-500/20 border border-blue-500/50 rounded-xl p-4">
+                <p className="text-blue-300 text-sm">
+                  💡 İpucu: {currentPuzzle.hint}
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-xl font-bold text-xl hover:scale-105 transition-transform shadow-lg"
+              >
+                <Lock className="w-6 h-6 inline mr-2" />
+                CEVABI KONTROL ET
+              </button>
+            </form>
+
+            <div className="mt-6 text-center text-gray-400 text-sm">
+              🎮 Tüm bulmaçları çöz ve dövüş oyununu kazan = +1 Gold! 💰
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Fighting game screen
   return (
     <div className="fixed inset-0 z-[10001] bg-black flex items-center justify-center">
+      {/* Gold Reward Notification */}
+      {showGoldReward && (
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-8 py-4 rounded-2xl font-bold text-2xl shadow-2xl border-4 border-yellow-300">
+            <Trophy className="w-8 h-8 inline mr-2" />
+            +1 GOLD KAZANDIN! 💰
+          </div>
+        </div>
+      )}
+
       {/* Close button */}
       <button
         onClick={onClose}
@@ -344,7 +575,11 @@ const FightingGame = ({ onClose }) => {
                   {winner === 'player' ? 'VICTORY!' : 'DEFEAT!'}
                 </h2>
                 <p className="text-white mb-6">
-                  {winner === 'player' ? 'You are the champion!' : 'Better luck next time!'}
+                  {winner === 'player'
+                    ? goldRewarded
+                      ? '🎉 Tebrikler! +1 Gold kazandın!'
+                      : 'Harika! Ödülün yolda...'
+                    : 'Better luck next time!'}
                 </p>
                 <button
                   onClick={() => window.location.reload()}

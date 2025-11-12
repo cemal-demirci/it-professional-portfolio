@@ -127,6 +127,7 @@ import RemoteDesktop from './pages/RemoteDesktop'
 
 // AI Bots Page
 import AIBots from './pages/AIBots'
+import UltraVIPAI from './pages/UltraVIPAI'
 
 // App Content - No blocking here, let individual pages handle rainbow mode
 function AppContent() {
@@ -146,6 +147,7 @@ function AppContent() {
 
           {/* AI Bots */}
           <Route path="/ai-bots" element={<AIBots />} />
+          <Route path="/ai-bots/ultra-vip" element={<UltraVIPAI />} />
 
           {/* File Share */}
           <Route path="/fileshare" element={<FileShare />} />
