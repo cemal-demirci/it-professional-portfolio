@@ -50,6 +50,16 @@ const VoiceChamber = () => {
   const videoRef = useRef(null) // For camera
   const canvasRef = useRef(null) // For gender swap rendering
 
+  // Secret code for Replicate features
+  const [replicateUnlocked, setReplicateUnlocked] = useState(false)
+  const [replicateCode, setReplicateCode] = useState('')
+  const [showReplicateModal, setShowReplicateModal] = useState(false)
+  const REPLICATE_SECRET = 'NSFW2025' // Özel kod
+
+  // Text chat for XXX
+  const [textInput, setTextInput] = useState('')
+  const [isSendingText, setIsSendingText] = useState(false)
+
   // Voice & audio
   const [isListening, setIsListening] = useState(false)
   const [isSpeaking, setIsSpeaking] = useState(false)
@@ -673,6 +683,46 @@ const VoiceChamber = () => {
     }
   }
 
+  // Check Replicate secret code
+  const checkReplicateCode = () => {
+    if (replicateCode.toUpperCase() === REPLICATE_SECRET) {
+      setReplicateUnlocked(true)
+      setShowReplicateModal(false)
+      setReplicateCode('')
+      alert('✅ Gelişmiş özellikler açıldı!')
+    } else {
+      alert('❌ Yanlış kod!')
+      setReplicateCode('')
+    }
+  }
+
+  // Send text message (for XXX character)
+  const handleSendTextMessage = async () => {
+    if (!textInput.trim()) return
+
+    const userText = textInput.trim()
+    setTextInput('')
+    setIsSendingText(true)
+
+    try {
+      // Add user message to conversation
+      setConversation(prev => [...prev, {
+        role: 'user',
+        text: userText,
+        timestamp: Date.now()
+      }])
+
+      // Process with AI (same as voice)
+      await processUserInput(userText)
+
+    } catch (error) {
+      console.error('Text message error:', error)
+      alert(`❌ Mesaj gönderme hatası: ${error.message}`)
+    } finally {
+      setIsSendingText(false)
+    }
+  }
+
   // Process user input and get AI response
   const processUserInput = async (userText) => {
     setIsProcessing(true)
@@ -1280,7 +1330,21 @@ const VoiceChamber = () => {
 
               {/* NEW: Replicate AI Features */}
               <div className="mt-6 space-y-3">
-                <h3 className="text-sm font-bold text-white text-center mb-3">🔥 Gelişmiş AI Özellikleri</h3>
+                {/* Unlock Button or Features */}
+                {!replicateUnlocked ? (
+                  <div className="text-center">
+                    <button
+                      onClick={() => setShowReplicateModal(true)}
+                      className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold text-sm hover:scale-105 transition-all shadow-lg"
+                    >
+                      <Lock className="w-4 h-4 inline mr-2" />
+                      Gelişmiş Özellikler 🔓
+                    </button>
+                    <p className="text-xs text-gray-400 mt-2">Özel kod ile kilidini aç</p>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="text-sm font-bold text-white text-center mb-3">🔥 Gelişmiş AI Özellikleri</h3>
 
                 {/* Row 1: Image Generation + User Face Upload */}
                 <div className="flex gap-2">
@@ -1406,6 +1470,90 @@ const VoiceChamber = () => {
                   </p>
                 </div>
               )}
+                  </>
+                )}
+              </div>
+
+              {/* Text Chat Input - Only for XXX character */}
+              <div className="mt-6">
+                <h3 className="text-sm font-bold text-white text-center mb-2">💬 Mesaj Gönder</h3>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={textInput}
+                    onChange={(e) => setTextInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && !isSendingText && handleSendTextMessage()}
+                    placeholder={`${userName || 'Bebeğim'} ile yaz...`}
+                    className="flex-1 px-4 py-3 bg-white/10 border-2 border-pink-500/30 rounded-xl text-white placeholder-gray-400 focus:border-pink-500 focus:outline-none transition-all"
+                    disabled={isSendingText || isProcessing}
+                  />
+                  <button
+                    onClick={handleSendTextMessage}
+                    disabled={isSendingText || isProcessing || !textInput.trim()}
+                    className="px-6 py-3 bg-gradient-to-r from-pink-600 to-red-600 rounded-xl font-bold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                  >
+                    {isSendingText ? (
+                      <Loader className="w-5 h-5 animate-spin" />
+                    ) : (
+                      '➤'
+                    )}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-400 text-center mt-2">
+                  💡 Mikrofon yerine yazarak da konuşabilirsin
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Replicate Code Modal */}
+          {showReplicateModal && (
+            <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+              <div className="bg-gradient-to-br from-purple-600/30 to-pink-600/30 backdrop-blur-2xl rounded-3xl p-8 border-2 border-purple-500/50 max-w-md w-full shadow-2xl">
+                <div className="text-center mb-6">
+                  <Lock className="w-16 h-16 text-purple-400 mx-auto mb-4" />
+                  <h2 className="text-3xl font-black text-white mb-2">Gelişmiş Özellikler</h2>
+                  <p className="text-pink-300 text-sm">Özel kodu gir ve kilidini aç</p>
+                </div>
+
+                <div className="mb-6">
+                  <input
+                    type="password"
+                    value={replicateCode}
+                    onChange={(e) => setReplicateCode(e.target.value.toUpperCase())}
+                    onKeyPress={(e) => e.key === 'Enter' && checkReplicateCode()}
+                    placeholder="Özel Kod Gir..."
+                    className="w-full px-4 py-3 bg-white/10 border-2 border-purple-500/30 rounded-xl text-white text-center font-bold text-lg tracking-widest focus:border-purple-500 focus:outline-none transition-all"
+                    maxLength={10}
+                    autoFocus
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={checkReplicateCode}
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold hover:scale-105 transition-all shadow-lg"
+                  >
+                    <Unlock className="w-5 h-5 inline mr-2" />
+                    Kilidi Aç
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowReplicateModal(false)
+                      setReplicateCode('')
+                    }}
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition-all"
+                  >
+                    İptal
+                  </button>
+                </div>
+
+                <div className="mt-6 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                  <p className="text-xs text-yellow-300 text-center">
+                    🔥 Görüntü üretimi, video, deepfake ve gender swap özellikleri
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 
