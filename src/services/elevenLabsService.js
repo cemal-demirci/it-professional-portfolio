@@ -1,12 +1,17 @@
 // ElevenLabs Text-to-Speech Service
 const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY
 
-// Voice IDs from ElevenLabs
+// Voice IDs from ElevenLabs - Best for Turkish
 export const VOICES = {
-  rachel: '21m00Tcm4TlvDq8ikWAM', // Mature, warm female voice
-  bella: 'EXAVITQu4vr4xnSDxMaL', // Soft, seductive female voice
-  elli: 'MF3mGyEYCl7XYWbV9V6O', // Young, energetic female
-  charlotte: 'XB0fDUnXU5powFXDhCwa', // Seductive, mature female
+  // Premium natural voices - better for Turkish
+  rachel: '21m00Tcm4TlvDq8ikWAM', // Mature, warm female (good Turkish)
+  bella: 'EXAVITQu4vr4xnSDxMaL', // Soft, seductive female (excellent Turkish)
+  domi: 'AZnzlk1XvdvUeBnXmlld', // Young, energetic female (natural Turkish)
+  freya: 'jsCqWAovK2LkecY7zXl4', // British female (warm, clear)
+
+  // Alternative natural voices
+  nicole: 'piTKgcLEGmPE4e6mEKli', // Soft American female (clear)
+  charlotte: 'XB0fDUnXU5powFXDhCwa', // Seductive mature female
 }
 
 // Turkish AI Characters
@@ -17,7 +22,7 @@ export const AI_CHARACTERS = {
     emoji: '💋',
     role: 'Emlak Danışmanı',
     personality: 'Seksi, şehvetli, ikna edici',
-    voiceId: VOICES.rachel,
+    voiceId: VOICES.bella, // Bella - most natural and seductive
     systemPrompt: `Sen LUNA, son derece çekici ve ikna edici bir emlak danışmanısın.
 
 Kişiliğin:
@@ -42,7 +47,7 @@ SADECE Türkçe konuş! Her yanıtın seksi, şehvetli ve ikna edici olmalı.`,
     emoji: '🌹',
     role: 'Kişisel Terapis',
     personality: 'Rahatlatıcı, yakın, şehvetli',
-    voiceId: VOICES.bella,
+    voiceId: VOICES.rachel, // Rachel - warm and soothing
     systemPrompt: `Sen SCARLETT, son derece rahatlatıcı ve yakın bir terapistsin.
 
 Kişiliğin:
@@ -65,7 +70,7 @@ SADECE Türkçe konuş! Her yanıtın rahatlatıcı ve şehvetli olmalı.`,
     emoji: '💎',
     role: 'Fitness & Wellness Coach',
     personality: 'Enerjik, motive edici, çekici',
-    voiceId: VOICES.elli,
+    voiceId: VOICES.domi, // Domi - energetic and natural
     systemPrompt: `Sen JADE, çok enerjik ve motive edici bir fitness coach'sun.
 
 Kişiliğin:
@@ -88,7 +93,7 @@ SADECE Türkçe konuş! Her yanıtın enerjik ve motive edici olmalı.`,
     emoji: '🍷',
     role: 'Life Coach',
     personality: 'Gizemli, derin, baştan çıkarıcı',
-    voiceId: VOICES.charlotte,
+    voiceId: VOICES.freya, // Freya - warm, clear, mysterious
     systemPrompt: `Sen EVE, gizemli ve derin bir life coach'sun.
 
 Kişiliğin:
@@ -125,12 +130,12 @@ export const generateSpeech = async (text, voiceId = VOICES.rachel) => {
         },
         body: JSON.stringify({
           text: text,
-          model_id: 'eleven_multilingual_v2', // Supports Turkish
+          model_id: 'eleven_turbo_v2_5', // Faster, more natural for Turkish
           voice_settings: {
-            stability: 0.5, // More expressive
-            similarity_boost: 0.75,
-            style: 0.5, // Sexy, expressive style
-            use_speaker_boost: true
+            stability: 0.71, // Higher stability = more natural, less robotic
+            similarity_boost: 0.85, // Higher = closer to original voice
+            style: 0.21, // Lower = more natural conversation
+            use_speaker_boost: true // Better clarity
           }
         })
       }
@@ -196,11 +201,11 @@ export const streamSpeech = async (text, voiceId = VOICES.rachel, onChunk) => {
         },
         body: JSON.stringify({
           text: text,
-          model_id: 'eleven_multilingual_v2',
+          model_id: 'eleven_turbo_v2_5',
           voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: 0.5,
+            stability: 0.71,
+            similarity_boost: 0.85,
+            style: 0.21,
             use_speaker_boost: true
           }
         })
