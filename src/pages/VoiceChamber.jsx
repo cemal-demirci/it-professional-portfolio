@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X } from 'lucide-react'
+import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X, Flame } from 'lucide-react'
 import { AI_CHARACTERS, generateSpeech, getQuota } from '../services/elevenLabsService'
 import { analyzeWithGemini } from '../services/geminiService'
 import { getUserGold } from '../services/goldService'
@@ -25,6 +25,7 @@ const VoiceChamber = () => {
   const [sessionTime, setSessionTime] = useState(0)
   const [conversation, setConversation] = useState([])
   const [settingsModal, setSettingsModal] = useState(null) // For showing AI details
+  const [dirtyTalkMode, setDirtyTalkMode] = useState(false) // XXX character intensity mode
 
   // Voice & audio
   const [isListening, setIsListening] = useState(false)
@@ -121,6 +122,7 @@ const VoiceChamber = () => {
     setSelectedCharacter(null)
     setConversation([])
     setSessionTime(0)
+    setDirtyTalkMode(false) // Reset dirty talk mode
 
     if (sessionTimerRef.current) {
       clearInterval(sessionTimerRef.current)
@@ -235,9 +237,14 @@ const VoiceChamber = () => {
       conversationContext += `Kullanıcı: ${userText}\n`
 
       // Get AI response (Gemini)
+      // Use dirty talk prompt if XXX character and dirty talk mode is active
+      const systemPrompt = (selectedCharacter.id === 'xxx' && dirtyTalkMode && selectedCharacter.dirtyTalkPrompt)
+        ? selectedCharacter.dirtyTalkPrompt
+        : selectedCharacter.systemPrompt
+
       const aiResponse = await analyzeWithGemini(
         conversationContext,
-        selectedCharacter.systemPrompt,
+        systemPrompt,
         { bypassCreditCheck: true } // Uses Gold instead
       )
 
@@ -591,6 +598,23 @@ const VoiceChamber = () => {
               <Zap className="w-4 h-4" />
               <span className="font-bold">{goldBalance} Gold</span>
             </div>
+
+            {/* Dirty Talk Mode Toggle - Only for XXX character */}
+            {selectedCharacter.id === 'xxx' && (
+              <button
+                onClick={() => setDirtyTalkMode(!dirtyTalkMode)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-bold text-sm transition-all ${
+                  dirtyTalkMode
+                    ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white animate-pulse shadow-lg'
+                    : 'bg-white/10 text-gray-400 hover:bg-white/20'
+                }`}
+                title={dirtyTalkMode ? 'Dirty Talk Mode AÇIK 🔥' : 'Dirty Talk Mode\'u Aç'}
+              >
+                <Flame className={`w-4 h-4 ${dirtyTalkMode ? 'animate-pulse' : ''}`} />
+                <span>{dirtyTalkMode ? 'FULL POWER' : 'Dirty Talk'}</span>
+              </button>
+            )}
+
             <div className="flex items-center gap-2 text-gray-400">
               <Clock className="w-4 h-4" />
               <span className="font-bold">{formatTime(sessionTime)}</span>
@@ -679,8 +703,16 @@ const VoiceChamber = () => {
         </div>
 
         {/* Info */}
-        <div className="mt-4 text-center text-gray-500 text-xs">
-          Her konuşma 1 Gold harcar • ElevenLabs Turbo v2.5 (Türkçe optimize) kullanılıyor
+        <div className="mt-4 text-center text-xs">
+          {dirtyTalkMode && selectedCharacter.id === 'xxx' ? (
+            <div className="text-red-400 font-bold animate-pulse">
+              🔥 DIRTY TALK MODE AKTIF - VİTES ARDI! 🔥
+            </div>
+          ) : (
+            <div className="text-gray-500">
+              Her konuşma 1 Gold harcar • ElevenLabs Turbo v2.5 (Türkçe optimize) kullanılıyor
+            </div>
+          )}
         </div>
       </div>
     </div>
