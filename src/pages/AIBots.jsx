@@ -309,6 +309,49 @@ const AIBots = () => {
           </div>
         </div>
 
+        {/* Voice Chamber Banner */}
+        <Link to="/voice-chamber" className="block mb-8">
+          <div className="relative group bg-gradient-to-r from-pink-900/50 via-rose-900/50 to-red-900/50 backdrop-blur-xl rounded-3xl p-8 border-2 border-pink-500/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-[1.02] overflow-hidden">
+            {/* Animated Background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-600/10 via-rose-600/10 to-red-600/10 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+
+            {/* Sparkle Effects */}
+            <div className="absolute top-4 right-4">
+              <Mic className="w-8 h-8 text-pink-400 animate-pulse" />
+            </div>
+            <div className="absolute bottom-4 left-4">
+              <Sparkles className="w-6 h-6 text-rose-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
+            </div>
+
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-pink-500/20 backdrop-blur-sm rounded-full border border-pink-400/30 mb-4">
+                  <Mic className="w-4 h-4 text-pink-400" />
+                  <span className="text-sm font-bold text-pink-300 tracking-wider">
+                    {language === 'tr' ? 'SESLİ AI ASISTANLAR' : 'VOICE AI ASSISTANTS'}
+                  </span>
+                </div>
+
+                <h2 className="text-4xl md:text-5xl font-black mb-3 bg-gradient-to-r from-pink-300 via-rose-300 to-red-300 bg-clip-text text-transparent">
+                  {language === 'tr' ? 'Özel Eğitilmiş Sesli Agent AI\'lar' : 'Specially Trained Voice Agent AIs'}
+                </h2>
+
+                <p className="text-xl text-gray-300">
+                  {language === 'tr'
+                    ? '4 Premium Sesli AI Asistan. Emlak, Terapi, Fitness ve Life Coaching konularında uzman. Gerçekçi Türkçe seslendirme.'
+                    : '4 Premium Voice AI Assistants. Experts in Real Estate, Therapy, Fitness and Life Coaching. Realistic Turkish voices.'}
+                </p>
+              </div>
+
+              <div className="flex-shrink-0">
+                <div className="px-8 py-4 bg-gradient-to-r from-pink-600 to-rose-600 group-hover:from-pink-500 group-hover:to-rose-500 rounded-2xl font-bold text-white text-lg transition-all duration-300 transform group-hover:scale-105 shadow-lg shadow-pink-500/50">
+                  {language === 'tr' ? 'Konuş →' : 'Speak →'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Link>
+
         {/* Ultra VIP AI Chamber Banner */}
         <Link to="/ai-bots/ultra-vip" className="block mb-12">
           <div className="relative group bg-gradient-to-r from-purple-900/50 via-pink-900/50 to-amber-900/50 backdrop-blur-xl rounded-3xl p-8 border-2 border-purple-500/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-[1.02] overflow-hidden">

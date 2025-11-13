@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User } from 'lucide-react'
+import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X } from 'lucide-react'
 import { AI_CHARACTERS, generateSpeech, getQuota } from '../services/elevenLabsService'
 import { analyzeWithGemini } from '../services/geminiService'
 import { getUserGold } from '../services/goldService'
@@ -24,6 +24,7 @@ const VoiceChamber = () => {
   const [goldBalance, setGoldBalance] = useState(0)
   const [sessionTime, setSessionTime] = useState(0)
   const [conversation, setConversation] = useState([])
+  const [settingsModal, setSettingsModal] = useState(null) // For showing AI details
 
   // Voice & audio
   const [isListening, setIsListening] = useState(false)
@@ -351,6 +352,25 @@ const VoiceChamber = () => {
               VOICE CHAMBER
             </h1>
             <p className="text-gray-400 text-lg">Sesli AI Asistanınızı Seçin</p>
+
+            {/* Portfolio Demo Notice */}
+            <div className="mt-4 mx-auto max-w-2xl bg-blue-500/10 border border-blue-400/30 rounded-xl p-4 mb-4">
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="text-left">
+                  <p className="text-blue-300 text-sm font-semibold mb-1">
+                    📢 {language === 'tr' ? 'Portföy Sunumu' : 'Portfolio Demonstration'}
+                  </p>
+                  <p className="text-gray-400 text-xs">
+                    {language === 'tr'
+                      ? 'Bu AI asistanlar portföy sunumlarında kullanılmak üzere özel olarak eğitilmiştir. Gerçek projeler için detaylı bilgi almak isterseniz iletişime geçin.'
+                      : 'These AI assistants are specially trained for portfolio presentations. For detailed information about real projects, please contact us.'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="flex items-center justify-center gap-4 mt-4">
               <div className="flex items-center gap-2 text-amber-400">
                 <Zap className="w-5 h-5" />
@@ -366,15 +386,26 @@ const VoiceChamber = () => {
             {Object.values(AI_CHARACTERS).map(character => (
               <div
                 key={character.id}
-                onClick={() => startSession(character.id)}
-                className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-3xl p-8 border-2 border-white/20 hover:border-pink-500/60 transition-all duration-500 hover:scale-105 cursor-pointer group"
+                className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-3xl p-8 border-2 border-white/20 hover:border-pink-500/60 transition-all duration-500 hover:scale-105 group relative"
                 style={{
                   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)'
                 }}
               >
-                <div className="text-center">
-                  <div className="text-6xl mb-4 group-hover:scale-110 transition-transform">{character.emoji}</div>
-                  <h2 className="text-3xl font-black mb-2 group-hover:text-pink-400 transition-colors">{character.name}</h2>
+                {/* Settings Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setSettingsModal(character)
+                  }}
+                  className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 group/settings"
+                  title="AI Detayları"
+                >
+                  <Settings className="w-5 h-5 text-gray-400 group-hover/settings:text-pink-400 group-hover/settings:rotate-90 transition-all" />
+                </button>
+
+                <div className="text-center" onClick={() => startSession(character.id)}>
+                  <div className="text-6xl mb-4 group-hover:scale-110 transition-transform cursor-pointer">{character.emoji}</div>
+                  <h2 className="text-3xl font-black mb-2 group-hover:text-pink-400 transition-colors cursor-pointer">{character.name}</h2>
                   <p className="text-purple-300 font-bold mb-4">{character.role}</p>
                   <p className="text-gray-400 text-sm mb-6">{character.personality}</p>
 
@@ -382,7 +413,7 @@ const VoiceChamber = () => {
                     <p className="text-gray-300 text-sm italic">"{character.welcomeMessage}"</p>
                   </div>
 
-                  <button className="mt-6 w-full px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl font-bold hover:scale-105 transition-all shadow-lg">
+                  <button className="mt-6 w-full px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl font-bold hover:scale-105 transition-all shadow-lg cursor-pointer">
                     <Mic className="w-5 h-5 inline mr-2" />
                     BAŞLAT
                   </button>
@@ -398,6 +429,82 @@ const VoiceChamber = () => {
             ← Ana Sayfa
           </button>
         </div>
+
+        {/* Settings Modal */}
+        {settingsModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setSettingsModal(null)}>
+            <div className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-2xl rounded-3xl p-8 border-2 border-white/30 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="text-5xl">{settingsModal.emoji}</div>
+                  <div>
+                    <h2 className="text-3xl font-black text-white">{settingsModal.name}</h2>
+                    <p className="text-purple-300">{settingsModal.role}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSettingsModal(null)}
+                  className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all"
+                >
+                  <X className="w-6 h-6 text-gray-400" />
+                </button>
+              </div>
+
+              {/* Details */}
+              <div className="space-y-4">
+                {/* Personality */}
+                <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                  <h3 className="text-lg font-bold text-pink-400 mb-2">Kişilik</h3>
+                  <p className="text-gray-300">{settingsModal.personality}</p>
+                </div>
+
+                {/* Welcome Message */}
+                <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                  <h3 className="text-lg font-bold text-purple-400 mb-2">Hoş Geldin Mesajı</h3>
+                  <p className="text-gray-300 italic">"{settingsModal.welcomeMessage}"</p>
+                </div>
+
+                {/* System Prompt */}
+                <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                  <h3 className="text-lg font-bold text-blue-400 mb-2">Sistem Talimatları</h3>
+                  <pre className="text-gray-300 text-xs whitespace-pre-wrap font-mono bg-black/20 p-3 rounded-lg max-h-60 overflow-y-auto">
+                    {settingsModal.systemPrompt}
+                  </pre>
+                </div>
+
+                {/* Voice ID */}
+                <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                  <h3 className="text-lg font-bold text-green-400 mb-2">Ses Modeli</h3>
+                  <div className="flex items-center gap-2">
+                    <Volume2 className="w-4 h-4 text-green-400" />
+                    <code className="text-gray-300 text-sm">{settingsModal.voiceId}</code>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="mt-6 flex gap-3">
+                <button
+                  onClick={() => {
+                    setSettingsModal(null)
+                    startSession(settingsModal.id)
+                  }}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl font-bold hover:scale-105 transition-all"
+                >
+                  <Mic className="w-5 h-5 inline mr-2" />
+                  Başlat
+                </button>
+                <button
+                  onClick={() => setSettingsModal(null)}
+                  className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition-all"
+                >
+                  Kapat
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
