@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Settings as SettingsIcon, Zap, Infinity, UserCircle } from 'lucide-react'
+import { Menu, X, Settings as SettingsIcon, Zap, Infinity, UserCircle, Coins } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { t } from '../translations'
@@ -9,6 +9,7 @@ import LanguageSwitcher from './LanguageSwitcher'
 import DigitalPassport from './DigitalPassport'
 import { getRemainingRequests, LIMITS } from '../services/geminiService'
 import { useRainbow, getFabulousName, getFabulousMessage } from '../contexts/RainbowContext'
+import { getUserGoldBalance } from '../utils/digitalPassport'
 
 const Layout = ({ children }) => {
   const { rainbowMode } = useRainbow()
@@ -17,6 +18,7 @@ const Layout = ({ children }) => {
   const [fabulousMsg, setFabulousMsg] = useState('')
   const [remainingRequests, setRemainingRequests] = useState(10)
   const [isUnlimited, setIsUnlimited] = useState(false)
+  const [goldBalance, setGoldBalance] = useState(0)
   const [siteSettings, setSiteSettings] = useState({
     siteName: 'Cemal Demirci',
     showNavLogo: false,
@@ -48,8 +50,18 @@ const Layout = ({ children }) => {
       }
     }
 
+    // Update Gold balance from Digital Passport
+    const updateGoldBalance = () => {
+      const currentGold = getUserGoldBalance()
+      setGoldBalance(currentGold)
+    }
+
     updateRequests()
-    const interval = setInterval(updateRequests, 2000)
+    updateGoldBalance()
+    const interval = setInterval(() => {
+      updateRequests()
+      updateGoldBalance()
+    }, 2000)
     return () => clearInterval(interval)
   }, [])
 
@@ -173,6 +185,28 @@ const Layout = ({ children }) => {
                 {/* Language Switcher */}
                 <LanguageSwitcher />
 
+                {/* Vertical Separator */}
+                <div className="h-8 w-px bg-white/20"></div>
+
+                {/* Gold Balance Indicator */}
+                <Link
+                  to="/settings"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 shadow-lg hover:scale-105 bg-gradient-to-r from-amber-600/90 to-yellow-600/90 text-white hover:from-amber-500 hover:to-yellow-500"
+                  title={language === 'tr' ? 'Gold Bakiyesi' : 'Gold Balance'}
+                >
+                  {goldBalance === Infinity ? (
+                    <>
+                      <Infinity className="w-4 h-4" />
+                      <span>∞ Gold</span>
+                    </>
+                  ) : (
+                    <>
+                      <Coins className="w-4 h-4" />
+                      <span>{goldBalance}</span>
+                    </>
+                  )}
+                </Link>
+
                 {/* Digital Passport Button */}
                 <button
                   onClick={() => setPassportOpen(true)}
@@ -214,6 +248,25 @@ const Layout = ({ children }) => {
 
                 {/* Language Switcher - Mobile */}
                 <LanguageSwitcher />
+
+                {/* Gold Balance Indicator - Mobile */}
+                <Link
+                  to="/settings"
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 shadow-lg bg-gradient-to-r from-amber-600/90 to-yellow-600/90 text-white"
+                  title="Gold"
+                >
+                  {goldBalance === Infinity ? (
+                    <>
+                      <Infinity className="w-3 h-3" />
+                      <span>∞</span>
+                    </>
+                  ) : (
+                    <>
+                      <Coins className="w-3 h-3" />
+                      <span>{goldBalance}</span>
+                    </>
+                  )}
+                </Link>
 
                 {/* Digital Passport Button - Mobile */}
                 <button

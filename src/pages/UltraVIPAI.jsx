@@ -3,6 +3,7 @@ import { ArrowLeft, Brain, Moon, Sparkles, Lock, Unlock, Clock, Coins, Send, Loa
 import { useLanguage } from '../contexts/LanguageContext'
 import { getUserGold } from '../services/goldService'
 import { getOrCreatePassport, saveConversation } from '../utils/digitalPassport'
+import { analyzeWithGemini } from '../services/geminiService'
 
 const UltraVIPAI = () => {
   const { language } = useLanguage()
@@ -371,7 +372,6 @@ You don't just answer questions - you paint them with words. Answer in ${languag
     setMessages(prev => [...prev, userMessage])
 
     const currentInput = input
-    const currentFile = uploadedFile
     setInput('')
     setUploadedFile(null)
     if (fileInputRef.current) fileInputRef.current.value = ''
@@ -379,55 +379,30 @@ You don't just answer questions - you paint them with words. Answer in ${languag
     setIsStreaming(true)
 
     try {
-      const conversationHistory = []
-
-      if (messages.length === 0 || messages.length === 1) {
-        conversationHistory.push({
-          role: 'user',
-          parts: [{ text: `${selectedBot.systemPrompt}\n\nUser: ${currentInput}` }]
-        })
-      } else {
-        messages.forEach(msg => {
-          if (msg.role !== 'assistant' || msg.content !== selectedBot.welcomeMessage) {
-            conversationHistory.push({
-              role: msg.role === 'user' ? 'user' : 'model',
-              parts: [{ text: msg.content }]
-            })
-          }
-        })
-        conversationHistory.push({
-          role: 'user',
-          parts: [{ text: currentInput }]
-        })
-      }
-
-      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBHrH4iiVSkQXsIOGpYOb97nYlih8n12CE', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: conversationHistory,
-          generationConfig: {
-            temperature: 0.9,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 2048,
-          }
-        })
+      // Build conversation context (just like PremiumChatbot)
+      let conversationContext = ''
+      messages.forEach(msg => {
+        if (msg.role === 'user') {
+          conversationContext += `User: ${msg.content}\n`
+        } else if (msg.content !== selectedBot.welcomeMessage) {
+          conversationContext += `AI: ${msg.content}\n`
+        }
       })
+      conversationContext += `User: ${currentInput}\n`
 
-      const data = await response.json()
+      // Use analyzeWithGemini (same as PremiumChatbot)
+      const response = await analyzeWithGemini(
+        conversationContext,
+        selectedBot.systemPrompt,
+        { bypassCreditCheck: true } // Ultra VIP uses Gold, not credits
+      )
 
-      if (data.error) {
-        throw new Error(data.error.message || 'API Error')
+      const aiMessage = {
+        role: 'assistant',
+        content: response
       }
 
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text
-
-      if (!aiResponse) {
-        throw new Error('Empty response from AI')
-      }
-
-      setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }])
+      setMessages(prev => [...prev, aiMessage])
     } catch (error) {
       console.error('AI Error:', error)
       setMessages(prev => [...prev, {
@@ -652,72 +627,138 @@ You don't just answer questions - you paint them with words. Answer in ${languag
 
   // Bot Selection Screen
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-black text-white py-12 px-4">
-      <div className="container mx-auto max-w-7xl">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-gray-900 via-indigo-950 to-black text-white py-12 px-4">
+      {/* Premium Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 left-0 w-full h-full" style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255, 215, 0, 0.2) 1px, transparent 0)',
+          backgroundSize: '40px 40px'
+        }}></div>
+      </div>
+
+      {/* Animated Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-amber-400 rounded-full animate-ping"></div>
+        <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-cyan-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-1/4 left-1/2 w-2 h-2 bg-purple-400 rounded-full animate-ping" style={{animationDelay: '2s'}}></div>
+      </div>
+
+      {/* VIP Watermark */}
+      <div className="absolute top-4 right-4 opacity-20 pointer-events-none">
+        <div className="text-6xl font-black bg-gradient-to-br from-amber-400 to-yellow-600 bg-clip-text text-transparent">
+          VIP
+        </div>
+      </div>
+
+      <div className="container mx-auto max-w-7xl relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 mb-6">
-            <Sparkles className="w-6 h-6 text-blue-400 animate-pulse" />
-            <span className="text-sm font-bold text-cyan-300 tracking-wider">ULTRA VIP EXCLUSIVE</span>
+          {/* Premium Badge */}
+          <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 backdrop-blur-2xl rounded-full border-2 border-amber-400/30 mb-8 shadow-2xl shadow-amber-500/20 hover:scale-105 transition-transform duration-300">
+            <Sparkles className="w-7 h-7 text-amber-400 animate-pulse drop-shadow-lg" />
+            <span className="text-base font-black text-transparent bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 bg-clip-text tracking-widest">
+              ✨ ULTRA VIP EXCLUSIVE ✨
+            </span>
+            <Sparkles className="w-7 h-7 text-amber-400 animate-pulse drop-shadow-lg" />
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
-            Ultra VIP AI Chamber
+          {/* Title with Glow */}
+          <h1 className="text-6xl md:text-7xl font-black mb-6 relative">
+            <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
+              Ultra VIP AI Chamber
+            </span>
+            <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-30 blur-2xl -z-10"></div>
           </h1>
-          <p className="text-xl text-gray-300 mb-6">
+
+          <p className="text-xl text-gray-300 mb-8 font-medium">
             {language === 'tr'
-              ? '3 Premium AI ile derin sohbetler. Her 5 dakika 5 Gold.'
-              : '3 Premium AIs for deep conversations. 5 Gold per 5 minutes.'}
+              ? '💎 3 Premium AI ile derin sohbetler • Her 5 dakika 5 Gold 💎'
+              : '💎 3 Premium AIs for deep conversations • 5 Gold per 5 minutes 💎'}
           </p>
-          <div className="flex items-center justify-center gap-2 text-amber-400">
-            <Coins className="w-6 h-6" />
-            <span className="text-2xl font-bold">{goldBalance === Infinity ? '∞' : goldBalance} Gold</span>
+
+          {/* Gold Balance - Luxury Style */}
+          <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-600/20 to-yellow-600/20 backdrop-blur-xl rounded-2xl border-2 border-amber-500/40 shadow-2xl shadow-amber-500/30">
+            <Coins className="w-8 h-8 text-amber-400 drop-shadow-lg animate-pulse" />
+            <span className="text-3xl font-black bg-gradient-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">
+              {goldBalance === Infinity ? '∞' : goldBalance}
+            </span>
+            <span className="text-lg font-bold text-amber-300">Gold</span>
           </div>
         </div>
 
-        {/* Bots Grid */}
+        {/* Bots Grid - ULTRA LUXURY */}
         <div className="grid md:grid-cols-3 gap-8">
           {bots.map((bot) => {
             const IconComponent = bot.icon
             return (
               <div
                 key={bot.id}
-                className="relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:bg-white/10 hover:border-blue-500/50 transition-all duration-500 hover:scale-105 group"
+                className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-3xl p-8 border-2 border-white/20 hover:border-amber-400/60 transition-all duration-700 hover:scale-110 hover:-translate-y-4 group cursor-pointer"
                 style={{
-                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)'
+                  boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.7), 0 0 40px rgba(251, 191, 36, 0.15)',
+                  transform: 'perspective(1000px)',
+                  transformStyle: 'preserve-3d'
+                }}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect()
+                  const x = e.clientX - rect.left
+                  const y = e.clientY - rect.top
+                  const centerX = rect.width / 2
+                  const centerY = rect.height / 2
+                  const rotateX = (y - centerY) / 20
+                  const rotateY = (centerX - x) / 20
+                  e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1) translateY(-16px)`
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1) translateY(0)'
                 }}
               >
-                {/* Gradient Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${bot.gradient} opacity-0 group-hover:opacity-10 rounded-3xl transition-all duration-500`}></div>
+                {/* Gradient Glow Overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${bot.gradient} opacity-0 group-hover:opacity-20 rounded-3xl transition-all duration-700 blur-xl`}></div>
+
+                {/* Glowing Border */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 opacity-0 group-hover:opacity-50 rounded-3xl blur-lg transition-all duration-700"></div>
+
+                {/* Particle Effect on Hover */}
+                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                  <Sparkles className="w-6 h-6 text-amber-400 animate-pulse" />
+                </div>
 
                 <div className="relative z-10">
-                  {/* Icon */}
-                  <div className="w-20 h-20 bg-white/10 backdrop-blur-lg rounded-2xl flex items-center justify-center text-4xl mb-4 shadow-lg border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                  {/* Icon with Glow */}
+                  <div className="relative w-24 h-24 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-lg rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-2xl border-2 border-white/30 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
                     {bot.emoji}
+                    <div className="absolute -inset-1 bg-gradient-to-br from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-40 rounded-3xl blur-xl"></div>
                   </div>
 
-                  {/* Name */}
-                  <h2 className="text-2xl font-bold mb-2 text-white">{bot.name}</h2>
-                  <p className="text-lg text-gray-300 mb-4">{bot.tagline}</p>
-                  <p className="text-sm text-gray-400 mb-6 leading-relaxed">{bot.description}</p>
+                  {/* Premium Badge */}
+                  <div className="inline-block px-3 py-1 bg-gradient-to-r from-amber-500/30 to-yellow-500/30 border border-amber-400/40 rounded-full mb-4">
+                    <span className="text-xs font-black text-amber-300">PREMIUM</span>
+                  </div>
 
-                  {/* Buttons */}
+                  {/* Name with Gradient */}
+                  <h2 className="text-2xl font-black mb-2 bg-gradient-to-r from-white via-amber-100 to-white bg-clip-text text-transparent group-hover:from-amber-300 group-hover:via-yellow-300 group-hover:to-amber-300 transition-all duration-500">
+                    {bot.name}
+                  </h2>
+                  <p className="text-lg font-bold text-amber-300/80 mb-4">{bot.tagline}</p>
+                  <p className="text-sm text-gray-300 mb-6 leading-relaxed">{bot.description}</p>
+
+                  {/* Luxury Buttons */}
                   <div className="space-y-3">
                     <button
                       onClick={() => handleStartSpectator(bot)}
-                      className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+                      className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 group/btn"
                     >
-                      <Lock className="w-4 h-4" />
-                      {language === 'tr' ? 'Spectator Modu' : 'Spectator Mode'}
+                      <Lock className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                      <span className="group-hover/btn:tracking-wider transition-all">{language === 'tr' ? 'Spectator Modu' : 'Spectator Mode'}</span>
                     </button>
                     <button
                       onClick={() => handleStartAuthorized(bot)}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/50"
+                      className="w-full px-5 py-4 bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 hover:from-amber-500 hover:via-yellow-400 hover:to-amber-500 rounded-2xl font-black transition-all flex items-center justify-center gap-2 shadow-2xl shadow-amber-500/50 hover:shadow-amber-400/70 hover:scale-105 border-2 border-amber-400/50 group/btn"
                     >
-                      <Unlock className="w-4 h-4" />
-                      {language === 'tr' ? 'Tam Erişim' : 'Full Access'}
-                      <span className="text-sm opacity-80">(5 Gold/5dk)</span>
+                      <Unlock className="w-5 h-5 group-hover/btn:scale-125 group-hover/btn:rotate-12 transition-all" />
+                      <span className="group-hover/btn:tracking-wider transition-all">{language === 'tr' ? '💎 Tam Erişim' : '💎 Full Access'}</span>
+                      <span className="text-xs opacity-90">(5 Gold/5dk)</span>
                     </button>
                   </div>
                 </div>

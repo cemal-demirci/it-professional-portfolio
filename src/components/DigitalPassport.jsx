@@ -338,9 +338,9 @@ const DigitalPassport = ({ isOpen, onClose }) => {
   if (!isOpen || !passport) return null
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[10000] flex items-center justify-center p-4 animate-fadeIn">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[10000] flex items-center justify-center p-2 md:p-4 animate-fadeIn">
       <div
-        className="bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col border border-white/10 overflow-hidden animate-slideUp"
+        className="bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl max-w-4xl w-full max-h-[95vh] flex flex-col border border-white/10 overflow-hidden animate-slideUp"
         style={{
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)',
           background: `linear-gradient(135deg, ${passport.avatarColor.primary}10 0%, ${passport.avatarColor.secondary}10 100%)`
@@ -467,11 +467,11 @@ const DigitalPassport = ({ isOpen, onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6">
+        <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-3 md:space-y-4">
           {activeTab === 'overview' && (
             <>
               {/* XP Progress */}
-              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10">
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-white/10">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-white font-medium">{t(language, 'digitalPassport.profile.experience')}</span>
                   <span className="text-gray-400 text-sm">{experienceToNextLevel()} {t(language, 'digitalPassport.profile.xpToNextLevel')} {passport.level + 1}</span>
@@ -490,7 +490,7 @@ const DigitalPassport = ({ isOpen, onClose }) => {
 
               {/* Login Streak Progress */}
               {streakInfo && (
-                <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 backdrop-blur-lg rounded-2xl p-6 border border-amber-500/20">
+                <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-amber-500/20">
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="text-white font-bold flex items-center gap-2">
                       <Flame className="w-5 h-5 text-orange-400" />
@@ -544,7 +544,7 @@ const DigitalPassport = ({ isOpen, onClose }) => {
               )}
 
               {/* Gold Transfer */}
-              <div className="bg-gradient-to-br from-amber-600/10 to-yellow-600/10 backdrop-blur-lg rounded-2xl p-6 border border-amber-500/20">
+              <div className="bg-gradient-to-br from-amber-600/10 to-yellow-600/10 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-amber-500/20">
                 <h3 className="text-white font-bold mb-4 flex items-center gap-2">
                   <Send className="w-5 h-5 text-amber-400" />
                   {language === 'tr' ? 'Gold Transfer' : 'Transfer Gold'}
@@ -621,7 +621,7 @@ const DigitalPassport = ({ isOpen, onClose }) => {
               </div>
 
               {/* Gold Code Redemption */}
-              <div className="bg-gradient-to-br from-amber-600/10 to-yellow-600/10 backdrop-blur-lg rounded-2xl p-6 border border-amber-500/20">
+              <div className="bg-gradient-to-br from-amber-600/10 to-yellow-600/10 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-amber-500/20">
                 <h3 className="text-white font-bold mb-4 flex items-center gap-2">
                   <Gift className="w-5 h-5 text-amber-400" />
                   {language === 'tr' ? 'Gold Kodu Kullan' : 'Redeem Gold Code'}
@@ -663,7 +663,7 @@ const DigitalPassport = ({ isOpen, onClose }) => {
               </div>
 
               {/* QR Code */}
-              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10">
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-white/10">
                 <h3 className="text-white font-bold mb-4 flex items-center gap-2">
                   <Download className="w-5 h-5" />
                   {t(language, 'digitalPassport.profile.yourDigitalPassport')}
@@ -804,7 +804,7 @@ const DigitalPassport = ({ isOpen, onClose }) => {
               </div>
 
               {/* Info Card */}
-              <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-2xl p-6 border border-blue-500/30">
+              <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-2xl p-4 md:p-6 border border-blue-500/30">
                 <p className="text-white font-medium mb-2">🔒 {t(language, 'digitalPassport.profile.privacyTitle')}</p>
                 <p className="text-gray-300 text-sm">
                   {t(language, 'digitalPassport.profile.privacyDesc')}
