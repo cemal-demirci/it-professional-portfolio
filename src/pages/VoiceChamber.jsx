@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X, Flame } from 'lucide-react'
+import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X, Flame, Shuffle } from 'lucide-react'
 import { AI_CHARACTERS, generateSpeech, getQuota } from '../services/elevenLabsService'
 import { analyzeWithGemini } from '../services/geminiService'
 import { getUserGold } from '../services/goldService'
@@ -27,6 +27,11 @@ const VoiceChamber = () => {
   const [settingsModal, setSettingsModal] = useState(null) // For showing AI details
   const [dirtyTalkMode, setDirtyTalkMode] = useState(false) // XXX character intensity mode
 
+  // Name selection for XXX character
+  const [showNameModal, setShowNameModal] = useState(false)
+  const [userName, setUserName] = useState('')
+  const [customNameInput, setCustomNameInput] = useState('')
+
   // Voice & audio
   const [isListening, setIsListening] = useState(false)
   const [isSpeaking, setIsSpeaking] = useState(false)
@@ -38,6 +43,19 @@ const VoiceChamber = () => {
   const audioRef = useRef(null)
   const sessionTimerRef = useRef(null)
   const mediaStreamRef = useRef(null) // Track microphone stream for cleanup
+
+  // Random Turkish names for XXX character
+  const RANDOM_NAMES = {
+    male: ['Ahmet', 'Mehmet', 'Can', 'Cem', 'Deniz', 'Eren', 'Emre', 'Kaan', 'Murat', 'Onur', 'Serkan', 'Tolga', 'Burak', 'Barış', 'Arda'],
+    female: ['Ayşe', 'Elif', 'Zeynep', 'Defne', 'Selin', 'İrem', 'Damla', 'Begüm', 'Ebru', 'Özge', 'Ceren', 'Deniz', 'Aslı', 'Merve', 'Burcu']
+  }
+
+  // Get random name
+  const getRandomName = () => {
+    const gender = Math.random() > 0.5 ? 'male' : 'female'
+    const names = RANDOM_NAMES[gender]
+    return names[Math.floor(Math.random() * names.length)]
+  }
 
   // Load gold balance
   useEffect(() => {
@@ -89,6 +107,15 @@ const VoiceChamber = () => {
   // Select character and start session
   const startSession = (characterId) => {
     const character = AI_CHARACTERS[characterId]
+
+    // For XXX character, show name selection modal first
+    if (characterId === 'xxx') {
+      setSelectedCharacter(character)
+      setShowNameModal(true)
+      return
+    }
+
+    // For other characters, start normally
     setSelectedCharacter(character)
 
     // Add welcome message
@@ -100,6 +127,30 @@ const VoiceChamber = () => {
 
     // Speak welcome message
     speakText(character.welcomeMessage, character.voiceId)
+
+    // Start session timer
+    sessionTimerRef.current = setInterval(() => {
+      setSessionTime(prev => prev + 1)
+    }, 1000)
+  }
+
+  // Start XXX session after name selection
+  const startXXXSession = (name) => {
+    setUserName(name)
+    setShowNameModal(false)
+
+    // Personalized welcome message
+    const welcomeMessage = `Merhaba ${name}... Ben XXX, senin özel erotik partnerinin. Bu gece seninle neler yaşayacağız acaba? 😈🔥`
+
+    // Add welcome message
+    setConversation([{
+      role: 'assistant',
+      text: welcomeMessage,
+      timestamp: Date.now()
+    }])
+
+    // Speak welcome message
+    speakText(welcomeMessage, selectedCharacter.voiceId)
 
     // Start session timer
     sessionTimerRef.current = setInterval(() => {
@@ -123,6 +174,8 @@ const VoiceChamber = () => {
     setConversation([])
     setSessionTime(0)
     setDirtyTalkMode(false) // Reset dirty talk mode
+    setUserName('') // Reset user name
+    setCustomNameInput('') // Reset custom name input
 
     if (sessionTimerRef.current) {
       clearInterval(sessionTimerRef.current)
@@ -238,9 +291,14 @@ const VoiceChamber = () => {
 
       // Get AI response (Gemini)
       // Use dirty talk prompt if XXX character and dirty talk mode is active
-      const systemPrompt = (selectedCharacter.id === 'xxx' && dirtyTalkMode && selectedCharacter.dirtyTalkPrompt)
+      let systemPrompt = (selectedCharacter.id === 'xxx' && dirtyTalkMode && selectedCharacter.dirtyTalkPrompt)
         ? selectedCharacter.dirtyTalkPrompt
         : selectedCharacter.systemPrompt
+
+      // For XXX character, add user name to system prompt
+      if (selectedCharacter.id === 'xxx' && userName) {
+        systemPrompt += `\n\nÖNEMLİ: Kullanıcının adı "${userName}". Her konuşmanda bu ismi kullan ve ona çok samimi, yakın hitap et.`
+      }
 
       const aiResponse = await analyzeWithGemini(
         conversationContext,
@@ -555,6 +613,70 @@ const VoiceChamber = () => {
                   className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition-all"
                 >
                   Kapat
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Name Selection Modal for XXX */}
+        {showNameModal && (
+          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-gradient-to-br from-red-600/30 to-purple-600/30 backdrop-blur-2xl rounded-3xl p-8 border-2 border-red-500/50 max-w-md w-full shadow-2xl">
+              {/* Header */}
+              <div className="text-center mb-6">
+                <div className="text-6xl mb-4">😈</div>
+                <h2 className="text-3xl font-black text-white mb-2">XXX</h2>
+                <p className="text-pink-300 text-lg font-semibold">Bana nasıl seslenmek istersin bebeğim?</p>
+              </div>
+
+              {/* Random Name Suggestion */}
+              <div className="bg-white/10 rounded-xl p-4 mb-4 border border-white/20">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-gray-400 text-sm">Öneri:</span>
+                  <button
+                    onClick={() => setCustomNameInput(getRandomName())}
+                    className="flex items-center gap-1 px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-xs text-gray-300 transition-all"
+                  >
+                    <Shuffle className="w-3 h-3" />
+                    Yeni İsim
+                  </button>
+                </div>
+                <div className="text-white font-bold text-lg">{customNameInput || getRandomName()}</div>
+              </div>
+
+              {/* Custom Name Input */}
+              <div className="mb-6">
+                <label className="block text-gray-300 text-sm mb-2">Ya da kendi ismini yaz:</label>
+                <input
+                  type="text"
+                  value={customNameInput}
+                  onChange={(e) => setCustomNameInput(e.target.value)}
+                  placeholder="İsmini gir..."
+                  className="w-full px-4 py-3 bg-white/10 border-2 border-red-500/30 rounded-xl text-white font-bold focus:border-red-500 focus:outline-none transition-all"
+                  maxLength={20}
+                  autoFocus
+                />
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => startXXXSession(customNameInput || getRandomName())}
+                  disabled={!customNameInput && !getRandomName()}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-pink-600 to-red-600 rounded-xl font-bold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                >
+                  Başlat 🔥
+                </button>
+                <button
+                  onClick={() => {
+                    setShowNameModal(false)
+                    setSelectedCharacter(null)
+                    setCustomNameInput('')
+                  }}
+                  className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition-all"
+                >
+                  İptal
                 </button>
               </div>
             </div>
