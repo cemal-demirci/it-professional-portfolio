@@ -46,8 +46,9 @@ const VoiceChamber = () => {
 
   // Random Turkish names for XXX character
   const RANDOM_NAMES = {
-    male: ['Ahmet', 'Mehmet', 'Can', 'Cem', 'Deniz', 'Eren', 'Emre', 'Kaan', 'Murat', 'Onur', 'Serkan', 'Tolga', 'Burak', 'Barış', 'Arda'],
-    female: ['Ayşe', 'Elif', 'Zeynep', 'Defne', 'Selin', 'İrem', 'Damla', 'Begüm', 'Ebru', 'Özge', 'Ceren', 'Deniz', 'Aslı', 'Merve', 'Burcu']
+    male: ['Ahmet', 'Mehmet', 'Can', 'Cem', 'Deniz', 'Eren', 'Emre', 'Kaan', 'Murat', 'Onur', 'Serkan', 'Tolga', 'Burak', 'Barış', 'Arda', 'Alp', 'Ege', 'Kerem', 'Kuzey', 'Atlas'],
+    // Erotic/sexy Turkish female names
+    female: ['Dilara', 'Lara', 'Sıla', 'Ece', 'Ela', 'Selin', 'Derin', 'İpek', 'Nil', 'Su', 'Yağmur', 'Melis', 'Nehir', 'Deniz', 'Ayla', 'Ezgi', 'Naz', 'Pelin', 'Tuana', 'Defne']
   }
 
   // Get random name
