@@ -121,7 +121,7 @@ export const analyzeWithGemini = async (prompt, systemInstruction = '', options 
 
     const ai = initGemini()
     const model = ai.getGenerativeModel({
-      model: 'gemini-pro', // Most stable model
+      model: 'gemini-1.5-flash', // Standard SDK model
       generationConfig: {
         temperature: 0.7,
         topK: 40,
@@ -193,7 +193,7 @@ export const streamAnalyzeWithGemini = async (prompt, systemInstruction = '', on
 
     const ai = initGemini()
     const model = ai.getGenerativeModel({
-      model: 'gemini-pro',
+      model: 'gemini-1.5-flash',
       systemInstruction: systemInstruction || undefined
     })
 
