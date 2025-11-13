@@ -171,7 +171,7 @@ const VoiceChamber = () => {
       // Check gold balance (1 gold per interaction)
       const currentGold = await getUserGold()
       if (currentGold < 1) {
-        alert('Yetersiz Gold! Devam etmek için Gold satın alın.')
+        alert('⚠️ Yetersiz Gold! En az 1 Gold gerekli.\n\n💡 Settings sayfasından kod kullanarak Gold kazanabilirsiniz.')
         setIsProcessing(false)
         return
       }
@@ -201,9 +201,10 @@ const VoiceChamber = () => {
         timestamp: Date.now()
       }])
 
-      // Deduct gold
+      // Deduct gold and refresh balance
       await deductGold(1)
-      setGoldBalance(prev => prev - 1)
+      const newGold = await getUserGold()
+      setGoldBalance(newGold)
 
       // Speak AI response
       await speakText(aiResponse, selectedCharacter.voiceId)
