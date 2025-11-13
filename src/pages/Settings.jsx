@@ -752,6 +752,106 @@ const Settings = () => {
             </button>
           </div>
 
+          {/* System Passwords */}
+          <div className="bg-gradient-to-br from-red-500/10 to-purple-500/10 rounded-xl p-5 border border-red-500/20">
+            <div className="flex items-center gap-2 mb-4">
+              <Key className="w-5 h-5 text-red-400" />
+              <h3 className="text-lg font-bold text-white">System Passwords & Access Codes</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Voice Chamber */}
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-purple-300">Voice Chamber</span>
+                  <span className="text-xs text-gray-400">/voice-chamber</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 px-3 py-2 bg-black/30 rounded-lg text-red-400 font-mono text-sm">SECRET2025</code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText('SECRET2025')
+                      alert('✅ Kod kopyalandı!')
+                    }}
+                    className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+                    title="Copy"
+                  >
+                    <Copy className="w-4 h-4 text-gray-400" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Settings Admin */}
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-blue-300">Settings Admin</span>
+                  <span className="text-xs text-gray-400">/settings</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 px-3 py-2 bg-black/30 rounded-lg text-blue-400 font-mono text-sm">pass1234</code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText('pass1234')
+                      alert('✅ Şifre kopyalandı!')
+                    }}
+                    className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+                    title="Copy"
+                  >
+                    <Copy className="w-4 h-4 text-gray-400" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Zero Density */}
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-green-300">Zero Density</span>
+                  <span className="text-xs text-gray-400">/0d</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 px-3 py-2 bg-black/30 rounded-lg text-green-400 font-mono text-sm">zerodensity2024</code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText('zerodensity2024')
+                      alert('✅ Kod kopyalandı!')
+                    }}
+                    className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+                    title="Copy"
+                  >
+                    <Copy className="w-4 h-4 text-gray-400" />
+                  </button>
+                </div>
+              </div>
+
+              {/* God Mode */}
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-yellow-300">God Mode</span>
+                  <span className="text-xs text-gray-400">Easter Egg</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 px-3 py-2 bg-black/30 rounded-lg text-yellow-400 font-mono text-sm">cxmxl</code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText('cxmxl')
+                      alert('✅ Kod kopyalandı!')
+                    }}
+                    className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+                    title="Copy"
+                  >
+                    <Copy className="w-4 h-4 text-gray-400" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+              <p className="text-xs text-yellow-300 flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span>Bu bilgileri güvenli tutun. Sadece yetkili kişilerle paylaşın.</span>
+              </p>
+            </div>
+          </div>
+
           {/* Statistics */}
           {stats && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
