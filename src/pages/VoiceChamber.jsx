@@ -36,11 +36,35 @@ const VoiceChamber = () => {
 
   const audioRef = useRef(null)
   const sessionTimerRef = useRef(null)
+  const mediaStreamRef = useRef(null) // Track microphone stream for cleanup
 
   // Load gold balance
   useEffect(() => {
     getUserGold().then(gold => setGoldBalance(gold))
   }, [])
+
+  // Cleanup on component unmount (CRITICAL!)
+  useEffect(() => {
+    return () => {
+      // Stop microphone stream when component unmounts
+      stopMicrophoneStream()
+
+      // Stop recognition
+      if (recognition) {
+        recognition.stop()
+      }
+
+      // Clear session timer
+      if (sessionTimerRef.current) {
+        clearInterval(sessionTimerRef.current)
+      }
+
+      // Stop audio
+      if (currentAudio) {
+        currentAudio.pause()
+      }
+    }
+  }, [recognition, currentAudio])
 
   // Check access code
   const handleAccessCheck = () => {
@@ -82,6 +106,16 @@ const VoiceChamber = () => {
     }, 1000)
   }
 
+  // Stop microphone stream (CRITICAL for cleanup)
+  const stopMicrophoneStream = () => {
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => {
+        track.stop()
+      })
+      mediaStreamRef.current = null
+    }
+  }
+
   // End session
   const endSession = () => {
     setSelectedCharacter(null)
@@ -97,6 +131,13 @@ const VoiceChamber = () => {
       setCurrentAudio(null)
     }
 
+    // IMPORTANT: Stop microphone stream
+    stopMicrophoneStream()
+
+    if (recognition) {
+      recognition.stop()
+    }
+
     setIsSpeaking(false)
     setIsListening(false)
   }
@@ -109,7 +150,9 @@ const VoiceChamber = () => {
     }
 
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true })
+      // Get microphone stream and SAVE it for cleanup
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      mediaStreamRef.current = stream
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
       const recognitionInstance = new SpeechRecognition()
@@ -144,6 +187,8 @@ const VoiceChamber = () => {
 
       recognitionInstance.onend = () => {
         setIsListening(false)
+        // Stop microphone stream when recognition ends
+        stopMicrophoneStream()
       }
 
       recognitionInstance.start()
@@ -160,6 +205,8 @@ const VoiceChamber = () => {
     if (recognition) {
       recognition.stop()
     }
+    // IMPORTANT: Also stop microphone stream
+    stopMicrophoneStream()
     setIsListening(false)
   }
 
