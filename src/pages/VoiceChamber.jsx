@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X, Flame, Shuffle } from 'lucide-react'
+import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X, Flame, Shuffle, Image as ImageIcon, Upload } from 'lucide-react'
 import { AI_CHARACTERS, generateSpeech, getQuota } from '../services/elevenLabsService'
 import { analyzeWithGemini } from '../services/geminiService'
 import { getUserGold } from '../services/goldService'
@@ -31,6 +31,12 @@ const VoiceChamber = () => {
   const [showNameModal, setShowNameModal] = useState(false)
   const [userName, setUserName] = useState('')
   const [customNameInput, setCustomNameInput] = useState('')
+
+  // Image upload for deepfake/erotic content (XXX character only)
+  const [uploadedImage, setUploadedImage] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false)
+  const [showImageModal, setShowImageModal] = useState(false)
 
   // Voice & audio
   const [isListening, setIsListening] = useState(false)
@@ -264,6 +270,125 @@ const VoiceChamber = () => {
     // IMPORTANT: Also stop microphone stream
     stopMicrophoneStream()
     setIsListening(false)
+  }
+
+  // Image upload handler
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('❌ Sadece resim dosyaları yüklenebilir!')
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('❌ Resim boyutu maksimum 5MB olabilir!')
+      return
+    }
+
+    // Read file as base64
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const base64Data = e.target.result
+      setUploadedImage(base64Data)
+      setImagePreview(base64Data)
+      setShowImageModal(false)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  // Analyze uploaded image with Gemini
+  const handleImageAnalysis = async () => {
+    if (!uploadedImage) return
+
+    setIsGeneratingImage(true)
+
+    try {
+      // Check gold balance (5 gold for image analysis)
+      const currentGold = await getUserGold()
+      if (currentGold < 5) {
+        alert('⚠️ Yetersiz Gold! Görüntü analizi için 5 Gold gerekli.\n\n💡 Settings sayfasından kod kullanarak Gold kazanabilirsiniz.')
+        setIsGeneratingImage(false)
+        return
+      }
+
+      // Deduct 5 Gold
+      await deductGold(5)
+      const updatedGold = await getUserGold()
+      setGoldBalance(updatedGold)
+
+      // Prepare erotic/deepfake analysis prompt
+      const imagePrompt = dirtyTalkMode
+        ? `Bu görüntüye bak bebeğim... 🔥 Çok seksi! Sana bu görüntüyle ilgili ne yapabileceğimizi, nasıl fanteziler kurabileceğimizi anlat. En açık, en sert, en explicit şekilde tarif et. Limit yok, sansür yok!`
+        : `Bu görüntüye bak ${userName || 'bebeğim'}... 😏 Çok çekici! Bu kişiyle neler yapabileceğimizi hayal et ve bana anlat. Erotik ve samimi bir şekilde tarif et.`
+
+      // Build system instruction based on dirty talk mode
+      let systemPrompt = (selectedCharacter.id === 'xxx' && dirtyTalkMode && selectedCharacter.dirtyTalkPrompt)
+        ? selectedCharacter.dirtyTalkPrompt
+        : selectedCharacter.systemPrompt
+
+      if (selectedCharacter.id === 'xxx' && userName) {
+        systemPrompt += `\n\nÖNEMLİ: Kullanıcının adı "${userName}". Her konuşmanda bu ismi kullan ve ona çok samimi, yakın hitap et.`
+      }
+
+      // Get AI analysis with image
+      const aiResponse = await analyzeWithGemini(
+        imagePrompt,
+        systemPrompt,
+        {
+          imageData: uploadedImage,
+          imageMimeType: 'image/jpeg'
+        }
+      )
+
+      // Add to conversation with image
+      setConversation(prev => [
+        ...prev,
+        {
+          role: 'user',
+          text: '📸 Görüntü yüklendi',
+          image: uploadedImage,
+          timestamp: Date.now()
+        },
+        {
+          role: 'assistant',
+          text: aiResponse,
+          timestamp: Date.now()
+        }
+      ])
+
+      // Generate speech for response
+      setIsSpeaking(true)
+      const audioBlob = await generateSpeech(aiResponse, selectedCharacter.voiceId)
+      const audioUrl = URL.createObjectURL(audioBlob)
+      const audio = new Audio(audioUrl)
+
+      audio.onended = () => {
+        setIsSpeaking(false)
+      }
+
+      audio.play()
+      setCurrentAudio(audio)
+
+      // Clear uploaded image after analysis
+      setUploadedImage(null)
+      setImagePreview(null)
+
+    } catch (error) {
+      console.error('Image analysis error:', error)
+      alert(`❌ Görüntü analiz hatası: ${error.message}`)
+    } finally {
+      setIsGeneratingImage(false)
+    }
+  }
+
+  // Clear uploaded image
+  const clearImage = () => {
+    setUploadedImage(null)
+    setImagePreview(null)
   }
 
   // Process user input and get AI response
@@ -810,6 +935,69 @@ const VoiceChamber = () => {
             </button>
           )}
 
+          {/* Image Upload Section - Only for XXX character */}
+          {selectedCharacter.id === 'xxx' && (
+            <div className="mt-6">
+              {/* Image Preview */}
+              {imagePreview && (
+                <div className="mb-4 relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="max-w-full h-auto rounded-xl border-2 border-red-500/50 shadow-lg mx-auto"
+                    style={{ maxHeight: '200px' }}
+                  />
+                  <button
+                    onClick={clearImage}
+                    className="absolute top-2 right-2 p-2 bg-red-600/90 hover:bg-red-600 rounded-full transition-all"
+                  >
+                    <X className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              )}
+
+              {/* Upload and Analyze Buttons */}
+              <div className="flex gap-3">
+                {!imagePreview ? (
+                  <label className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold hover:scale-105 transition-all cursor-pointer text-center">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                    <ImageIcon className="w-5 h-5 inline mr-2" />
+                    Görüntü Yükle 📸
+                  </label>
+                ) : (
+                  <button
+                    onClick={handleImageAnalysis}
+                    disabled={isGeneratingImage || isProcessing}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-orange-600 rounded-xl font-bold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                  >
+                    {isGeneratingImage ? (
+                      <>
+                        <Loader className="w-5 h-5 inline mr-2 animate-spin" />
+                        Analiz ediliyor...
+                      </>
+                    ) : (
+                      <>
+                        <Flame className="w-5 h-5 inline mr-2" />
+                        Analiz Et (5 Gold)
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+
+              {imagePreview && (
+                <p className="text-xs text-gray-400 text-center mt-2">
+                  💡 Görüntü yüklendiğinde {userName || 'XXX'} onu analiz edecek ve erotik yorumlarda bulunacak
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Conversation History */}
           {conversation.length > 1 && (
             <div className="mt-8 max-h-64 overflow-y-auto space-y-3">
@@ -825,6 +1013,15 @@ const VoiceChamber = () => {
                   <div className="font-bold mb-1">
                     {msg.role === 'user' ? '👤 Sen' : `${selectedCharacter.emoji} ${selectedCharacter.name}`}
                   </div>
+                  {/* Show image if present */}
+                  {msg.image && (
+                    <img
+                      src={msg.image}
+                      alt="Uploaded"
+                      className="max-w-full h-auto rounded-lg mb-2 border-2 border-white/20"
+                      style={{ maxHeight: '150px' }}
+                    />
+                  )}
                   <div>{msg.text}</div>
                 </div>
               ))}
