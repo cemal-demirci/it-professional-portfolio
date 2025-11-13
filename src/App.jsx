@@ -129,6 +129,7 @@ import RemoteDesktop from './pages/RemoteDesktop'
 import AIBots from './pages/AIBots'
 import UltraVIPAI from './pages/UltraVIPAI'
 import VoiceChamber from './pages/VoiceChamber'
+import Alev from './pages/Alev'
 
 // App Content - No blocking here, let individual pages handle rainbow mode
 function AppContent() {
@@ -152,6 +153,9 @@ function AppContent() {
 
           {/* Secret Voice Chamber */}
           <Route path="/voice-chamber" element={<VoiceChamber />} />
+
+          {/* Secret Alev - Personal AI Companion */}
+          <Route path="/alev" element={<Alev />} />
 
           {/* File Share */}
           <Route path="/fileshare" element={<FileShare />} />
