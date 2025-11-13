@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User } from 'lucide-react'
 import { AI_CHARACTERS, generateSpeech, getQuota } from '../services/elevenLabsService'
 import { analyzeWithGemini } from '../services/geminiService'
-import { getUserGold, deductGold } from '../services/goldService'
+import { getUserGold } from '../services/goldService'
+import { deductGold } from '../utils/digitalPassport'
 import { useLanguage } from '../contexts/LanguageContext'
 
 const VoiceChamber = () => {
