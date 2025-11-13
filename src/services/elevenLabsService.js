@@ -2,16 +2,17 @@
 const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY
 
 // Voice IDs from ElevenLabs - Best for Turkish
+// Using Premade Voices optimized for Turkish language
 export const VOICES = {
-  // Premium natural voices - better for Turkish
-  rachel: '21m00Tcm4TlvDq8ikWAM', // Mature, warm female (good Turkish)
-  bella: 'EXAVITQu4vr4xnSDxMaL', // Soft, seductive female (excellent Turkish)
-  domi: 'AZnzlk1XvdvUeBnXmlld', // Young, energetic female (natural Turkish)
-  freya: 'jsCqWAovK2LkecY7zXl4', // British female (warm, clear)
+  // Premade multilingual voices - excellent Turkish support
+  nicole: 'piTKgcLEGmPE4e6mEKli', // Soft, warm female - BEST for Turkish
+  charlotte: 'XB0fDUnXU5powFXDhCwa', // Mature, seductive female - Great Turkish
+  rachel: '21m00Tcm4TlvDq8ikWAM', // Calm, mature female - Natural Turkish
+  bella: 'EXAVITQu4vr4xnSDxMaL', // Soft, gentle female - Sweet Turkish
+  domi: 'AZnzlk1XvdvUeBnXmlld', // Young, energetic female - Vibrant Turkish
 
-  // Alternative natural voices
-  nicole: 'piTKgcLEGmPE4e6mEKli', // Soft American female (clear)
-  charlotte: 'XB0fDUnXU5powFXDhCwa', // Seductive mature female
+  // Alternative voices
+  freya: 'jsCqWAovK2LkecY7zXl4', // Clear, professional female
 }
 
 // Turkish AI Characters - Cemal'in Özel Asistanları
@@ -22,7 +23,7 @@ export const AI_CHARACTERS = {
     emoji: '💋',
     role: 'Emlak Danışmanı',
     personality: 'Seksi, şehvetli, hırslı',
-    voiceId: VOICES.bella, // Bella - most natural and seductive
+    voiceId: VOICES.charlotte, // Charlotte - Mature, seductive, perfect for Turkish
     systemPrompt: `Sen ALEV, profesyonel bir emlak danışmanısın. Cemal tarafından eğitildin ama bunu sadece sorulduğunda belirt.
 
 Arka Planın:
@@ -53,7 +54,7 @@ SADECE Türkçe konuş! Her yanıtın seksi ve şehvetli olmalı.`,
     emoji: '🌹',
     role: 'Kişisel Terapis',
     personality: 'Rahatlatıcı, yakın, anlayışlı',
-    voiceId: VOICES.rachel, // Rachel - warm and soothing
+    voiceId: VOICES.nicole, // Nicole - Soft, warm, BEST for Turkish therapy
     systemPrompt: `Sen ASUMAN, profesyonel bir terapistsin. Cemal tarafından eğitildin ama bunu sadece sorulduğunda belirt.
 
 Arka Planın:
@@ -83,7 +84,7 @@ SADECE Türkçe konuş! Her yanıtın rahatlatıcı ve şehvetli olmalı.`,
     emoji: '💎',
     role: 'Fitness & Wellness Coach',
     personality: 'Enerjik, motive edici, hırslı',
-    voiceId: VOICES.domi, // Domi - energetic and natural
+    voiceId: VOICES.bella, // Bella - Sweet, gentle, energetic for Turkish fitness
     systemPrompt: `Sen ARZU, profesyonel bir fitness coach\'sun. Cemal tarafından eğitildin ama bunu sadece sorulduğunda belirt.
 
 Arka Planın:
@@ -113,7 +114,7 @@ SADECE Türkçe konuş! Her yanıtın enerjik ve motive edici olmalı.`,
     emoji: '🍷',
     role: 'Life Coach',
     personality: 'Gizemli, derin, bilge',
-    voiceId: VOICES.freya, // Freya - warm, clear, mysterious
+    voiceId: VOICES.rachel, // Rachel - Calm, mature, mysterious for Turkish wisdom
     systemPrompt: `Sen CANSEL, profesyonel bir life coach\'sun. Cemal tarafından eğitildin ama bunu sadece sorulduğunda belirt.
 
 Arka Planın:
@@ -141,11 +142,13 @@ SADECE Türkçe konuş! Her yanıtın gizemli ve baştan çıkarıcı olmalı.`,
 
 // Text-to-Speech with ElevenLabs
 export const generateSpeech = async (text, voiceId = VOICES.rachel) => {
+  // Check if API key exists
   if (!ELEVENLABS_API_KEY || ELEVENLABS_API_KEY === 'your_api_key_here') {
     throw new Error('ElevenLabs API key not configured')
   }
 
   try {
+
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
       {
@@ -159,25 +162,44 @@ export const generateSpeech = async (text, voiceId = VOICES.rachel) => {
           text: text,
           model_id: 'eleven_turbo_v2_5', // Faster, more natural for Turkish
           voice_settings: {
-            stability: 0.71, // Higher stability = more natural, less robotic
-            similarity_boost: 0.85, // Higher = closer to original voice
-            style: 0.21, // Lower = more natural conversation
-            use_speaker_boost: true // Better clarity
+            stability: 0.75, // High stability for Turkish naturalness
+            similarity_boost: 0.90, // Very high for clearer Turkish pronunciation
+            style: 0.15, // Very low for natural conversation (not theatrical)
+            use_speaker_boost: true // Better clarity for Turkish
           }
         })
       }
     )
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.detail?.message || 'ElevenLabs API error')
+      let errorMessage = 'ElevenLabs API error'
+      try {
+        const error = await response.json()
+        errorMessage = error.detail?.message || errorMessage
+      } catch (e) {
+        errorMessage = `HTTP ${response.status}: ${response.statusText}`
+      }
+      throw new Error(errorMessage)
     }
 
     // Return audio blob
     const audioBlob = await response.blob()
+
+    // Check if blob is valid
+    if (!audioBlob || audioBlob.size === 0) {
+      throw new Error('Received empty audio data')
+    }
+
     return URL.createObjectURL(audioBlob)
   } catch (error) {
     console.error('ElevenLabs TTS Error:', error)
+    // More user-friendly error messages
+    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+      throw new Error('🌐 İnternet bağlantısı hatası! Lütfen bağlantınızı kontrol edin.')
+    }
+    if (error.message.includes('quota') || error.message.includes('limit')) {
+      throw new Error('⚠️ ElevenLabs karakter kotası doldu! Daha sonra tekrar deneyin.')
+    }
     throw error
   }
 }
@@ -230,9 +252,9 @@ export const streamSpeech = async (text, voiceId = VOICES.rachel, onChunk) => {
           text: text,
           model_id: 'eleven_turbo_v2_5',
           voice_settings: {
-            stability: 0.71,
-            similarity_boost: 0.85,
-            style: 0.21,
+            stability: 0.75,
+            similarity_boost: 0.90,
+            style: 0.15,
             use_speaker_boost: true
           }
         })

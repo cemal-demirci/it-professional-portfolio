@@ -17,7 +17,7 @@ const VoiceChamber = () => {
   const [codeError, setCodeError] = useState('')
 
   // Secret access code - CHANGE THIS!
-  const SECRET_CODE = 'LUNA2025'
+  const SECRET_CODE = 'SECRET2025'
 
   // Character & session
   const [selectedCharacter, setSelectedCharacter] = useState(null)
@@ -632,7 +632,7 @@ const VoiceChamber = () => {
 
         {/* Info */}
         <div className="mt-4 text-center text-gray-500 text-xs">
-          Her konuşma 1 Gold harcar • ElevenLabs multilingual v2 kullanılıyor
+          Her konuşma 1 Gold harcar • ElevenLabs Turbo v2.5 (Türkçe optimize) kullanılıyor
         </div>
       </div>
     </div>
