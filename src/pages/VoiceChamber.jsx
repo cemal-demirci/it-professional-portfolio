@@ -1442,7 +1442,6 @@ const VoiceChamber = () => {
                   <p>🎭 Deepfake: Senin yüzünü görüntüye ekler</p>
                   <p>📸 Gender Swap: Kamerayı açıp kadın olarak gösterir</p>
                 </div>
-              </div>
 
               {/* Gender Swap Camera Display */}
               {genderSwapMode && (
