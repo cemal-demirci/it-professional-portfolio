@@ -321,6 +321,11 @@ SADECE Türkçe konuş! Her yanıtın bilgilendirici ve güven verici olmalı.`,
   }
 }
 
+// Detect mobile device
+const isMobile = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
 // Text-to-Speech with ElevenLabs
 export const generateSpeech = async (text, voiceId = VOICES.rachel) => {
   // Check if API key exists
@@ -329,6 +334,16 @@ export const generateSpeech = async (text, voiceId = VOICES.rachel) => {
   }
 
   try {
+    // Mobile-optimized settings
+    const isMobileDevice = isMobile()
+
+    if (import.meta.env.DEV) {
+      console.log('🎤 ElevenLabs Request:', {
+        mobile: isMobileDevice,
+        voiceId,
+        textLength: text.length
+      })
+    }
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
@@ -348,18 +363,33 @@ export const generateSpeech = async (text, voiceId = VOICES.rachel) => {
             style: 0.15, // Very low for natural conversation (not theatrical)
             use_speaker_boost: true // Better clarity for Turkish
           }
-        })
+        }),
+        // Longer timeout for mobile
+        signal: AbortSignal.timeout(isMobileDevice ? 30000 : 15000)
       }
     )
 
     if (!response.ok) {
       let errorMessage = 'ElevenLabs API error'
+      let errorDetails = {}
+
       try {
         const error = await response.json()
         errorMessage = error.detail?.message || errorMessage
+        errorDetails = error
       } catch (e) {
         errorMessage = `HTTP ${response.status}: ${response.statusText}`
       }
+
+      // Log detailed error for debugging (especially on mobile)
+      console.error('❌ ElevenLabs API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        mobile: isMobile(),
+        voiceId,
+        details: errorDetails
+      })
+
       throw new Error(errorMessage)
     }
 
@@ -368,18 +398,37 @@ export const generateSpeech = async (text, voiceId = VOICES.rachel) => {
 
     // Check if blob is valid
     if (!audioBlob || audioBlob.size === 0) {
+      console.error('❌ Empty audio blob received')
       throw new Error('Received empty audio data')
+    }
+
+    if (import.meta.env.DEV) {
+      console.log('✅ Audio generated:', audioBlob.size, 'bytes')
     }
 
     return URL.createObjectURL(audioBlob)
   } catch (error) {
-    console.error('ElevenLabs TTS Error:', error)
+    // Enhanced mobile error logging
+    const isMobileDevice = isMobile()
+    console.error('🔥 ElevenLabs TTS Error:', {
+      error: error.message,
+      mobile: isMobileDevice,
+      voiceId,
+      stack: error.stack
+    })
+
     // More user-friendly error messages
+    if (error.name === 'AbortError' || error.message.includes('timeout')) {
+      throw new Error(`⏱️ Bağlantı zaman aşımı! ${isMobileDevice ? 'Mobil bağlantınız yavaş olabilir.' : 'Tekrar deneyin.'}`)
+    }
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
       throw new Error('🌐 İnternet bağlantısı hatası! Lütfen bağlantınızı kontrol edin.')
     }
     if (error.message.includes('quota') || error.message.includes('limit')) {
       throw new Error('⚠️ ElevenLabs karakter kotası doldu! Daha sonra tekrar deneyin.')
+    }
+    if (error.message.includes('CORS')) {
+      throw new Error('🚫 CORS hatası! Lütfen sayfayı yenileyin.')
     }
     throw error
   }

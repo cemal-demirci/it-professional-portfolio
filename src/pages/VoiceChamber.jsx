@@ -368,7 +368,14 @@ const VoiceChamber = () => {
     } catch (error) {
       console.error('Speech error:', error)
       setIsSpeaking(false)
-      alert('Ses üretme hatası! ElevenLabs API key\'i kontrol edin.')
+
+      // Show detailed error message
+      const errorMsg = error.message || 'Ses üretme hatası!'
+      alert(`🔊 ${errorMsg}\n\n💡 İpucu: ${
+        /mobile|android|iphone/i.test(navigator.userAgent)
+          ? 'Mobil bağlantınızı kontrol edin ve tekrar deneyin.'
+          : 'Lütfen internet bağlantınızı kontrol edin.'
+      }`)
     }
   }
 
