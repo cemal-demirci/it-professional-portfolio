@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  /* MINIMAL PROFESSIONAL DESIGN - BANKSY INSPIRED */
+  /* PREMIUM MINIMAL DESIGN - BANKSY INSPIRED */
   * {
     @apply border-gray-800;
     cursor: url('/cursor.svg') 3 3, auto;
@@ -20,6 +20,10 @@
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     letter-spacing: -0.01em;
+    /* Premium subtle grain texture */
+    background-image:
+      radial-gradient(at 40% 20%, rgba(59, 130, 246, 0.03) 0px, transparent 50%),
+      radial-gradient(at 80% 80%, rgba(139, 92, 246, 0.03) 0px, transparent 50%);
   }
 
   /* Premium Custom Scrollbar */
@@ -63,23 +67,40 @@
 }
 
 @layer components {
-  /* MINIMAL COMPONENTS */
+  /* PREMIUM MINIMAL COMPONENTS */
   .tool-card {
     @apply bg-zinc-900 border border-zinc-800 rounded-lg p-6
            hover:border-zinc-700 transition-all duration-200
            hover:bg-zinc-900/80;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .tool-card:hover {
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.5),
+      0 2px 4px -1px rgba(255, 255, 255, 0.03);
   }
 
   .btn-primary {
     @apply bg-white text-black px-6 py-3 rounded-lg
            hover:bg-gray-200 transition-all duration-150 font-medium
            border border-transparent hover:border-gray-300;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
   }
 
   .btn-secondary {
     @apply bg-transparent text-white px-6 py-3 rounded-lg
            border border-zinc-800 hover:border-zinc-700
            transition-all duration-150 font-medium;
+  }
+
+  .btn-secondary:hover {
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
   }
 
   /* Input Fields */
@@ -95,9 +116,13 @@
            transition-all duration-150;
   }
 
-  /* Glassmorphism - Subtle */
+  /* Premium Glassmorphism */
   .glass {
     @apply bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.3),
+      0 2px 4px -1px rgba(255, 255, 255, 0.02),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
   }
 }
 
