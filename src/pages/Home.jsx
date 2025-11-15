@@ -124,10 +124,10 @@ const Home = () => {
         <section className="min-h-screen flex items-center justify-center px-4 pt-20 relative">
           {/* Subtle background elements */}
           <div className="absolute top-20 right-20 w-64 h-64 opacity-3">
-            <div className="text-9xl">💻</div>
+            <div className="text-9xl">🤖</div>
           </div>
           <div className="absolute bottom-20 left-20 w-48 h-48 opacity-3">
-            <div className="text-7xl">🔧</div>
+            <div className="text-7xl">⚡</div>
           </div>
 
           <div className="max-w-5xl mx-auto relative z-10">
@@ -235,6 +235,71 @@ const Home = () => {
                   <div className="text-4xl mb-4">{tool.icon}</div>
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-300">{tool.name}</h3>
                   <p className="text-gray-500 text-sm">{tool.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* AI Chatbots Section */}
+        <section className="py-24 px-4 bg-black">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'AI Chatbots' : 'AI Sohbet Botları'}
+              </h2>
+              <p className="text-gray-500">
+                {language === 'en' ? 'Specialized AI assistants for IT professionals' : 'IT profesyonelleri için özel AI asistanlar'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                {
+                  name: language === 'en' ? 'Event Correlator' : 'Olay İlişkilendirici',
+                  desc: language === 'en' ? 'Analyze and correlate system events' : 'Sistem olaylarını analiz et ve ilişkilendir',
+                  icon: '🔍',
+                  path: '/ai-bots/event-correlator'
+                },
+                {
+                  name: language === 'en' ? 'Cert Analyzer' : 'Sertifika Analizi',
+                  desc: language === 'en' ? 'SSL/TLS certificate analysis' : 'SSL/TLS sertifika analizi',
+                  icon: '🔐',
+                  path: '/ai-bots/cert-analyzer'
+                },
+                {
+                  name: language === 'en' ? 'DR Planner' : 'DR Planlayıcı',
+                  desc: language === 'en' ? 'Disaster recovery planning' : 'Felaket kurtarma planlaması',
+                  icon: '🚨',
+                  path: '/ai-bots/dr-planner'
+                },
+                {
+                  name: language === 'en' ? 'Perf Troubleshooter' : 'Performans Sorun Giderici',
+                  desc: language === 'en' ? 'Performance issue diagnosis' : 'Performans sorun teşhisi',
+                  icon: '⚡',
+                  path: '/ai-bots/perf-troubleshooter'
+                },
+                {
+                  name: language === 'en' ? 'Proxmox Assistant' : 'Proxmox Asistanı',
+                  desc: language === 'en' ? 'Proxmox VE expert assistant' : 'Proxmox VE uzman asistan',
+                  icon: '🖥️',
+                  path: '/ai-bots/proxmox-assistant'
+                },
+                {
+                  name: language === 'en' ? 'Script Generator' : 'Script Üretici',
+                  desc: language === 'en' ? 'Generate automation scripts' : 'Otomasyon scriptleri üret',
+                  icon: '📜',
+                  path: '/ai-bots/script-generator'
+                }
+              ].map((bot, idx) => (
+                <Link
+                  key={idx}
+                  to={bot.path}
+                  className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-zinc-700 transition-all group"
+                >
+                  <div className="text-4xl mb-4">{bot.icon}</div>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-300">{bot.name}</h3>
+                  <p className="text-gray-500 text-sm">{bot.desc}</p>
                 </Link>
               ))}
             </div>
