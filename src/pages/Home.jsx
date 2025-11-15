@@ -39,8 +39,8 @@ const Home = () => {
       hero: {
         greeting: "Hey, I'm Cemal",
         tagline: "Tools & Digital Playground",
-        description: "Privacy-first alternative to bloated corporate tools. Everything runs in your browser.",
-        cta1: "Explore Tools",
+        description: "Corporate tools are slow, bloated, and spy on you. Mine are fast, light, and actually respect your privacy.",
+        cta1: "Show Me",
         cta2: "About Me"
       },
       stats: [
@@ -62,12 +62,12 @@ const Home = () => {
       },
       manifesto: {
         title: "Why This Exists",
-        quote: "Yavaş, şişkin, gizlilik ihlali yapan araçlardan bıktım. Kendi alanımı kurdum.",
+        quote: "Tired of slow, bloated tools that sell your data. So I built my own playground. No corporate BS, no paywalls, no tracking.",
         points: [
-          "Ücretli duvar yok",
-          "Veri toplama yok",
-          "Her şey lokal çalışır",
-          "Açık kaynak zihniyeti"
+          "Zero dollars. Always.",
+          "Your data stays yours",
+          "Everything runs in your browser",
+          "Open source vibes"
         ]
       }
     },
@@ -75,8 +75,8 @@ const Home = () => {
       hero: {
         greeting: "Merhaba, Ben Cemal",
         tagline: "Araçlar & Dijital Oyun Alanı",
-        description: "Kurumsal araçlar yavaş ve şişkin. Ben daha hızlı ve güvenli olanlarını yaptım.",
-        cta1: "Araçlara Göz At",
+        description: "Kurumsal araçlar yavaş, şişkin ve seni izliyor. Benimkiler hızlı, hafif ve gizliliğine gerçekten saygı duyuyor.",
+        cta1: "Göster",
         cta2: "Hakkımda"
       },
       stats: [
@@ -98,11 +98,11 @@ const Home = () => {
       },
       manifesto: {
         title: "Neden Var Bu Site",
-        quote: "Yavaş, şişkin ve gizliliğe saygısı olmayan araçlardan bıktım. Kendi alanımı kurdum.",
+        quote: "Yavaş, şişkin ve verini satan araçlardan bıktım. Kendi oyun alanımı kurdum. Kurumsal saçmalık yok, para yok, takip yok.",
         points: [
-          "Para istemiyor",
-          "Veri toplamıyor",
-          "Hepsi tarayıcında çalışıyor",
+          "Sıfır para. Hep öyle.",
+          "Verin size ait kalıyor",
+          "Her şey tarayıcında çalışıyor",
           "Açık kaynak ruhuyla"
         ]
       }
@@ -122,14 +122,14 @@ const Home = () => {
       <div className="relative z-10">
         {/* Hero Section */}
         <section className="min-h-screen flex items-center justify-center px-4 pt-20 relative">
-          {/* Banksy-style graffiti text */}
-          <div className="absolute top-32 right-12 transform rotate-12 opacity-10">
+          {/* Banksy-style graffiti text - hidden on mobile */}
+          <div className="hidden md:block absolute top-32 right-12 transform rotate-12 opacity-10">
             <p className="text-6xl font-black text-white stencil-text">NO BS</p>
           </div>
-          <div className="absolute bottom-32 left-12 transform -rotate-6 opacity-10">
+          <div className="hidden md:block absolute bottom-32 left-12 transform -rotate-6 opacity-10">
             <p className="text-5xl font-black text-white stencil-text">FREE TOOLS</p>
           </div>
-          <div className="absolute top-1/2 right-8 transform -translate-y-1/2 rotate-90 opacity-5">
+          <div className="hidden lg:block absolute top-1/2 right-8 transform -translate-y-1/2 rotate-90 opacity-5">
             <p className="text-4xl font-black text-white stencil-text">PRIVACY FIRST</p>
           </div>
 
@@ -199,8 +199,8 @@ const Home = () => {
 
         {/* Featured Tools Section */}
         <section className="py-24 px-4 relative">
-          {/* Banksy graffiti */}
-          <div className="absolute top-12 left-8 transform -rotate-3 opacity-8">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute top-12 left-8 transform -rotate-3 opacity-8">
             <p className="text-5xl font-black text-white stencil-text">TOOLS</p>
           </div>
           <div className="max-w-7xl mx-auto">
@@ -250,8 +250,8 @@ const Home = () => {
 
         {/* AI Chatbots Section */}
         <section className="py-24 px-4 bg-black relative">
-          {/* Banksy graffiti */}
-          <div className="absolute bottom-16 right-12 transform rotate-6 opacity-8">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute bottom-16 right-12 transform rotate-6 opacity-8">
             <p className="text-6xl font-black text-white stencil-text">AI</p>
           </div>
           <div className="max-w-7xl mx-auto">
@@ -319,8 +319,8 @@ const Home = () => {
 
         {/* Categories Section */}
         <section className="py-24 px-4 bg-zinc-950/50 relative">
-          {/* Banksy graffiti */}
-          <div className="absolute top-20 left-16 transform -rotate-12 opacity-8">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute top-20 left-16 transform -rotate-12 opacity-8">
             <p className="text-7xl font-black text-white stencil-text">70+</p>
           </div>
           <div className="max-w-7xl mx-auto">
@@ -354,8 +354,8 @@ const Home = () => {
 
         {/* Tech Stack Section */}
         <section className="py-24 px-4 bg-zinc-950/50 relative">
-          {/* Banksy graffiti */}
-          <div className="absolute bottom-12 right-20 transform rotate-3 opacity-8">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute bottom-12 right-20 transform rotate-3 opacity-8">
             <p className="text-5xl font-black text-white stencil-text">REACT</p>
           </div>
           <div className="max-w-7xl mx-auto">
@@ -391,8 +391,8 @@ const Home = () => {
 
         {/* Expertise Section */}
         <section className="py-24 px-4 relative">
-          {/* Banksy graffiti */}
-          <div className="absolute top-16 right-8 transform rotate-12 opacity-8">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute top-16 right-8 transform rotate-12 opacity-8">
             <p className="text-6xl font-black text-white stencil-text">HACK</p>
           </div>
           <div className="max-w-7xl mx-auto">
@@ -443,8 +443,8 @@ const Home = () => {
 
         {/* Manifesto Section - Clean */}
         <section className="py-24 px-4 bg-zinc-950/50 relative">
-          {/* Banksy graffiti */}
-          <div className="absolute top-24 left-8 transform -rotate-6 opacity-8">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute top-24 left-8 transform -rotate-6 opacity-8">
             <p className="text-5xl font-black text-white stencil-text">WHY?</p>
           </div>
           <div className="max-w-4xl mx-auto">
@@ -478,8 +478,8 @@ const Home = () => {
 
         {/* Quick Facts Section */}
         <section className="py-24 px-4 relative">
-          {/* Banksy graffiti */}
-          <div className="absolute bottom-20 left-12 transform rotate-3 opacity-8">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute bottom-20 left-12 transform rotate-3 opacity-8">
             <p className="text-7xl font-black text-white stencil-text">100%</p>
           </div>
           <div className="max-w-7xl mx-auto">
@@ -519,8 +519,8 @@ const Home = () => {
 
         {/* Final CTA - Minimal */}
         <section className="py-16 px-4 bg-white relative">
-          {/* Banksy graffiti */}
-          <div className="absolute top-8 right-16 transform -rotate-12 opacity-10">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute top-8 right-16 transform -rotate-12 opacity-10">
             <p className="text-6xl font-black text-black stencil-text">START</p>
           </div>
           <div className="max-w-4xl mx-auto text-center">
