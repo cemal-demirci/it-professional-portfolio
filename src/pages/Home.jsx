@@ -965,17 +965,17 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Coffee Consumed */}
+              {/* Red Bull Consumed */}
               <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center hover:border-zinc-700 transition-all group">
-                <div className="text-6xl mb-4">☕</div>
-                <div className="text-4xl font-black text-white mb-2 font-mono group-hover:text-amber-400 transition-colors">
+                <div className="text-6xl mb-4">🪽</div>
+                <div className="text-4xl font-black text-white mb-2 font-mono group-hover:text-blue-400 transition-colors">
                   {coffeeConsumed.toLocaleString()}
                 </div>
                 <div className="text-sm text-gray-500 mb-3">
-                  {language === 'en' ? 'Cups of Coffee' : 'Fincan Kahve'}
+                  {language === 'en' ? 'Cans of Red Bull' : 'Kutu Red Bull'}
                 </div>
                 <div className="text-xs text-gray-600 italic">
-                  {language === 'en' ? '(Powered by caffeine)' : '(Kafeinle çalışıyor)'}
+                  {language === 'en' ? '(Gives you wings)' : '(Kanat verir)'}
                 </div>
               </div>
 
