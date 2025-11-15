@@ -183,12 +183,59 @@ const Home = () => {
             </div>
 
             {/* Stats - Minimal Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-              {t.stats.map((stat, idx) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+              {t.stats.filter(stat => !stat.label.toLowerCase().includes('cost') && !stat.label.toLowerCase().includes('ücret')).map((stat, idx) => (
                 <div key={idx} className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-zinc-700 transition-all duration-200">
                   <div className="text-3xl font-black text-white mb-2">{stat.value}</div>
                   <div className="text-sm text-gray-500 uppercase tracking-wide">{stat.label}</div>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Tools Section */}
+        <section className="py-24 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'Featured Tools' : 'Öne Çıkan Araçlar'}
+              </h2>
+              <p className="text-gray-500">
+                {language === 'en' ? 'Most popular tools on the platform' : 'Platformdaki en popüler araçlar'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {[
+                {
+                  name: language === 'en' ? 'AI Text Analyzer' : 'AI Metin Analizi',
+                  desc: language === 'en' ? 'Advanced sentiment & quality analysis' : 'Gelişmiş duygu ve kalite analizi',
+                  icon: '🤖',
+                  path: '/tools/text-analyzer'
+                },
+                {
+                  name: language === 'en' ? 'Network Diagnostics' : 'Ağ Tanılama',
+                  desc: language === 'en' ? 'Complete network troubleshooting' : 'Komple ağ sorun giderme',
+                  icon: '🌐',
+                  path: '/tools/network-diagnostics'
+                },
+                {
+                  name: language === 'en' ? 'Password Generator' : 'Şifre Oluşturucu',
+                  desc: language === 'en' ? 'Secure password generation' : 'Güvenli şifre oluşturma',
+                  icon: '🔐',
+                  path: '/tools/password-generator'
+                }
+              ].map((tool, idx) => (
+                <Link
+                  key={idx}
+                  to={tool.path}
+                  className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-zinc-700 transition-all group"
+                >
+                  <div className="text-4xl mb-4">{tool.icon}</div>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-300">{tool.name}</h3>
+                  <p className="text-gray-500 text-sm">{tool.desc}</p>
+                </Link>
               ))}
             </div>
           </div>
@@ -225,8 +272,89 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Manifesto Section - Clean */}
+        {/* Tech Stack Section */}
+        <section className="py-24 px-4 bg-zinc-950/50">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'Built With' : 'Teknolojiler'}
+              </h2>
+              <p className="text-gray-500">
+                {language === 'en' ? 'Modern tech stack for maximum performance' : 'Maksimum performans için modern teknolojiler'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {[
+                { name: 'React 18', icon: '⚛️' },
+                { name: 'Vite', icon: '⚡' },
+                { name: 'TailwindCSS', icon: '🎨' },
+                { name: 'Google AI', icon: '🤖' },
+                { name: 'Node.js', icon: '🟢' },
+                { name: 'Vercel', icon: '▲' }
+              ].map((tech, idx) => (
+                <div
+                  key={idx}
+                  className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-center hover:border-zinc-700 transition-all"
+                >
+                  <div className="text-3xl mb-2">{tech.icon}</div>
+                  <div className="text-sm text-gray-400">{tech.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Expertise Section */}
         <section className="py-24 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'Expertise' : 'Uzmanlık Alanları'}
+              </h2>
+              <p className="text-gray-500">
+                {language === 'en' ? 'What I bring to the table' : 'Masaya getirdiklerim'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  title: language === 'en' ? 'IT Infrastructure' : 'IT Altyapı',
+                  desc: language === 'en' ? 'Enterprise systems & networks' : 'Kurumsal sistemler ve ağlar',
+                  icon: '🖥️'
+                },
+                {
+                  title: language === 'en' ? 'AI Integration' : 'AI Entegrasyonu',
+                  desc: language === 'en' ? 'Smart automation tools' : 'Akıllı otomasyon araçları',
+                  icon: '🤖'
+                },
+                {
+                  title: language === 'en' ? 'Security' : 'Güvenlik',
+                  desc: language === 'en' ? 'Privacy-first approach' : 'Gizlilik odaklı yaklaşım',
+                  icon: '🔒'
+                },
+                {
+                  title: language === 'en' ? 'Web Development' : 'Web Geliştirme',
+                  desc: language === 'en' ? 'Modern, fast interfaces' : 'Modern, hızlı arayüzler',
+                  icon: '⚡'
+                }
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-zinc-700 transition-all"
+                >
+                  <div className="text-4xl mb-4">{item.icon}</div>
+                  <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                  <p className="text-gray-500 text-sm">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Manifesto Section - Clean */}
+        <section className="py-24 px-4 bg-zinc-950/50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8 text-center">
               {t.manifesto.title}
@@ -252,6 +380,43 @@ const Home = () => {
                   — Cemal Demirci
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Quick Facts Section */}
+        <section className="py-24 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'Why Choose This?' : 'Neden Bunu Seçmelisin?'}
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: language === 'en' ? '100% Privacy' : '%100 Gizlilik',
+                  desc: language === 'en' ? 'All tools run locally in your browser. Zero data collection.' : 'Tüm araçlar tarayıcında lokal çalışır. Sıfır veri toplama.',
+                  icon: '🔒'
+                },
+                {
+                  title: language === 'en' ? 'Always Free' : 'Hep Ücretsiz',
+                  desc: language === 'en' ? 'No paywalls, no subscriptions. Just use the tools you need.' : 'Ücretli duvar yok, abonelik yok. Sadece araçları kullan.',
+                  icon: '💰'
+                },
+                {
+                  title: language === 'en' ? 'No Account' : 'Hesap Yok',
+                  desc: language === 'en' ? 'Start using immediately. No signup, no email, no BS.' : 'Hemen kullanmaya başla. Kayıt yok, email yok, BS yok.',
+                  icon: '⚡'
+                }
+              ].map((item, idx) => (
+                <div key={idx} className="text-center">
+                  <div className="text-5xl mb-4">{item.icon}</div>
+                  <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                  <p className="text-gray-500">{item.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
