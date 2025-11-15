@@ -18,11 +18,6 @@ const Home = () => {
   const [amazonPurchases, setAmazonPurchases] = useState(89234)
   const [cemalData, setCemalData] = useState(0)
 
-  // Live Stats - Site statistics
-  const [linesOfCode, setLinesOfCode] = useState(42069)
-  const [coffeeConsumed, setCoffeeConsumed] = useState(1337)
-  const [bugsFixed, setBugsFixed] = useState(9001)
-
   useEffect(() => {
     const hasLoaded = sessionStorage.getItem('cemal_loaded')
     if (hasLoaded) {
@@ -39,17 +34,6 @@ const Home = () => {
       setAmazonPurchases(prev => prev + Math.floor(Math.random() * 300))
       // cemalData stays at 0
     }, 2000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  // Update Live Stats every 3 seconds (satirical)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLinesOfCode(prev => prev + Math.floor(Math.random() * 10))
-      setCoffeeConsumed(prev => prev + Math.floor(Math.random() * 2))
-      setBugsFixed(prev => prev + Math.floor(Math.random() * 3))
-    }, 3000)
 
     return () => clearInterval(interval)
   }, [])
@@ -923,118 +907,6 @@ const Home = () => {
                 {language === 'en'
                   ? '* These numbers are satirical, but the privacy violations are real.'
                   : '* Bu sayılar satiriktir, ama gizlilik ihlalleri gerçektir.'}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Live Stats Section */}
-        <section className="py-24 px-4 bg-zinc-950/50 relative">
-          {/* Banksy graffiti - hidden on mobile */}
-          <div className="hidden md:block absolute top-16 left-12 transform -rotate-6 opacity-8">
-            <p className="text-7xl font-black text-white stencil-text">STATS</p>
-          </div>
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
-                {language === 'en' ? 'Live Stats™' : 'Canlı İstatistikler™'}
-              </h2>
-              <p className="text-gray-500">
-                {language === 'en' ? '(Totally accurate numbers)' : '(Kesinlikle doğru rakamlar)'}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Lines of Code */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center hover:border-zinc-700 transition-all group">
-                <div className="text-6xl mb-4">💻</div>
-                <div className="text-4xl font-black text-white mb-2 font-mono group-hover:text-green-400 transition-colors">
-                  {linesOfCode.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-500 mb-3">
-                  {language === 'en' ? 'Lines of Code' : 'Satır Kod'}
-                </div>
-                <div className="text-xs text-gray-600 italic">
-                  {language === 'en' ? '(Half are console.logs)' : '(Yarısı console.log)'}
-                </div>
-              </div>
-
-              {/* Red Bull Consumed */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center hover:border-zinc-700 transition-all group">
-                <div className="text-6xl mb-4">🪽</div>
-                <div className="text-4xl font-black text-white mb-2 font-mono group-hover:text-blue-400 transition-colors">
-                  {coffeeConsumed.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-500 mb-3">
-                  {language === 'en' ? 'Cans of Red Bull' : 'Kutu Red Bull'}
-                </div>
-                <div className="text-xs text-gray-600 italic">
-                  {language === 'en' ? '(Gives you wings)' : '(Kanat verir)'}
-                </div>
-              </div>
-
-              {/* Bugs Fixed */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center hover:border-zinc-700 transition-all group">
-                <div className="text-6xl mb-4">🐛</div>
-                <div className="text-4xl font-black text-white mb-2 font-mono group-hover:text-red-400 transition-colors">
-                  {bugsFixed.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-500 mb-3">
-                  {language === 'en' ? 'Bugs Fixed' : 'Düzeltilen Bug'}
-                </div>
-                <div className="text-xs text-gray-600 italic">
-                  {language === 'en' ? '(Created 2x more)' : '(2 katı oluşturuldu)'}
-                </div>
-              </div>
-
-              {/* Tools Built */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center hover:border-zinc-700 transition-all group">
-                <div className="text-6xl mb-4">🛠️</div>
-                <div className="text-4xl font-black text-white mb-2 font-mono group-hover:text-blue-400 transition-colors">
-                  70+
-                </div>
-                <div className="text-sm text-gray-500 mb-3">
-                  {language === 'en' ? 'Tools Built' : 'Yapılan Araç'}
-                </div>
-                <div className="text-xs text-gray-600 italic">
-                  {language === 'en' ? '(All free, all yours)' : '(Hepsi bedava, hepsi senin)'}
-                </div>
-              </div>
-
-              {/* Privacy Score */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center hover:border-zinc-700 transition-all group">
-                <div className="text-6xl mb-4">🔒</div>
-                <div className="text-4xl font-black text-white mb-2 font-mono group-hover:text-green-400 transition-colors">
-                  100%
-                </div>
-                <div className="text-sm text-gray-500 mb-3">
-                  {language === 'en' ? 'Privacy Score' : 'Gizlilik Skoru'}
-                </div>
-                <div className="text-xs text-gray-600 italic">
-                  {language === 'en' ? '(Unlike Big Tech)' : '(Big Tech\'ten farklı)'}
-                </div>
-              </div>
-
-              {/* Uptime */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center hover:border-zinc-700 transition-all group">
-                <div className="text-6xl mb-4">⚡</div>
-                <div className="text-4xl font-black text-white mb-2 font-mono group-hover:text-purple-400 transition-colors">
-                  99.9%
-                </div>
-                <div className="text-sm text-gray-500 mb-3">
-                  {language === 'en' ? 'Uptime' : 'Çalışma Süresi'}
-                </div>
-                <div className="text-xs text-gray-600 italic">
-                  {language === 'en' ? '(0.1% = nap time)' : '(0.1% = uyku zamanı)'}
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center mt-12">
-              <p className="text-gray-500 text-sm italic">
-                {language === 'en'
-                  ? '* These stats update live because why not. They\'re as real as my commitment to privacy (very real).'
-                  : '* Bu istatistikler canlı güncelleniyor çünkü neden olmasın. Gizliliğe olan bağlılığım kadar gerçekler (çok gerçek).'}
               </p>
             </div>
           </div>
