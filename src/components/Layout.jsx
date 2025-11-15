@@ -10,6 +10,7 @@ import DigitalPassport from './DigitalPassport'
 import { getRemainingRequests, LIMITS } from '../services/geminiService'
 import { useRainbow, getFabulousName, getFabulousMessage } from '../contexts/RainbowContext'
 import { getUserGoldBalance } from '../utils/digitalPassport'
+import BanksyQuote from './BanksyQuote'
 
 const Layout = ({ children }) => {
   const { rainbowMode } = useRainbow()
@@ -358,6 +359,9 @@ const Layout = ({ children }) => {
 
         {/* GDPR Cookie Consent */}
         <CookieConsent />
+
+        {/* Rotating Banksy Quote */}
+        {!rainbowMode && <BanksyQuote />}
       </div>
     </div>
   )
