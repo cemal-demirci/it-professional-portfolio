@@ -127,7 +127,7 @@ const Layout = ({ children }) => {
 
         {/* Minimal Header */}
         <header className="bg-zinc-900/90 backdrop-blur-xl border-b border-zinc-800 sticky top-0 z-50">
-          <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="w-full px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex items-center">
                 <Link to="/" className="flex items-center space-x-3 group">
@@ -325,13 +325,13 @@ const Layout = ({ children }) => {
         </header>
 
         {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
           {children}
         </main>
 
         {/* Minimal Footer */}
         <footer className="bg-zinc-900/90 backdrop-blur-xl border-t border-zinc-800 mt-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
             {/* Banksy Quote in Footer */}
             {!rainbowMode && (
               <div className="mb-6">
