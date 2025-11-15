@@ -696,29 +696,36 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Manifesto Section - Clean */}
+        {/* Cemal Says Section */}
         <section className="py-24 px-4 bg-zinc-950/50 relative">
           {/* Banksy graffiti - hidden on mobile */}
           <div className="hidden md:block absolute top-24 left-8 transform -rotate-6 opacity-8">
-            <p className="text-5xl font-black text-white stencil-text">WHY?</p>
+            <p className="text-5xl font-black text-white stencil-text">CEMAL</p>
           </div>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8 text-center">
-              {t.manifesto.title}
+              Cemal Says
             </h2>
 
             <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 md:p-12 mb-8">
-              <blockquote className="text-xl md:text-2xl text-white mb-8 italic border-l-4 border-white pl-6">
-                "{t.manifesto.quote}"
+              {/* Nolan Quote */}
+              <blockquote className="text-lg md:text-xl text-gray-300 mb-8 italic border-l-4 border-zinc-700 pl-6">
+                "We all wake up every morning, we get ourselves ready, we go out into the world and try to become ourselves. But that's impossible, because we can only ever be one version of ourselves."
               </blockquote>
+              <p className="text-sm text-gray-600 font-mono mb-8">— Christopher Nolan</p>
 
-              <div className="space-y-3">
-                {t.manifesto.points.map((point, idx) => (
-                  <div key={idx} className="flex items-start gap-3 text-gray-300">
-                    <span className="text-white">→</span>
-                    <span>{point}</span>
-                  </div>
-                ))}
+              {/* Personal Statement */}
+              <div className="space-y-4 text-gray-300 leading-relaxed">
+                <p>
+                  {language === 'en'
+                    ? 'One restless day, I imagined gathering my own tools and putting together a website and my profile. This site aims to make money from future customers, not from users.'
+                    : 'Huzursuz hissettiğim bir günde, kendime ait araçlarımı toparlayıp bir web sitesi ve profilimi ortaya koymayı hayal ettim. Bu site kullanıcılardan değil, gelecek müşterilerden para kazanmayı amaçlamaktadır.'}
+                </p>
+                <p className="text-gray-500 text-sm italic">
+                  {language === 'en'
+                    ? 'No tracking. No ads. Just honest work and honest tools.'
+                    : 'Takip yok. Reklam yok. Sadece dürüst iş ve dürüst araçlar.'}
+                </p>
               </div>
 
               {/* Signature */}
