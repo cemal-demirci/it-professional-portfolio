@@ -249,9 +249,10 @@ const About = () => {
       category: '🎥 Broadcast & Media Solutions',
       services: [
         'IP-based broadcasting (SMPTE 2110, NDI)',
-        'Live streaming setup (SRT, RTMP, WebRTC)',
+        'Live streaming setup (SRT, RTMP, HLS, WebRTC)',
         'OTT platform kurulumu ve yönetimi',
-        'Video encoding ve transcoding workflows',
+        'Video encoding ve transcoding workflows (FFmpeg, MPEG)',
+        'Video upscaling ve AI enhancement',
         'PTZ camera integration',
         'Production workflow optimization',
         'Media server setup ve management'
@@ -351,9 +352,10 @@ const About = () => {
       category: '🎥 Broadcast & Media Solutions',
       services: [
         'IP-based broadcasting (SMPTE 2110, NDI)',
-        'Live streaming setup (SRT, RTMP, WebRTC)',
+        'Live streaming setup (SRT, RTMP, HLS, WebRTC)',
         'OTT platform setup and management',
-        'Video encoding and transcoding workflows',
+        'Video encoding and transcoding workflows (FFmpeg, MPEG)',
+        'Video upscaling and AI enhancement',
         'PTZ camera integration',
         'Production workflow optimization',
         'Media server setup and management'
