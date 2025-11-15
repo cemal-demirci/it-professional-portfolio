@@ -130,11 +130,6 @@ const Layout = ({ children }) => {
             <div className="flex justify-between h-16">
               <div className="flex items-center">
                 <Link to="/" className="flex items-center space-x-3 group">
-                  {siteSettings.showNavLogo && (
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center group-hover:bg-gray-200 transition-all duration-300">
-                      <span className="text-black font-bold text-xl">{siteSettings.logoText}</span>
-                    </div>
-                  )}
                   <span className="text-xl font-black text-white tracking-tight">{siteSettings.siteName}</span>
                 </Link>
               </div>

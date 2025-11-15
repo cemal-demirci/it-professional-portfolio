@@ -75,7 +75,7 @@ const Home = () => {
       hero: {
         greeting: "Merhaba, Ben Cemal",
         tagline: "Araçlar & Dijital Oyun Alanı",
-        description: "Şişirilmiş kurumsal araçlara gizlilik-öncelikli alternatif. Her şey tarayıcında çalışır.",
+        description: "Kurumsal araçlar yavaş ve şişkin. Ben daha hızlı ve gizlilik odaklı olanları yaptım.",
         cta1: "Araçları Keşfet",
         cta2: "Hakkımda"
       },
@@ -122,12 +122,15 @@ const Home = () => {
       <div className="relative z-10">
         {/* Hero Section */}
         <section className="min-h-screen flex items-center justify-center px-4 pt-20 relative">
-          {/* Subtle background elements */}
-          <div className="absolute top-20 right-20 w-64 h-64 opacity-3">
-            <div className="text-9xl">🤖</div>
+          {/* Banksy-style graffiti text */}
+          <div className="absolute top-32 right-12 transform rotate-12 opacity-10">
+            <p className="text-6xl font-black text-white stencil-text">NO BS</p>
           </div>
-          <div className="absolute bottom-20 left-20 w-48 h-48 opacity-3">
-            <div className="text-7xl">⚡</div>
+          <div className="absolute bottom-32 left-12 transform -rotate-6 opacity-10">
+            <p className="text-5xl font-black text-white stencil-text">FREE TOOLS</p>
+          </div>
+          <div className="absolute top-1/2 right-8 transform -translate-y-1/2 rotate-90 opacity-5">
+            <p className="text-4xl font-black text-white stencil-text">PRIVACY FIRST</p>
           </div>
 
           <div className="max-w-5xl mx-auto relative z-10">
@@ -195,7 +198,11 @@ const Home = () => {
         </section>
 
         {/* Featured Tools Section */}
-        <section className="py-24 px-4">
+        <section className="py-24 px-4 relative">
+          {/* Banksy graffiti */}
+          <div className="absolute top-12 left-8 transform -rotate-3 opacity-8">
+            <p className="text-5xl font-black text-white stencil-text">TOOLS</p>
+          </div>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
@@ -242,7 +249,11 @@ const Home = () => {
         </section>
 
         {/* AI Chatbots Section */}
-        <section className="py-24 px-4 bg-black">
+        <section className="py-24 px-4 bg-black relative">
+          {/* Banksy graffiti */}
+          <div className="absolute bottom-16 right-12 transform rotate-6 opacity-8">
+            <p className="text-6xl font-black text-white stencil-text">AI</p>
+          </div>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
@@ -307,7 +318,11 @@ const Home = () => {
         </section>
 
         {/* Categories Section */}
-        <section className="py-24 px-4 bg-zinc-950/50">
+        <section className="py-24 px-4 bg-zinc-950/50 relative">
+          {/* Banksy graffiti */}
+          <div className="absolute top-20 left-16 transform -rotate-12 opacity-8">
+            <p className="text-7xl font-black text-white stencil-text">70+</p>
+          </div>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-black text-white mb-2">
@@ -338,7 +353,11 @@ const Home = () => {
         </section>
 
         {/* Tech Stack Section */}
-        <section className="py-24 px-4 bg-zinc-950/50">
+        <section className="py-24 px-4 bg-zinc-950/50 relative">
+          {/* Banksy graffiti */}
+          <div className="absolute bottom-12 right-20 transform rotate-3 opacity-8">
+            <p className="text-5xl font-black text-white stencil-text">REACT</p>
+          </div>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
@@ -371,7 +390,11 @@ const Home = () => {
         </section>
 
         {/* Expertise Section */}
-        <section className="py-24 px-4">
+        <section className="py-24 px-4 relative">
+          {/* Banksy graffiti */}
+          <div className="absolute top-16 right-8 transform rotate-12 opacity-8">
+            <p className="text-6xl font-black text-white stencil-text">HACK</p>
+          </div>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
@@ -419,7 +442,11 @@ const Home = () => {
         </section>
 
         {/* Manifesto Section - Clean */}
-        <section className="py-24 px-4 bg-zinc-950/50">
+        <section className="py-24 px-4 bg-zinc-950/50 relative">
+          {/* Banksy graffiti */}
+          <div className="absolute top-24 left-8 transform -rotate-6 opacity-8">
+            <p className="text-5xl font-black text-white stencil-text">WHY?</p>
+          </div>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8 text-center">
               {t.manifesto.title}
@@ -450,7 +477,11 @@ const Home = () => {
         </section>
 
         {/* Quick Facts Section */}
-        <section className="py-24 px-4">
+        <section className="py-24 px-4 relative">
+          {/* Banksy graffiti */}
+          <div className="absolute bottom-20 left-12 transform rotate-3 opacity-8">
+            <p className="text-7xl font-black text-white stencil-text">100%</p>
+          </div>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
@@ -487,7 +518,11 @@ const Home = () => {
         </section>
 
         {/* Final CTA - Minimal */}
-        <section className="py-16 px-4 bg-white">
+        <section className="py-16 px-4 bg-white relative">
+          {/* Banksy graffiti */}
+          <div className="absolute top-8 right-16 transform -rotate-12 opacity-10">
+            <p className="text-6xl font-black text-black stencil-text">START</p>
+          </div>
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-3xl md:text-4xl font-black text-black mb-4">
               {language === 'en' ? 'Ready to Start?' : 'Başlamaya Hazır mısın?'}
