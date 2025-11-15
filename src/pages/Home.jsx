@@ -75,8 +75,8 @@ const Home = () => {
       hero: {
         greeting: "Merhaba, Ben Cemal",
         tagline: "Araçlar & Dijital Oyun Alanı",
-        description: "Kurumsal araçlar yavaş ve şişkin. Ben daha hızlı ve gizlilik odaklı olanları yaptım.",
-        cta1: "Araçları Keşfet",
+        description: "Kurumsal araçlar yavaş ve şişkin. Ben daha hızlı ve güvenli olanlarını yaptım.",
+        cta1: "Araçlara Göz At",
         cta2: "Hakkımda"
       },
       stats: [
@@ -86,24 +86,24 @@ const Home = () => {
         { label: "Ücret", value: "₺0" }
       ],
       categories: {
-        title: "İçeride Ne Var",
+        title: "Neler Var",
         items: [
           { name: "AI Araçları", count: "13", icon: Code },
           { name: "Kod", count: "6", icon: Code },
           { name: "Güvenlik", count: "4", icon: Shield },
           { name: "Ağ", count: "12", icon: Network },
           { name: "Windows", count: "4", icon: Terminal },
-          { name: "Daha Fazla", count: "30+", icon: Wrench }
+          { name: "Diğerleri", count: "30+", icon: Wrench }
         ]
       },
       manifesto: {
-        title: "Neden Bu Var",
-        quote: "Yavaş, şişkin, gizlilik ihlali yapan araçlardan bıktım. Kendi alanımı kurdum.",
+        title: "Neden Var Bu Site",
+        quote: "Yavaş, şişkin ve gizliliğe saygısı olmayan araçlardan bıktım. Kendi alanımı kurdum.",
         points: [
-          "Ücretli duvar yok",
-          "Veri toplama yok",
-          "Her şey lokal çalışır",
-          "Açık kaynak zihniyeti"
+          "Para istemiyor",
+          "Veri toplamıyor",
+          "Hepsi tarayıcında çalışıyor",
+          "Açık kaynak ruhuyla"
         ]
       }
     }
@@ -209,7 +209,7 @@ const Home = () => {
                 {language === 'en' ? 'Featured Tools' : 'Öne Çıkan Araçlar'}
               </h2>
               <p className="text-gray-500">
-                {language === 'en' ? 'Most popular tools on the platform' : 'Platformdaki en popüler araçlar'}
+                {language === 'en' ? 'Most popular tools on the platform' : 'En çok kullanılan araçlar'}
               </p>
             </div>
 
@@ -222,14 +222,14 @@ const Home = () => {
                   path: '/tools/text-analyzer'
                 },
                 {
-                  name: language === 'en' ? 'Network Diagnostics' : 'Ağ Tanılama',
-                  desc: language === 'en' ? 'Complete network troubleshooting' : 'Komple ağ sorun giderme',
+                  name: language === 'en' ? 'Network Diagnostics' : 'Ağ Teşhisi',
+                  desc: language === 'en' ? 'Complete network troubleshooting' : 'Ağ sorunlarını tespit eder',
                   icon: '🌐',
                   path: '/tools/network-diagnostics'
                 },
                 {
                   name: language === 'en' ? 'Password Generator' : 'Şifre Oluşturucu',
-                  desc: language === 'en' ? 'Secure password generation' : 'Güvenli şifre oluşturma',
+                  desc: language === 'en' ? 'Secure password generation' : 'Güvenli şifreler oluşturur',
                   icon: '🔐',
                   path: '/tools/password-generator'
                 }
@@ -260,7 +260,7 @@ const Home = () => {
                 {language === 'en' ? 'AI Chatbots' : 'AI Sohbet Botları'}
               </h2>
               <p className="text-gray-500">
-                {language === 'en' ? 'Specialized AI assistants for IT professionals' : 'IT profesyonelleri için özel AI asistanlar'}
+                {language === 'en' ? 'Specialized AI assistants for IT professionals' : 'IT uzmanları için yapay zeka asistanları'}
               </p>
             </div>
 
@@ -268,37 +268,37 @@ const Home = () => {
               {[
                 {
                   name: language === 'en' ? 'Event Correlator' : 'Olay İlişkilendirici',
-                  desc: language === 'en' ? 'Analyze and correlate system events' : 'Sistem olaylarını analiz et ve ilişkilendir',
+                  desc: language === 'en' ? 'Analyze and correlate system events' : 'Sistem olaylarını analiz edip ilişkilendirir',
                   icon: '🔍',
                   path: '/ai-bots/event-correlator'
                 },
                 {
                   name: language === 'en' ? 'Cert Analyzer' : 'Sertifika Analizi',
-                  desc: language === 'en' ? 'SSL/TLS certificate analysis' : 'SSL/TLS sertifika analizi',
+                  desc: language === 'en' ? 'SSL/TLS certificate analysis' : 'SSL/TLS sertifikalarını analiz eder',
                   icon: '🔐',
                   path: '/ai-bots/cert-analyzer'
                 },
                 {
                   name: language === 'en' ? 'DR Planner' : 'DR Planlayıcı',
-                  desc: language === 'en' ? 'Disaster recovery planning' : 'Felaket kurtarma planlaması',
+                  desc: language === 'en' ? 'Disaster recovery planning' : 'Felaket kurtarma planları yapar',
                   icon: '🚨',
                   path: '/ai-bots/dr-planner'
                 },
                 {
                   name: language === 'en' ? 'Perf Troubleshooter' : 'Performans Sorun Giderici',
-                  desc: language === 'en' ? 'Performance issue diagnosis' : 'Performans sorun teşhisi',
+                  desc: language === 'en' ? 'Performance issue diagnosis' : 'Performans sorunlarını tespit eder',
                   icon: '⚡',
                   path: '/ai-bots/perf-troubleshooter'
                 },
                 {
                   name: language === 'en' ? 'Proxmox Assistant' : 'Proxmox Asistanı',
-                  desc: language === 'en' ? 'Proxmox VE expert assistant' : 'Proxmox VE uzman asistan',
+                  desc: language === 'en' ? 'Proxmox VE expert assistant' : 'Proxmox VE uzman asistanı',
                   icon: '🖥️',
                   path: '/ai-bots/proxmox-assistant'
                 },
                 {
                   name: language === 'en' ? 'Script Generator' : 'Script Üretici',
-                  desc: language === 'en' ? 'Generate automation scripts' : 'Otomasyon scriptleri üret',
+                  desc: language === 'en' ? 'Generate automation scripts' : 'Otomasyon scriptleri oluşturur',
                   icon: '📜',
                   path: '/ai-bots/script-generator'
                 }
@@ -364,7 +364,7 @@ const Home = () => {
                 {language === 'en' ? 'Built With' : 'Teknolojiler'}
               </h2>
               <p className="text-gray-500">
-                {language === 'en' ? 'Modern tech stack for maximum performance' : 'Maksimum performans için modern teknolojiler'}
+                {language === 'en' ? 'Modern tech stack for maximum performance' : 'Hızlı ve modern teknolojilerle yapıldı'}
               </p>
             </div>
 
@@ -401,7 +401,7 @@ const Home = () => {
                 {language === 'en' ? 'Expertise' : 'Uzmanlık Alanları'}
               </h2>
               <p className="text-gray-500">
-                {language === 'en' ? 'What I bring to the table' : 'Masaya getirdiklerim'}
+                {language === 'en' ? 'What I bring to the table' : 'Neler yapabilirim'}
               </p>
             </div>
 
@@ -485,7 +485,7 @@ const Home = () => {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
-                {language === 'en' ? 'Why Choose This?' : 'Neden Bunu Seçmelisin?'}
+                {language === 'en' ? 'Why Choose This?' : 'Neden Burası?'}
               </h2>
             </div>
 
@@ -493,17 +493,17 @@ const Home = () => {
               {[
                 {
                   title: language === 'en' ? '100% Privacy' : '%100 Gizlilik',
-                  desc: language === 'en' ? 'All tools run locally in your browser. Zero data collection.' : 'Tüm araçlar tarayıcında lokal çalışır. Sıfır veri toplama.',
+                  desc: language === 'en' ? 'All tools run locally in your browser. Zero data collection.' : 'Her şey tarayıcında çalışır. Hiçbir veri toplamıyorum.',
                   icon: '🔒'
                 },
                 {
-                  title: language === 'en' ? 'Always Free' : 'Hep Ücretsiz',
-                  desc: language === 'en' ? 'No paywalls, no subscriptions. Just use the tools you need.' : 'Ücretli duvar yok, abonelik yok. Sadece araçları kullan.',
+                  title: language === 'en' ? 'Always Free' : 'Tamamen Ücretsiz',
+                  desc: language === 'en' ? 'No paywalls, no subscriptions. Just use the tools you need.' : 'Para yok, abonelik yok. Sadece kullan.',
                   icon: '💰'
                 },
                 {
-                  title: language === 'en' ? 'No Account' : 'Hesap Yok',
-                  desc: language === 'en' ? 'Start using immediately. No signup, no email, no BS.' : 'Hemen kullanmaya başla. Kayıt yok, email yok, BS yok.',
+                  title: language === 'en' ? 'No Account' : 'Hesap Gerektirmiyor',
+                  desc: language === 'en' ? 'Start using immediately. No signup, no email, no BS.' : 'Hemen kullanmaya başla. Kayıt yok, email yok, saçmalık yok.',
                   icon: '⚡'
                 }
               ].map((item, idx) => (
@@ -525,18 +525,18 @@ const Home = () => {
           </div>
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-3xl md:text-4xl font-black text-black mb-4">
-              {language === 'en' ? 'Ready to Start?' : 'Başlamaya Hazır mısın?'}
+              {language === 'en' ? 'Ready to Start?' : 'Başlayalım mı?'}
             </h3>
             <p className="text-lg text-gray-600 mb-8">
               {language === 'en'
                 ? 'No signup. No tracking. Just tools.'
-                : 'Kayıt yok. Takip yok. Sadece araçlar.'}
+                : 'Kayıt yok. Takip yok. Sadece araçlar var.'}
             </p>
             <Link
               to="/tools"
               className="inline-flex items-center gap-2 px-8 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-900 transition-all duration-150"
             >
-              {language === 'en' ? 'Explore Tools' : 'Araçları Keşfet'}
+              {language === 'en' ? 'Explore Tools' : 'Araçlara Göz At'}
               <ArrowRight className="w-5 h-5" />
             </Link>
 
