@@ -248,6 +248,86 @@ const Home = () => {
           </div>
         </section>
 
+        {/* Wall of Shame Section */}
+        <section className="py-24 px-4 bg-zinc-950/50 relative">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute top-16 right-16 transform rotate-6 opacity-8">
+            <p className="text-6xl font-black text-white stencil-text">SHAME</p>
+          </div>
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'Wall of Shame' : 'Utanç Duvarı'}
+              </h2>
+              <p className="text-gray-500">
+                {language === 'en' ? 'Corporate tools you probably hate (but keep using)' : 'Muhtemelen nefret ettiğin (ama kullanmaya devam ettiğin) kurumsal araçlar'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                {
+                  name: 'Google Analytics',
+                  shame: language === 'en' ? 'Tracks your visitors, then sells the data' : 'Ziyaretçilerini izler, sonra verisini satar',
+                  icon: '🕵️',
+                  price: language === 'en' ? 'Free (you\'re the product)' : 'Bedava (sen ürünsün)'
+                },
+                {
+                  name: 'Adobe Creative Cloud',
+                  shame: language === 'en' ? 'Mortgage your kidney for Photoshop' : 'Photoshop için böbreğini ipotek et',
+                  icon: '💸',
+                  price: '$54.99/mo'
+                },
+                {
+                  name: 'Zoom',
+                  shame: language === 'en' ? 'Your boss watches you, we watch you too' : 'Patron seni gözetlerken biz de seni gözetliyoruz',
+                  icon: '👁️',
+                  price: language === 'en' ? 'Free (with data mining)' : 'Bedava (veri madenciliği ile)'
+                },
+                {
+                  name: 'Microsoft 365',
+                  shame: language === 'en' ? 'Subscription hell since 2011' : '2011\'den beri abonelik cehennemi',
+                  icon: '🔥',
+                  price: '$12.50/mo'
+                },
+                {
+                  name: 'Slack',
+                  shame: language === 'en' ? 'Pay to get distracted 24/7' : 'Dikkatinin dağılması için para öde',
+                  icon: '💬',
+                  price: '$7.25/mo'
+                },
+                {
+                  name: 'Salesforce',
+                  shame: language === 'en' ? 'Complicated AF, expensive AF' : 'Karmaşık AF, pahalı AF',
+                  icon: '🤮',
+                  price: language === 'en' ? 'Call for quote (lol)' : 'Teklif için ara (lol)'
+                }
+              ].map((tool, idx) => (
+                <div
+                  key={idx}
+                  className="bg-zinc-900 border-2 border-red-900/50 rounded-lg p-6 hover:border-red-700 transition-all relative"
+                >
+                  <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-black px-2 py-1 rounded transform rotate-12">
+                    {language === 'en' ? 'SHAME' : 'UTANÇ'}
+                  </div>
+                  <div className="text-4xl mb-4">{tool.icon}</div>
+                  <h3 className="text-xl font-bold text-white mb-2">{tool.name}</h3>
+                  <p className="text-red-400 text-sm mb-3 italic">"{tool.shame}"</p>
+                  <p className="text-gray-500 text-xs line-through">{tool.price}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <p className="text-gray-500 italic">
+                {language === 'en'
+                  ? 'Meanwhile, everything here is free and respects your privacy. Just saying.'
+                  : 'Bu arada buradaki her şey bedava ve gizliliğine saygı duyuyor. Yalnızca söylüyorum.'}
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* AI Chatbots Section */}
         <section className="py-24 px-4 bg-black relative">
           {/* Banksy graffiti - hidden on mobile */}
@@ -441,6 +521,83 @@ const Home = () => {
           </div>
         </section>
 
+        {/* Satirical Testimonials Section */}
+        <section className="py-24 px-4 bg-black relative">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute bottom-12 left-8 transform -rotate-12 opacity-8">
+            <p className="text-6xl font-black text-white stencil-text">LOL</p>
+          </div>
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'What They Say' : 'Ne Diyorlar'}
+              </h2>
+              <p className="text-gray-500">
+                {language === 'en' ? '(Totally real reviews, trust me bro)' : '(Kesinlikle gerçek yorumlar, inan bana kardeşim)'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                {
+                  quote: language === 'en' ? 'Disappointed you don\'t sell my data' : 'Verilerimi satmadığınız için hayal kırıklığına uğradım',
+                  author: language === 'en' ? 'Google CEO' : 'Google CEO\'su',
+                  avatar: '😢',
+                  rating: '★☆☆☆☆'
+                },
+                {
+                  quote: language === 'en' ? 'How are you not making money? This is madness!' : 'Nasıl para kazanmıyorsunuz ki? Bu delilik!',
+                  author: 'Mark Zuckerberg',
+                  avatar: '🤯',
+                  rating: '★☆☆☆☆'
+                },
+                {
+                  quote: language === 'en' ? 'Privacy in 2025? You\'re kidding, right?' : 'Gizlilik mi? 2025\'te mi? Şaka yapıyorsunuz değil mi?',
+                  author: language === 'en' ? 'A SaaS Startup' : 'Bir SaaS Girişimi',
+                  avatar: '🤑',
+                  rating: '★☆☆☆☆'
+                },
+                {
+                  quote: language === 'en' ? 'Where\'s the subscription? Where\'s the paywall?' : 'Abonelik nerede? Ücretli duvar nerede?',
+                  author: 'Adobe',
+                  avatar: '💸',
+                  rating: '★☆☆☆☆'
+                },
+                {
+                  quote: language === 'en' ? 'This is hurting our business model' : 'Bu bizim iş modelimize zarar veriyor',
+                  author: language === 'en' ? 'Big Tech Coalition' : 'Big Tech Koalisyonu',
+                  avatar: '🏢',
+                  rating: '★☆☆☆☆'
+                },
+                {
+                  quote: language === 'en' ? 'Actually useful and free? Unfair competition!' : 'Gerçekten kullanışlı ve bedava mı? Haksız rekabet!',
+                  author: 'Microsoft',
+                  avatar: '😠',
+                  rating: '★☆☆☆☆'
+                }
+              ].map((testimonial, idx) => (
+                <div
+                  key={idx}
+                  className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-zinc-700 transition-all relative"
+                >
+                  <div className="absolute top-3 right-3 text-2xl">{testimonial.rating}</div>
+                  <div className="text-5xl mb-4">{testimonial.avatar}</div>
+                  <blockquote className="text-gray-300 italic mb-4">"{testimonial.quote}"</blockquote>
+                  <p className="text-sm text-gray-500 font-semibold">— {testimonial.author}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <p className="text-gray-500 text-sm italic">
+                {language === 'en'
+                  ? '* These reviews are satirical. Big Tech actually loves ignoring us.'
+                  : '* Bu yorumlar satiriktir. Big Tech aslında bizi görmezden gelmeyi seviyor.'}
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Manifesto Section - Clean */}
         <section className="py-24 px-4 bg-zinc-950/50 relative">
           {/* Banksy graffiti - hidden on mobile */}
@@ -472,6 +629,115 @@ const Home = () => {
                   — Cemal Demirci
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Big Tech vs Me Comparison Section */}
+        <section className="py-24 px-4 bg-zinc-950/50 relative">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute top-16 left-16 transform -rotate-6 opacity-8">
+            <p className="text-6xl font-black text-white stencil-text">VS</p>
+          </div>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'Them vs Me' : 'Onlar vs Ben'}
+              </h2>
+              <p className="text-gray-500">
+                {language === 'en' ? 'The difference is pretty obvious' : 'Fark oldukça açık'}
+              </p>
+            </div>
+
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-zinc-800">
+                      <th className="px-6 py-4 text-left text-white font-black">{language === 'en' ? 'Feature' : 'Özellik'}</th>
+                      <th className="px-6 py-4 text-center text-red-400 font-black">Big Tech 🏢</th>
+                      <th className="px-6 py-4 text-center text-green-400 font-black">cemal.online ✨</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      {
+                        feature: language === 'en' ? 'Data Collection' : 'Veri Toplama',
+                        them: language === 'en' ? 'Everything' : 'Her şey',
+                        me: language === 'en' ? 'Nothing' : 'Hiçbir şey',
+                        themIcon: '🕵️',
+                        meIcon: '🙈'
+                      },
+                      {
+                        feature: language === 'en' ? 'Price' : 'Fiyat',
+                        them: '$99/mo',
+                        me: '$0',
+                        themIcon: '💸',
+                        meIcon: '🎉'
+                      },
+                      {
+                        feature: language === 'en' ? 'Privacy' : 'Gizlilik',
+                        them: 'LOL',
+                        me: language === 'en' ? 'Actual real privacy' : 'Gerçek gizlilik',
+                        themIcon: '🤡',
+                        meIcon: '🔒'
+                      },
+                      {
+                        feature: language === 'en' ? 'Terms of Service' : 'Kullanım Şartları',
+                        them: language === 'en' ? '47 pages' : '47 sayfa',
+                        me: language === 'en' ? 'Use it, don\'t be evil' : 'Kullan, kötü olma',
+                        themIcon: '📄',
+                        meIcon: '✌️'
+                      },
+                      {
+                        feature: language === 'en' ? 'Ads' : 'Reklamlar',
+                        them: language === 'en' ? 'Everywhere' : 'Her yerde',
+                        me: language === 'en' ? 'None. Ever.' : 'Yok. Asla olmayacak.',
+                        themIcon: '🎯',
+                        meIcon: '🚫'
+                      },
+                      {
+                        feature: language === 'en' ? 'Account Required' : 'Hesap Gerekli mi',
+                        them: language === 'en' ? 'Yes + email + phone' : 'Evet + email + telefon',
+                        me: language === 'en' ? 'Nope' : 'Hayır',
+                        themIcon: '📧',
+                        meIcon: '🎊'
+                      },
+                      {
+                        feature: language === 'en' ? 'Sells Your Data' : 'Verini Satar mı',
+                        them: language === 'en' ? 'That\'s the business model' : 'İş modeli bu',
+                        me: language === 'en' ? 'What data?' : 'Hangi veri?',
+                        themIcon: '💰',
+                        meIcon: '🤷'
+                      }
+                    ].map((row, idx) => (
+                      <tr key={idx} className="border-t border-zinc-800">
+                        <td className="px-6 py-4 text-white font-semibold">{row.feature}</td>
+                        <td className="px-6 py-4 text-center text-red-400">
+                          <div className="flex items-center justify-center gap-2">
+                            <span>{row.themIcon}</span>
+                            <span>{row.them}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-center text-green-400">
+                          <div className="flex items-center justify-center gap-2">
+                            <span>{row.meIcon}</span>
+                            <span className="font-bold">{row.me}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="text-center mt-8">
+              <p className="text-gray-500 italic text-sm">
+                {language === 'en'
+                  ? '* All comparisons are 100% factual. Fight me.'
+                  : '* Tüm karşılaştırmalar %100 gerçektir. Kavga et benimle.'}
+              </p>
             </div>
           </div>
         </section>
