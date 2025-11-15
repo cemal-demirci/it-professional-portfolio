@@ -6,7 +6,7 @@ const NotFound = () => {
   const { language } = useLanguage()
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 relative overflow-hidden">
       {/* Grid background */}
       <div className="fixed inset-0 grid-bg opacity-10 -z-10" />
 

@@ -102,8 +102,8 @@ const Layout = ({ children }) => {
   return (
     <div className={`min-h-screen relative overflow-hidden ${
       rainbowMode
-        ? 'bg-black'
-        : 'bg-black'
+        ? 'bg-zinc-950'
+        : 'bg-zinc-950'
     }`}>
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

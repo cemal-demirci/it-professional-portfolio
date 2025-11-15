@@ -12,12 +12,30 @@ const Home = () => {
   const { language } = useLanguage()
   const { rainbowMode } = useRainbow()
 
+  // Big Tech Tracker - Satirical counters
+  const [googleData, setGoogleData] = useState(45892)
+  const [facebookProfiles, setFacebookProfiles] = useState(127453)
+  const [amazonPurchases, setAmazonPurchases] = useState(89234)
+  const [cemalData, setCemalData] = useState(0)
+
   useEffect(() => {
     const hasLoaded = sessionStorage.getItem('cemal_loaded')
     if (hasLoaded) {
       setLoading(false)
       setIsVisible(true)
     }
+  }, [])
+
+  // Update Big Tech counters every 2 seconds (satirical)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGoogleData(prev => prev + Math.floor(Math.random() * 1000))
+      setFacebookProfiles(prev => prev + Math.floor(Math.random() * 500))
+      setAmazonPurchases(prev => prev + Math.floor(Math.random() * 300))
+      // cemalData stays at 0
+    }, 2000)
+
+    return () => clearInterval(interval)
   }, [])
 
   const handleLoadComplete = () => {
@@ -112,7 +130,7 @@ const Home = () => {
   const t = translations[language]
 
   return (
-    <div className={`min-h-screen bg-black transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`min-h-screen bg-zinc-950 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
       {/* Grid background */}
       <div className="fixed inset-0 grid-bg opacity-10 -z-10" />
 
@@ -329,7 +347,7 @@ const Home = () => {
         </section>
 
         {/* AI Chatbots Section */}
-        <section className="py-24 px-4 bg-black relative">
+        <section className="py-24 px-4 bg-zinc-950 relative">
           {/* Banksy graffiti - hidden on mobile */}
           <div className="hidden md:block absolute bottom-16 right-12 transform rotate-6 opacity-8">
             <p className="text-6xl font-black text-white stencil-text">AI</p>
@@ -522,7 +540,7 @@ const Home = () => {
         </section>
 
         {/* Satirical Testimonials Section */}
-        <section className="py-24 px-4 bg-black relative">
+        <section className="py-24 px-4 bg-zinc-950 relative">
           {/* Banksy graffiti - hidden on mobile */}
           <div className="hidden md:block absolute bottom-12 left-8 transform -rotate-12 opacity-8">
             <p className="text-6xl font-black text-white stencil-text">LOL</p>
@@ -737,6 +755,78 @@ const Home = () => {
                 {language === 'en'
                   ? '* All comparisons are 100% factual. Fight me.'
                   : '* Tüm karşılaştırmalar %100 gerçektir. Kavga et benimle.'}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Big Tech Tracker Section - Live Satirical Counters */}
+        <section className="py-24 px-4 bg-zinc-950 relative">
+          {/* Banksy graffiti - hidden on mobile */}
+          <div className="hidden md:block absolute top-16 right-12 transform rotate-12 opacity-8">
+            <p className="text-7xl font-black text-white stencil-text">DATA</p>
+          </div>
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                {language === 'en' ? 'Big Tech Tracker™' : 'Big Tech Takipçi™'}
+              </h2>
+              <p className="text-gray-500">
+                {language === 'en' ? 'Live data (probably)' : 'Canlı veri (muhtemelen)'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-zinc-900 border-2 border-red-900/50 rounded-lg p-6 text-center">
+                <div className="text-sm text-red-400 mb-2 font-bold uppercase">Google</div>
+                <div className="text-4xl font-black text-red-400 mb-2 font-mono">
+                  {googleData.toLocaleString()}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {language === 'en' ? 'GB of data collected today' : 'Bugün toplanan veri (GB)'}
+                </div>
+                <div className="mt-2 text-xs text-red-400 animate-pulse">📈 Increasing</div>
+              </div>
+
+              <div className="bg-zinc-900 border-2 border-red-900/50 rounded-lg p-6 text-center">
+                <div className="text-sm text-red-400 mb-2 font-bold uppercase">Facebook</div>
+                <div className="text-4xl font-black text-red-400 mb-2 font-mono">
+                  {facebookProfiles.toLocaleString()}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {language === 'en' ? 'Profiles sold today' : 'Bugün satılan profil'}
+                </div>
+                <div className="mt-2 text-xs text-red-400 animate-pulse">📈 Increasing</div>
+              </div>
+
+              <div className="bg-zinc-900 border-2 border-red-900/50 rounded-lg p-6 text-center">
+                <div className="text-sm text-red-400 mb-2 font-bold uppercase">Amazon</div>
+                <div className="text-4xl font-black text-red-400 mb-2 font-mono">
+                  {amazonPurchases.toLocaleString()}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {language === 'en' ? 'Purchase histories tracked' : 'Takip edilen alışveriş geçmişi'}
+                </div>
+                <div className="mt-2 text-xs text-red-400 animate-pulse">📈 Increasing</div>
+              </div>
+
+              <div className="bg-zinc-900 border-2 border-green-900/50 rounded-lg p-6 text-center">
+                <div className="text-sm text-green-400 mb-2 font-bold uppercase">cemal.online</div>
+                <div className="text-4xl font-black text-green-400 mb-2 font-mono">
+                  {cemalData}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {language === 'en' ? 'Bytes of data collected' : 'Toplanan veri (byte)'}
+                </div>
+                <div className="mt-2 text-xs text-green-400">✅ Always zero</div>
+              </div>
+            </div>
+
+            <div className="text-center mt-8">
+              <p className="text-gray-500 text-sm italic">
+                {language === 'en'
+                  ? '* These numbers are satirical, but the privacy violations are real.'
+                  : '* Bu sayılar satiriktir, ama gizlilik ihlalleri gerçektir.'}
               </p>
             </div>
           </div>
