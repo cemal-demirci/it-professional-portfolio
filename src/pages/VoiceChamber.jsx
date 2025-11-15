@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X, Flame, Shuffle, Image as ImageIcon, Upload } from 'lucide-react'
+import { Lock, Unlock, Mic, MicOff, Volume2, VolumeX, Loader, Zap, Clock, User, Settings, Info, X, Flame, Shuffle, Image as ImageIcon, Upload, Wand2, Video, UserCheck, Camera } from 'lucide-react'
 import { AI_CHARACTERS, generateSpeech, getQuota } from '../services/elevenLabsService'
 import { analyzeWithGemini } from '../services/geminiService'
 import { getUserGold } from '../services/goldService'
 import { deductGold } from '../utils/digitalPassport'
 import { useLanguage } from '../contexts/LanguageContext'
+import { generateNSFWImage, generateNSFWVideo, performFaceSwap, performGenderSwap, buildEroticPrompt, DEFAULT_NEGATIVE_PROMPT } from '../services/replicateService'
 
 const VoiceChamber = () => {
   const navigate = useNavigate()
@@ -32,11 +33,28 @@ const VoiceChamber = () => {
   const [userName, setUserName] = useState('')
   const [customNameInput, setCustomNameInput] = useState('')
 
-  // Image upload for erotic content (XXX character only)
+  // Image upload for deepfake/erotic content (XXX character only)
   const [uploadedImage, setUploadedImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [isGeneratingImage, setIsGeneratingImage] = useState(false)
   const [showImageModal, setShowImageModal] = useState(false)
+
+  // NEW: Replicate AI Features
+  const [generatedImages, setGeneratedImages] = useState([]) // Store AI generated images
+  const [generatedVideos, setGeneratedVideos] = useState([]) // Store AI generated videos
+  const [userFacePhoto, setUserFacePhoto] = useState(null) // User's face for deepfake
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false)
+  const [isFaceSwapping, setIsFaceSwapping] = useState(false)
+  const [isGenderSwapping, setIsGenderSwapping] = useState(false)
+  const [genderSwapMode, setGenderSwapMode] = useState(false) // Camera gender swap mode
+  const videoRef = useRef(null) // For camera
+  const canvasRef = useRef(null) // For gender swap rendering
+
+  // Secret code for Replicate features
+  const [replicateUnlocked, setReplicateUnlocked] = useState(false)
+  const [replicateCode, setReplicateCode] = useState('')
+  const [showReplicateModal, setShowReplicateModal] = useState(false)
+  const REPLICATE_SECRET = 'NSFW2025' // Özel kod
 
   // Text chat for XXX
   const [textInput, setTextInput] = useState('')
@@ -395,6 +413,288 @@ const VoiceChamber = () => {
     setImagePreview(null)
   }
 
+  // ==========================================
+  // NEW: REPLICATE AI FEATURES
+  // ==========================================
+
+  // 1. Generate NSFW Image
+  const handleGenerateNSFWImage = async () => {
+    setIsGeneratingImage(true)
+
+    try {
+      // Check gold balance (10 gold for image generation)
+      const currentGold = await getUserGold()
+      if (currentGold < 10) {
+        alert('⚠️ Yetersiz Gold! Görüntü üretimi için 10 Gold gerekli.\n\n💡 Settings sayfasından kod kullanarak Gold kazanabilirsiniz.')
+        setIsGeneratingImage(false)
+        return
+      }
+
+      // Deduct 10 Gold
+      await deductGold(10)
+      const updatedGold = await getUserGold()
+      setGoldBalance(updatedGold)
+
+      // Build erotic prompt based on conversation context
+      const lastUserMessage = conversation.filter(m => m.role === 'user').pop()?.text || 'sexy woman'
+      const prompt = buildEroticPrompt(lastUserMessage, dirtyTalkMode, userName)
+
+      console.log('🎨 Generating NSFW image...')
+      console.log('📝 Prompt:', prompt)
+
+      // Generate image (realistic mode)
+      const imageUrls = await generateNSFWImage(prompt, 'realistic', DEFAULT_NEGATIVE_PROMPT)
+
+      console.log('✅ Image generated!')
+      console.log('🖼️ URLs:', imageUrls)
+
+      // Add to conversation and generated images
+      setGeneratedImages(prev => [...prev, ...imageUrls])
+
+      setConversation(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: '🎨 İşte senin için özel olarak oluşturduğum görüntü bebeğim... Beğendin mi? 😈🔥',
+          generatedImage: imageUrls[0],
+          timestamp: Date.now()
+        }
+      ])
+
+      // XXX character responds
+      const aiResponse = dirtyTalkMode
+        ? `Ohh ${userName || 'bebeğim'}, bak ne yarattım senin için! Bu görüntüye baktıkça ne hissediyorsun? Sana daha fazlasını yaratayım mı? 🔥💋`
+        : `İşte ${userName || 'bebeğim'}, senin için özel bir görüntü yarattım. Nasıl buldun? Daha fazlasını ister misin? 😏`
+
+      // Generate speech
+      setIsSpeaking(true)
+      const audioBlob = await generateSpeech(aiResponse, selectedCharacter.voiceId)
+      const audioUrl = URL.createObjectURL(audioBlob)
+      const audio = new Audio(audioUrl)
+      audio.onended = () => setIsSpeaking(false)
+      audio.play()
+      setCurrentAudio(audio)
+
+    } catch (error) {
+      console.error('❌ Image generation error:', error)
+      alert(`❌ Görüntü üretim hatası: ${error.message}`)
+    } finally {
+      setIsGeneratingImage(false)
+    }
+  }
+
+  // 2. Generate Video from Image
+  const handleGenerateVideo = async (imageUrl) => {
+    setIsGeneratingVideo(true)
+
+    try {
+      // Check gold balance (15 gold for video)
+      const currentGold = await getUserGold()
+      if (currentGold < 15) {
+        alert('⚠️ Yetersiz Gold! Video üretimi için 15 Gold gerekli.')
+        setIsGeneratingVideo(false)
+        return
+      }
+
+      await deductGold(15)
+      const updatedGold = await getUserGold()
+      setGoldBalance(updatedGold)
+
+      console.log('🎥 Generating video from image...')
+      const videoUrl = await generateNSFWVideo(imageUrl, 'default')
+
+      console.log('✅ Video generated!')
+      console.log('🎬 Video URL:', videoUrl)
+
+      setGeneratedVideos(prev => [...prev, videoUrl])
+
+      setConversation(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: '🎥 İşte senin için videoyu oluşturdum! İzlemek ister misin? 😈',
+          generatedVideo: videoUrl,
+          timestamp: Date.now()
+        }
+      ])
+
+      // Voice response
+      const aiResponse = `Video hazır ${userName || 'bebeğim'}! Şimdi hareketi de görebiliyorsun... Nasıl olmuş? 🔥`
+      setIsSpeaking(true)
+      const audioBlob = await generateSpeech(aiResponse, selectedCharacter.voiceId)
+      const audioUrl = URL.createObjectURL(audioBlob)
+      const audio = new Audio(audioUrl)
+      audio.onended = () => setIsSpeaking(false)
+      audio.play()
+      setCurrentAudio(audio)
+
+    } catch (error) {
+      console.error('❌ Video generation error:', error)
+      alert(`❌ Video üretim hatası: ${error.message}`)
+    } finally {
+      setIsGeneratingVideo(false)
+    }
+  }
+
+  // 3. Face Swap (Deepfake)
+  const handleFaceSwap = async (targetImageUrl) => {
+    if (!userFacePhoto) {
+      alert('❌ Önce kendi yüzünü yükle! "Yüzünü Yükle" butonunu kullan.')
+      return
+    }
+
+    setIsFaceSwapping(true)
+
+    try {
+      // Check gold balance (20 gold for face swap - most expensive)
+      const currentGold = await getUserGold()
+      if (currentGold < 20) {
+        alert('⚠️ Yetersiz Gold! Deepfake için 20 Gold gerekli.')
+        setIsFaceSwapping(false)
+        return
+      }
+
+      await deductGold(20)
+      const updatedGold = await getUserGold()
+      setGoldBalance(updatedGold)
+
+      console.log('🎭 Performing face swap...')
+      const swappedImageUrl = await performFaceSwap(userFacePhoto, targetImageUrl)
+
+      console.log('✅ Face swap complete!')
+
+      setConversation(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: `🎭 İşte senin yüzünle birlikte... Nasıl görünüyorsun ${userName || 'bebeğim'}? 😈💋`,
+          generatedImage: swappedImageUrl,
+          timestamp: Date.now()
+        }
+      ])
+
+      // Voice response
+      const aiResponse = dirtyTalkMode
+        ? `Ohhh ${userName}! Şimdi sen de bu görüntüdesin... Çok seksi görünüyorsun! Daha fazlasını yapalım mı? 🔥💋`
+        : `İşte ${userName}, senin yüzünle birlikte görüntü! Nasıl buldun kendini? 😏`
+
+      setIsSpeaking(true)
+      const audioBlob = await generateSpeech(aiResponse, selectedCharacter.voiceId)
+      const audioUrl = URL.createObjectURL(audioBlob)
+      const audio = new Audio(audioUrl)
+      audio.onended = () => setIsSpeaking(false)
+      audio.play()
+      setCurrentAudio(audio)
+
+    } catch (error) {
+      console.error('❌ Face swap error:', error)
+      alert(`❌ Deepfake hatası: ${error.message}`)
+    } finally {
+      setIsFaceSwapping(false)
+    }
+  }
+
+  // 4. Upload user face photo for deepfake
+  const handleUserFaceUpload = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      alert('❌ Sadece resim dosyaları!')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setUserFacePhoto(e.target.result)
+      alert('✅ Yüzün yüklendi! Artık deepfake yapabilirsin.')
+    }
+    reader.readAsDataURL(file)
+  }
+
+  // 5. Gender Swap Camera (Real-time)
+  const toggleGenderSwapMode = async () => {
+    if (!genderSwapMode) {
+      // Start gender swap camera
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+          videoRef.current.play()
+        }
+        setGenderSwapMode(true)
+
+        // Start processing frames
+        processGenderSwapFrame()
+
+      } catch (error) {
+        console.error('Camera access error:', error)
+        alert('❌ Kamera izni gerekli!')
+      }
+    } else {
+      // Stop gender swap camera
+      if (videoRef.current && videoRef.current.srcObject) {
+        const tracks = videoRef.current.srcObject.getTracks()
+        tracks.forEach(track => track.stop())
+        videoRef.current.srcObject = null
+      }
+      setGenderSwapMode(false)
+    }
+  }
+
+  // Process camera frame for gender swap
+  const processGenderSwapFrame = async () => {
+    if (!genderSwapMode || !videoRef.current || !canvasRef.current) return
+
+    const video = videoRef.current
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+
+    // Capture current frame
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+    ctx.drawImage(video, 0, 0)
+
+    // Get image data
+    const imageData = canvas.toDataURL('image/jpeg')
+
+    try {
+      setIsGenderSwapping(true)
+
+      // Send to API for gender swap (throttle to 1 per second)
+      const transformedImageUrl = await performGenderSwap(imageData, 'female', true)
+
+      // Display transformed image
+      const img = new Image()
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      }
+      img.src = transformedImageUrl
+
+    } catch (error) {
+      console.error('Gender swap error:', error)
+    } finally {
+      setIsGenderSwapping(false)
+
+      // Continue processing if still in gender swap mode
+      if (genderSwapMode) {
+        setTimeout(processGenderSwapFrame, 1000) // 1 FPS due to API limits
+      }
+    }
+  }
+
+  // Check Replicate secret code
+  const checkReplicateCode = () => {
+    if (replicateCode.toUpperCase() === REPLICATE_SECRET) {
+      setReplicateUnlocked(true)
+      setShowReplicateModal(false)
+      setReplicateCode('')
+      alert('✅ Gelişmiş özellikler açıldı!')
+    } else {
+      alert('❌ Yanlış kod!')
+      setReplicateCode('')
+    }
+  }
 
   // Send text message (for XXX character)
   const handleSendTextMessage = async () => {
@@ -1028,6 +1328,151 @@ const VoiceChamber = () => {
                 </p>
               )}
 
+              {/* NEW: Replicate AI Features */}
+              <div className="mt-6 space-y-3">
+                {/* Unlock Button or Features */}
+                {!replicateUnlocked ? (
+                  <div className="text-center">
+                    <button
+                      onClick={() => setShowReplicateModal(true)}
+                      className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold text-sm hover:scale-105 transition-all shadow-lg"
+                    >
+                      <Lock className="w-4 h-4 inline mr-2" />
+                      Gelişmiş Özellikler 🔓
+                    </button>
+                    <p className="text-xs text-gray-400 mt-2">Özel kod ile kilidini aç</p>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="text-sm font-bold text-white text-center mb-3">🔥 Gelişmiş AI Özellikleri</h3>
+
+                {/* Row 1: Image Generation + User Face Upload */}
+                <div className="flex gap-2">
+                  {/* Generate NSFW Image */}
+                  <button
+                    onClick={handleGenerateNSFWImage}
+                    disabled={isGeneratingImage || isProcessing}
+                    className="flex-1 px-3 py-2 bg-gradient-to-r from-pink-600 to-red-600 rounded-lg font-bold text-sm hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                  >
+                    {isGeneratingImage ? (
+                      <>
+                        <Loader className="w-4 h-4 inline mr-1 animate-spin" />
+                        Üretiliyor...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="w-4 h-4 inline mr-1" />
+                        Görüntü Üret (10 Gold)
+                      </>
+                    )}
+                  </button>
+
+                  {/* Upload User Face */}
+                  <label className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-bold text-sm hover:scale-105 transition-all cursor-pointer text-center shadow-lg">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleUserFaceUpload}
+                      className="hidden"
+                    />
+                    <UserCheck className="w-4 h-4 inline mr-1" />
+                    {userFacePhoto ? '✅ Yüz Yüklendi' : 'Yüzünü Yükle'}
+                  </label>
+                </div>
+
+                {/* Row 2: Video + Gender Swap */}
+                <div className="flex gap-2">
+                  {/* Generate Video (disabled if no generated images) */}
+                  <button
+                    onClick={() => generatedImages.length > 0 && handleGenerateVideo(generatedImages[generatedImages.length - 1])}
+                    disabled={isGeneratingVideo || generatedImages.length === 0}
+                    className="flex-1 px-3 py-2 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-lg font-bold text-sm hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                  >
+                    {isGeneratingVideo ? (
+                      <>
+                        <Loader className="w-4 h-4 inline mr-1 animate-spin" />
+                        Video...
+                      </>
+                    ) : (
+                      <>
+                        <Video className="w-4 h-4 inline mr-1" />
+                        Video Yap (15 Gold)
+                      </>
+                    )}
+                  </button>
+
+                  {/* Gender Swap Camera */}
+                  <button
+                    onClick={toggleGenderSwapMode}
+                    disabled={isGenderSwapping}
+                    className={`flex-1 px-3 py-2 rounded-lg font-bold text-sm hover:scale-105 transition-all shadow-lg ${
+                      genderSwapMode
+                        ? 'bg-gradient-to-r from-red-600 to-pink-600 animate-pulse'
+                        : 'bg-gradient-to-r from-green-600 to-teal-600'
+                    }`}
+                  >
+                    <Camera className="w-4 h-4 inline mr-1" />
+                    {genderSwapMode ? 'Kapat' : 'Gender Swap'}
+                  </button>
+                </div>
+
+                {/* Row 3: Deepfake (Face Swap) */}
+                <button
+                  onClick={() => generatedImages.length > 0 && handleFaceSwap(generatedImages[generatedImages.length - 1])}
+                  disabled={isFaceSwapping || !userFacePhoto || generatedImages.length === 0}
+                  className="w-full px-3 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg font-bold text-sm hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                >
+                  {isFaceSwapping ? (
+                    <>
+                      <Loader className="w-4 h-4 inline mr-1 animate-spin" />
+                      Deepfake işleniyor...
+                    </>
+                  ) : (
+                    <>
+                      <UserCheck className="w-4 h-4 inline mr-1" />
+                      Deepfake Yap (20 Gold)
+                    </>
+                  )}
+                </button>
+
+                {/* Helper text */}
+                <div className="text-xs text-gray-400 text-center space-y-1">
+                  <p>💡 Görüntü Üret: AI ile NSFW görüntü oluşturur</p>
+                  <p>🎥 Video Yap: Üretilen görüntüyü videoya çevirir</p>
+                  <p>🎭 Deepfake: Senin yüzünü görüntüye ekler</p>
+                  <p>📸 Gender Swap: Kamerayı açıp kadın olarak gösterir</p>
+                </div>
+
+              {/* Gender Swap Camera Display */}
+              {genderSwapMode && (
+                <div className="mt-6">
+                  <h4 className="text-sm font-bold text-white text-center mb-2">👗 Gender Swap Kamera</h4>
+                  <div className="relative">
+                    <video
+                      ref={videoRef}
+                      className="hidden"
+                      autoPlay
+                      playsInline
+                    />
+                    <canvas
+                      ref={canvasRef}
+                      className="w-full h-auto rounded-xl border-2 border-pink-500/50 shadow-lg"
+                    />
+                    {isGenderSwapping && (
+                      <div className="absolute top-2 right-2 bg-black/70 px-2 py-1 rounded-lg">
+                        <Loader className="w-4 h-4 text-white animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-400 text-center mt-2">
+                    💡 Kamera açık ve gerçek zamanlı dönüşüm yapıyorum... (1 FPS)
+                  </p>
+                </div>
+              )}
+                  </>
+                )}
+              </div>
+
               {/* Text Chat Input - Only for XXX character */}
               <div className="mt-6">
                 <h3 className="text-sm font-bold text-white text-center mb-2">💬 Mesaj Gönder</h3>
@@ -1060,6 +1505,56 @@ const VoiceChamber = () => {
             </div>
           )}
 
+          {/* Replicate Code Modal */}
+          {showReplicateModal && (
+            <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+              <div className="bg-gradient-to-br from-purple-600/30 to-pink-600/30 backdrop-blur-2xl rounded-3xl p-8 border-2 border-purple-500/50 max-w-md w-full shadow-2xl">
+                <div className="text-center mb-6">
+                  <Lock className="w-16 h-16 text-purple-400 mx-auto mb-4" />
+                  <h2 className="text-3xl font-black text-white mb-2">Gelişmiş Özellikler</h2>
+                  <p className="text-pink-300 text-sm">Özel kodu gir ve kilidini aç</p>
+                </div>
+
+                <div className="mb-6">
+                  <input
+                    type="password"
+                    value={replicateCode}
+                    onChange={(e) => setReplicateCode(e.target.value.toUpperCase())}
+                    onKeyPress={(e) => e.key === 'Enter' && checkReplicateCode()}
+                    placeholder="Özel Kod Gir..."
+                    className="w-full px-4 py-3 bg-white/10 border-2 border-purple-500/30 rounded-xl text-white text-center font-bold text-lg tracking-widest focus:border-purple-500 focus:outline-none transition-all"
+                    maxLength={10}
+                    autoFocus
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={checkReplicateCode}
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold hover:scale-105 transition-all shadow-lg"
+                  >
+                    <Unlock className="w-5 h-5 inline mr-2" />
+                    Kilidi Aç
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowReplicateModal(false)
+                      setReplicateCode('')
+                    }}
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition-all"
+                  >
+                    İptal
+                  </button>
+                </div>
+
+                <div className="mt-6 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                  <p className="text-xs text-yellow-300 text-center">
+                    🔥 Görüntü üretimi, video, deepfake ve gender swap özellikleri
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Conversation History */}
           {conversation.length > 1 && (
@@ -1083,6 +1578,48 @@ const VoiceChamber = () => {
                       alt="Uploaded"
                       className="max-w-full h-auto rounded-lg mb-2 border-2 border-white/20"
                       style={{ maxHeight: '150px' }}
+                    />
+                  )}
+                  {/* Show AI generated image if present */}
+                  {msg.generatedImage && (
+                    <div className="mb-2">
+                      <img
+                        src={msg.generatedImage}
+                        alt="AI Generated"
+                        className="max-w-full h-auto rounded-lg border-2 border-pink-500/50"
+                        style={{ maxHeight: '200px' }}
+                      />
+                      <div className="mt-1 flex gap-2">
+                        {/* Video button */}
+                        <button
+                          onClick={() => handleGenerateVideo(msg.generatedImage)}
+                          disabled={isGeneratingVideo}
+                          className="px-2 py-1 bg-blue-600/80 hover:bg-blue-600 rounded text-xs"
+                        >
+                          <Video className="w-3 h-3 inline mr-1" />
+                          Video Yap
+                        </button>
+                        {/* Deepfake button */}
+                        {userFacePhoto && (
+                          <button
+                            onClick={() => handleFaceSwap(msg.generatedImage)}
+                            disabled={isFaceSwapping}
+                            className="px-2 py-1 bg-yellow-600/80 hover:bg-yellow-600 rounded text-xs"
+                          >
+                            <UserCheck className="w-3 h-3 inline mr-1" />
+                            Deepfake
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {/* Show AI generated video if present */}
+                  {msg.generatedVideo && (
+                    <video
+                      src={msg.generatedVideo}
+                      controls
+                      className="max-w-full h-auto rounded-lg mb-2 border-2 border-blue-500/50"
+                      style={{ maxHeight: '200px' }}
                     />
                   )}
                   <div>{msg.text}</div>

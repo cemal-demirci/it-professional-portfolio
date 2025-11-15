@@ -9,7 +9,7 @@ import {
   Type, Diff, Droplet, Sparkles, Link as LinkIcon, Globe, Wifi,
   QrCode, Clock, Fingerprint, Settings, Zap, Trash2, Terminal, Database, Server, Mail, Brain,
   Users, RefreshCw, LifeBuoy, Gauge, Eye, Activity, Rocket, Info, AlertTriangle,
-  Star, Search, X, Filter
+  Star, Search, X, Filter, Gamepad2
 } from 'lucide-react'
 import { getFavorites, toggleFavorite, isFavorite, addToRecent } from '../services/favoritesService'
 import RainbowModeToolBlocker from '../components/RainbowModeToolBlocker'
@@ -44,7 +44,7 @@ const Tools = () => {
       id: 'ai-powered-tools',
       name: '🤖 AI-Powered Tools',
       icon: Brain,
-      color: 'from-purple-600 via-pink-600 to-purple-500',
+      color: 'from-white to-gray-200',
       featured: true,
       tools: [
         { name: 'AI Text Analyzer', path: '/tools/text-analyzer', icon: Brain, description: 'Advanced sentiment, quality & writing suggestions' },
@@ -66,7 +66,7 @@ const Tools = () => {
       id: 'code-tools',
       name: 'Code Tools',
       icon: Code,
-      color: 'from-blue-500 to-cyan-500',
+      color: 'from-zinc-700 to-zinc-600',
       tools: [
         { name: 'JSON Formatter', path: '/tools/json-formatter', icon: FileJson, description: 'Format and validate JSON data' },
         { name: 'Base64 Encoder/Decoder', path: '/tools/base64', icon: Binary, description: 'Base64 encoding and decoding' },
@@ -80,7 +80,7 @@ const Tools = () => {
       id: 'windows-tools',
       name: 'Windows Tools',
       icon: Monitor,
-      color: 'from-cyan-500 to-blue-600',
+      color: 'from-gray-300 to-gray-400',
       tools: [
         { name: 'Gaming Optimizer', path: '/tools/gaming-optimizer', icon: Settings, description: 'Optimize Windows for gaming performance' },
         { name: 'GUID Generator', path: '/tools/guid-generator', icon: Fingerprint, description: 'Generate Windows GUIDs' },
@@ -92,7 +92,7 @@ const Tools = () => {
       id: 'pdf-tools',
       name: 'PDF Tools',
       icon: FileOutput,
-      color: 'from-red-500 to-pink-500',
+      color: 'from-zinc-600 to-zinc-500',
       tools: [
         { name: 'PDF Merger', path: '/tools/pdf-merger', icon: FileOutput, description: 'Merge PDF files' },
         { name: 'PDF to Image', path: '/tools/pdf-to-image', icon: Image, description: 'Convert PDF to images' },
@@ -104,7 +104,7 @@ const Tools = () => {
       id: 'security-tools',
       name: 'Security Tools',
       icon: Lock,
-      color: 'from-green-500 to-emerald-500',
+      color: 'from-gray-400 to-gray-500',
       tools: [
         { name: 'Password Strength Checker', path: '/tools/password-strength', icon: Shield, description: 'Test password strength & security' },
         { name: 'Password Generator', path: '/tools/password-generator', icon: Key, description: 'Generate strong passwords' },
@@ -116,7 +116,7 @@ const Tools = () => {
       id: 'text-tools',
       name: 'Text Tools',
       icon: FileText,
-      color: 'from-purple-500 to-violet-500',
+      color: 'from-zinc-500 to-zinc-400',
       tools: [
         { name: 'AI Text Analyzer', path: '/tools/text-analyzer', icon: Brain, description: 'Sentiment, readability & keyword analysis' },
         { name: 'Markdown Editor', path: '/tools/markdown-editor', icon: FileText, description: 'Markdown editor with preview' },
@@ -129,7 +129,7 @@ const Tools = () => {
       id: 'design-tools',
       name: 'Design Tools',
       icon: Palette,
-      color: 'from-orange-500 to-amber-500',
+      color: 'from-gray-200 to-gray-300',
       tools: [
         { name: 'Color Picker', path: '/tools/color-picker', icon: Droplet, description: 'Pick colors and get codes' },
         { name: 'Gradient Generator', path: '/tools/gradient-generator', icon: Sparkles, description: 'Create CSS gradients' },
@@ -137,10 +137,21 @@ const Tools = () => {
       ]
     },
     {
+      id: 'games',
+      name: "Cemal's Casino",
+      icon: Gamepad2,
+      color: 'from-white to-gray-100',
+      featured: true,
+      badge: 'New',
+      tools: [
+        { name: 'Code Blackjack', path: '/game/blackjack', icon: Gamepad2, description: 'Beat the dealer and win gold! 🃏', badge: 'New' },
+      ]
+    },
+    {
       id: 'network-tools',
       name: 'Network Tools',
       icon: Network,
-      color: 'from-indigo-500 to-blue-500',
+      color: 'from-zinc-400 to-zinc-500',
       tools: [
         { name: 'URL Encoder/Decoder', path: '/tools/url-encoder', icon: LinkIcon, description: 'Encode/decode URLs' },
         { name: 'IP Lookup', path: '/tools/ip-lookup', icon: Globe, description: 'Get IP address information' },
@@ -160,7 +171,7 @@ const Tools = () => {
       id: 'utility-tools',
       name: 'Utility Tools',
       icon: Wrench,
-      color: 'from-pink-500 to-rose-500',
+      color: 'from-gray-300 to-gray-400',
       tools: [
         { name: 'QR Code Generator', path: '/tools/qr-generator', icon: QrCode, description: 'Generate QR codes' },
         { name: 'Timestamp Converter', path: '/tools/timestamp-converter', icon: Clock, description: 'Convert Unix timestamps' },
@@ -171,7 +182,7 @@ const Tools = () => {
       id: 'advanced-tools',
       name: 'Advanced Tools',
       icon: Terminal,
-      color: 'from-teal-500 to-cyan-500',
+      color: 'from-zinc-600 to-zinc-500',
       tools: [
         { name: 'JWT Decoder', path: '/tools/jwt-decoder', icon: Key, description: 'Decode JSON Web Tokens' },
         { name: 'Subnet Calculator', path: '/tools/subnet-calculator', icon: Network, description: 'Calculate IP subnets' },
@@ -182,7 +193,7 @@ const Tools = () => {
       id: 'data-tools',
       name: 'Data Tools',
       icon: Database,
-      color: 'from-emerald-500 to-green-500',
+      color: 'from-gray-400 to-gray-500',
       tools: [
         { name: 'YAML ⇄ JSON Converter', path: '/tools/yaml-json-converter', icon: FileJson, description: 'Convert between YAML and JSON' },
       ]
@@ -191,7 +202,7 @@ const Tools = () => {
       id: 'sysadmin-tools',
       name: 'SysAdmin Tools',
       icon: Server,
-      color: 'from-violet-500 to-purple-500',
+      color: 'from-zinc-500 to-zinc-600',
       tools: [
         { name: 'Cron Expression Generator', path: '/tools/cron-generator', icon: Clock, description: 'Generate cron expressions' },
       ]
@@ -200,7 +211,7 @@ const Tools = () => {
       id: 'active-directory',
       name: 'Active Directory',
       icon: Server,
-      color: 'from-blue-600 to-indigo-600',
+      color: 'from-gray-300 to-gray-400',
       tools: [
         { name: 'AD User Bulk Creator', path: '/tools/ad-user-bulk-creator', icon: Users, description: 'Create multiple AD users from CSV' },
         { name: 'AD Password Reset', path: '/tools/ad-password-reset', icon: Key, description: 'Reset AD user passwords' },
@@ -211,7 +222,7 @@ const Tools = () => {
       id: 'advanced-network',
       name: 'Advanced Network',
       icon: Network,
-      color: 'from-teal-500 to-cyan-600',
+      color: 'from-zinc-400 to-zinc-500',
       tools: [
         { name: 'Network Reset & Repair', path: '/tools/network-reset', icon: RefreshCw, description: 'Fix network connectivity issues' },
         { name: 'Firewall Rule Generator', path: '/tools/firewall-rules', icon: Shield, description: 'Create Windows Firewall rules' },
@@ -222,7 +233,7 @@ const Tools = () => {
       id: 'macos-tools',
       name: 'macOS Tools',
       icon: Terminal,
-      color: 'from-gray-600 to-gray-800',
+      color: 'from-gray-200 to-gray-300',
       tools: [
         { name: 'macOS AI Assistant', path: '/tools/macos-assistant', icon: Brain, description: 'AI-powered macOS terminal command help' },
       ]
@@ -262,9 +273,9 @@ const Tools = () => {
     <div className="space-y-8 relative overflow-hidden">
       {/* Animated Background Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-10 left-10 w-72 h-72 bg-zinc-800/3 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-zinc-700/3 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-zinc-600/3 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Animated Logo */}
@@ -273,36 +284,34 @@ const Tools = () => {
       </div>
 
       <div className={`text-center space-y-4 relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-xl rounded-full mb-4 border border-white/10">
-          <Sparkles className="w-4 h-4 text-blue-400" />
-          <span className="text-sm font-medium text-gray-300" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>{t(language, 'tools.professionalTools')}</span>
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 backdrop-blur-xl rounded-full mb-4 border border-zinc-800">
+          <Sparkles className="w-4 h-4 text-gray-400" />
+          <span className="text-sm font-medium text-gray-300">{t(language, 'tools.professionalTools')}</span>
         </div>
-        <h1 className="text-5xl md:text-6xl font-bold text-white mb-4" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif', letterSpacing: '-0.02em' }}>
-          <span className="bg-gradient-to-br from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-            {t(language, 'tools.title')}
-          </span>
+        <h1 className="text-5xl md:text-6xl font-black text-white mb-4 stencil-text">
+          {t(language, 'tools.title')}
         </h1>
-        <p className="text-xl text-gray-400" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+        <p className="text-xl text-gray-400">
           {t(language, 'tools.subtitle')}
         </p>
 
         {/* Privacy Banner */}
-        <div className="max-w-2xl mx-auto mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-          <p className="text-sm text-blue-200 text-center">
+        <div className="max-w-2xl mx-auto mt-6 p-4 bg-zinc-900 border border-zinc-800 rounded-xl">
+          <p className="text-sm text-gray-300 text-center">
             🔒 <strong>{language === 'tr' ? 'Gizlilik:' : 'Privacy:'}</strong> {language === 'tr' ? 'Tüm araçlar tamamen browser\'ınızda çalışır. Hiçbir veri sunucuya gönderilmez. Çünkü ben Google değilim.' : 'All tools run completely in your browser. No data is sent to servers. Because I\'m not Google.'}
           </p>
         </div>
 
         {/* Floating Icons */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-          <Code className="absolute top-20 left-[10%] w-8 h-8 text-blue-500/10 animate-float" />
-          <Rocket className="absolute top-40 right-[15%] w-10 h-10 text-indigo-500/10 animate-float-delayed" />
-          <Sparkles className="absolute bottom-10 left-[20%] w-6 h-6 text-purple-500/10 animate-float" style={{ animationDelay: '1s' }} />
+          <Code className="absolute top-20 left-[10%] w-8 h-8 text-zinc-800/20 animate-float" />
+          <Rocket className="absolute top-40 right-[15%] w-10 h-10 text-zinc-700/20 animate-float-delayed" />
+          <Sparkles className="absolute bottom-10 left-[20%] w-6 h-6 text-zinc-600/20 animate-float" style={{ animationDelay: '1s' }} />
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className={`bg-white/5 backdrop-blur-xl rounded-2xl p-4 border border-white/10 shadow-2xl space-y-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
+      <div className={`bg-zinc-900 backdrop-blur-xl rounded-2xl p-4 border border-zinc-800 space-y-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
         {/* Search Bar */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -311,8 +320,7 @@ const Tools = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t(language, 'tools.search')}
-            className="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-gray-400 transition-all"
-            style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}
+            className="w-full pl-10 pr-10 py-3 bg-zinc-900 border border-zinc-800 rounded-xl focus:ring-1 focus:ring-zinc-700 focus:border-zinc-700 text-white placeholder-gray-400 transition-all"
           />
           {searchQuery && (
             <button
@@ -329,12 +337,11 @@ const Tools = () => {
           <Filter className="w-4 h-4 text-gray-400 flex-shrink-0" />
           <button
             onClick={() => setSelectedCategory('all')}
-            className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'all'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                ? 'bg-white text-black'
+                : 'bg-zinc-800 text-gray-300 hover:bg-zinc-700'
             }`}
-            style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}
           >
             {t(language, 'tools.allTools')}
           </button>
@@ -342,12 +349,11 @@ const Tools = () => {
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                  : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                  ? 'bg-white text-black'
+                  : 'bg-zinc-800 text-gray-300 hover:bg-zinc-700'
               }`}
-              style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}
             >
               {t(language, `tools.categories.${cat.id}`)}
             </button>
@@ -359,10 +365,10 @@ const Tools = () => {
       {favoriteTools.length > 0 && selectedCategory === 'all' && !searchQuery && (
         <div className={`space-y-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
-              <Star className="w-6 h-6 text-white fill-white" />
+            <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center">
+              <Star className="w-6 h-6 text-black fill-black" />
             </div>
-            <h2 className="text-2xl font-bold text-white">{t(language, 'tools.favorites')}</h2>
+            <h2 className="text-2xl font-black text-white">{t(language, 'tools.favorites')}</h2>
             <span className="text-sm text-gray-400">({favoriteTools.length})</span>
           </div>
 
@@ -374,25 +380,25 @@ const Tools = () => {
                   key={index}
                   to={tool.path}
                   onClick={() => handleToolClick(tool.path, tool.name)}
-                  className="group bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 hover:bg-white/10 hover:border-blue-500/50 hover:scale-105 hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                  className="group bg-zinc-900 border border-zinc-800 rounded-lg p-4 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all duration-200"
                 >
                   <div className="flex items-start space-x-3">
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tool.categoryColor} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg`}>
-                      <ToolIcon className="w-5 h-5 text-white" />
+                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${tool.categoryColor} flex items-center justify-center flex-shrink-0`}>
+                      <ToolIcon className="w-5 h-5 text-black" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-white mb-1" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                      <h3 className="font-semibold text-white mb-1">
                         {t(language, `tools.toolNames.${tool.name}`)}
                       </h3>
-                      <p className="text-sm text-gray-400" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                      <p className="text-sm text-gray-400">
                         {t(language, `tools.toolDescriptions.${tool.name}`)}
                       </p>
                     </div>
                     <button
                       onClick={(e) => handleToggleFavorite(tool.path, tool.name, e)}
-                      className="flex-shrink-0 p-1.5 hover:bg-yellow-900/20 rounded-lg transition-colors"
+                      className="flex-shrink-0 p-1.5 hover:bg-zinc-800 rounded-lg transition-colors"
                     >
-                      <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                      <Star className="w-5 h-5 text-white fill-white" />
                     </button>
                   </div>
                 </Link>
@@ -403,10 +409,10 @@ const Tools = () => {
       )}
 
       {/* Disclaimer */}
-      <div className={`bg-blue-500/10 backdrop-blur-xl border border-blue-500/20 rounded-2xl p-4 transition-all duration-500 hover:shadow-lg ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '300ms' }}>
+      <div className={`bg-zinc-900 border border-zinc-800 rounded-lg p-4 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '300ms' }}>
         <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-          <p className="text-sm text-blue-300" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+          <Info className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-gray-300">
             <strong className="font-semibold">{t(language, 'tools.note')}</strong> {t(language, 'tools.disclaimer')}
           </p>
         </div>
@@ -431,10 +437,10 @@ const Tools = () => {
             style={{ transitionDelay: `${(index + 4) * 100}ms` }}
           >
             <div className="flex items-center space-x-3">
-              <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center animate-gradient-rotate`}>
-                <CategoryIcon className="w-6 h-6 text-white animate-pulse-slow" />
+              <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center`}>
+                <CategoryIcon className="w-6 h-6 text-black" />
               </div>
-              <h2 className="text-2xl font-bold text-white">{t(language, `tools.categories.${category.id}`)}</h2>
+              <h2 className="text-2xl font-black text-white">{t(language, `tools.categories.${category.id}`)}</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -446,25 +452,25 @@ const Tools = () => {
                     key={toolIndex}
                     to={tool.path}
                     onClick={() => handleToolClick(tool.path, tool.name)}
-                    className="group bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 hover:bg-white/10 hover:border-blue-500/50 hover:scale-105 hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                    className="group bg-zinc-900 border border-zinc-800 rounded-lg p-4 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all duration-200"
                   >
                     <div className="flex items-start space-x-3">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg`}>
-                        <ToolIcon className="w-5 h-5 text-white" />
+                      <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center flex-shrink-0`}>
+                        <ToolIcon className="w-5 h-5 text-black" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-white mb-1" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                        <h3 className="font-semibold text-white mb-1">
                           {t(language, `tools.toolNames.${tool.name}`)}
                         </h3>
-                        <p className="text-sm text-gray-400" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                        <p className="text-sm text-gray-400">
                           {t(language, `tools.toolDescriptions.${tool.name}`)}
                         </p>
                       </div>
                       <button
                         onClick={(e) => handleToggleFavorite(tool.path, tool.name, e)}
-                        className="flex-shrink-0 p-1.5 hover:bg-gray-700/50 rounded-lg transition-colors group/star"
+                        className="flex-shrink-0 p-1.5 hover:bg-zinc-800 rounded-lg transition-colors group/star"
                       >
-                        <Star className={`w-5 h-5 transition-colors ${isToolFavorite ? 'text-yellow-500 fill-yellow-500' : 'text-gray-400 group-hover/star:text-yellow-500'}`} />
+                        <Star className={`w-5 h-5 transition-colors ${isToolFavorite ? 'text-white fill-white' : 'text-gray-400 group-hover/star:text-white'}`} />
                       </button>
                     </div>
                   </Link>

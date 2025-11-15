@@ -3,158 +3,125 @@
 @tailwind utilities;
 
 @layer base {
-  /* SÜPER MODERN DARK TEMA - TEK TEMA SİSTEMİ */
+  /* MINIMAL PROFESSIONAL DESIGN - BANKSY INSPIRED */
   * {
-    @apply border-gray-700;
+    @apply border-gray-800;
+    cursor: url('/cursor.svg') 3 3, auto;
+  }
+
+  a, button, .clickable {
+    cursor: url('/cursor.svg') 3 3, pointer !important;
   }
 
   body {
-    @apply bg-gradient-to-br from-gray-950 via-blue-950 to-purple-950 text-gray-100;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
+    @apply bg-black text-gray-100;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
+    letter-spacing: -0.01em;
   }
 
-  /* Scrollbar Styling */
+  /* Scrollbar - Minimal */
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-gray-900;
+    @apply bg-black;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gradient-to-b from-blue-600 to-purple-600 rounded-full;
+    @apply bg-gray-800 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply from-blue-500 to-purple-500;
+    @apply bg-gray-700;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-white text-black;
   }
 }
 
 @layer components {
-  /* MODERN DARK COMPONENTS */
+  /* MINIMAL COMPONENTS */
   .tool-card {
-    @apply bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6
-           hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 cursor-pointer
-           hover:border-blue-500/50 hover:scale-105;
+    @apply bg-zinc-900 border border-zinc-800 rounded-lg p-6
+           hover:border-zinc-700 transition-all duration-200
+           hover:bg-zinc-900/80;
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl
-           hover:from-blue-500 hover:to-purple-500 transition-all duration-200 font-bold
-           shadow-lg hover:shadow-xl hover:scale-105;
+    @apply bg-white text-black px-6 py-3 rounded-lg
+           hover:bg-gray-200 transition-all duration-150 font-medium
+           border border-transparent hover:border-gray-300;
   }
 
   .btn-secondary {
-    @apply bg-gray-800/80 backdrop-blur-md text-gray-100 px-6 py-3 rounded-xl
-           hover:bg-gray-700/80 transition-all duration-200 font-bold border border-gray-700
-           hover:border-gray-600 hover:scale-105;
+    @apply bg-transparent text-white px-6 py-3 rounded-lg
+           border border-zinc-800 hover:border-zinc-700
+           transition-all duration-150 font-medium;
   }
 
-  .input-field {
-    @apply w-full px-4 py-3 border border-gray-700 rounded-xl focus:outline-none
-           focus:ring-2 focus:ring-blue-500 focus:border-transparent
-           bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400
-           transition-all duration-200;
+  /* Input Fields */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  textarea,
+  select {
+    @apply bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2
+           text-white placeholder-gray-500
+           focus:outline-none focus:ring-1 focus:ring-zinc-700 focus:border-zinc-700
+           transition-all duration-150;
   }
 
-  .textarea-field {
-    @apply w-full px-4 py-3 border border-gray-700 rounded-xl focus:outline-none
-           focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[200px]
-           font-mono text-sm bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400
-           transition-all duration-200;
-  }
-
-  /* Result display areas */
-  pre {
-    @apply text-gray-200 bg-gray-800/50 p-4 rounded-xl border border-gray-700;
-  }
-
-  code {
-    @apply text-blue-400 bg-gray-800/30 px-2 py-1 rounded;
-  }
-
-  /* Prose content */
-  .prose {
-    @apply text-gray-100;
-  }
-
-  .prose pre {
-    @apply bg-gray-800/80 text-gray-100 border border-gray-700;
-  }
-
-  .prose code {
-    @apply text-blue-400 bg-gray-800/30;
-  }
-
-  .prose h1, .prose h2, .prose h3, .prose h4 {
-    @apply text-white font-bold;
-  }
-
-  .prose a {
-    @apply text-blue-400 hover:text-blue-300 transition-colors;
+  /* Glassmorphism - Subtle */
+  .glass {
+    @apply bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50;
   }
 }
 
 @layer utilities {
-  /* Gradient Animation */
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
+  /* Text Gradients - Minimal */
+  .text-gradient {
+    @apply bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
     }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
-  .animate-gradient {
-    animation: gradient 6s ease infinite;
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
 
-  /* Float Animation */
   @keyframes float {
     0%, 100% {
       transform: translateY(0px);
     }
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-10px);
     }
   }
 
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  .animate-float-delayed {
-    animation: float 3s ease-in-out infinite;
-    animation-delay: 1s;
-  }
-
-  /* Gradient Rotate Animation for Icons */
-  @keyframes gradient-rotate {
-    0% {
-      filter: hue-rotate(0deg);
-    }
-    100% {
-      filter: hue-rotate(360deg);
-    }
-  }
-
-  .animate-gradient-rotate {
-    animation: gradient-rotate 10s linear infinite;
-  }
-
-  /* Slow Pulse */
-  @keyframes pulse-slow {
+  @keyframes pulse-subtle {
     0%, 100% {
       opacity: 1;
     }
@@ -163,104 +130,160 @@
     }
   }
 
-  .animate-pulse-slow {
-    animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  /* Slow Spin */
-  @keyframes spin-slow {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  .animate-spin-slow {
-    animation: spin-slow 8s linear infinite;
-  }
-
-  /* MODERN GLASSMORPHISM */
-  .glass {
-    @apply backdrop-blur-xl bg-gray-900/70 border border-gray-700/30 shadow-2xl;
-  }
-
-  .glass-card {
-    @apply backdrop-blur-md bg-gray-800/40 border border-gray-700/40 shadow-xl
-           hover:bg-gray-800/60 transition-all duration-300;
-  }
-
-  /* Glow Effect */
-  .glow {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-  }
-
-  .glow-purple {
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
-  }
-
-  /* Scale on Hover */
-  .hover-scale {
-    transition: transform 0.3s ease;
-  }
-
-  .hover-scale:hover {
-    transform: scale(1.05);
-  }
-
-  /* Tilt on Hover */
-  .hover-tilt {
-    transition: transform 0.3s ease;
-  }
-
-  .hover-tilt:hover {
-    transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) scale(1.02);
-  }
-
-  /* Slide Up Animation */
-  @keyframes slide-up {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-slide-up {
-    animation: slide-up 0.6s ease-out;
-  }
-
-  /* Shimmer Effect */
-  @keyframes shimmer {
+  /* Spray paint effect - Banksy style */
+  @keyframes spray {
     0% {
-      background-position: -1000px 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
-  }
-
-  .animate-shimmer {
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    background-size: 1000px 100%;
-    animation: shimmer 2s infinite;
-  }
-
-  /* Bounce Subtle */
-  @keyframes bounce-subtle {
-    0%, 100% {
-      transform: translateY(0);
+      opacity: 0;
+      transform: scale(0.8) rotate(-5deg);
     }
     50% {
-      transform: translateY(-10px);
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
     }
   }
 
-  .animate-bounce-subtle {
-    animation: bounce-subtle 2s ease-in-out infinite;
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
   }
+
+  .animate-slideIn {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-spray {
+    animation: spray 0.3s ease-out;
+  }
+
+  /* Stencil text effect - Banksy style */
+  .stencil-text {
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+  }
+
+  /* Graffiti underline */
+  .graffiti-underline {
+    position: relative;
+  }
+
+  .graffiti-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 3px;
+    background: currentColor;
+    transform: skewX(-15deg);
+    opacity: 0.7;
+  }
+}
+
+/* Banksy-style elements */
+.spray-paint {
+  filter: contrast(1.1) brightness(1.05);
+  mix-blend-mode: multiply;
+}
+
+.noise-texture {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* Code block styling */
+pre {
+  @apply bg-zinc-950 border border-zinc-800 rounded-lg p-4 overflow-x-auto;
+}
+
+code {
+  @apply bg-zinc-900 px-2 py-1 rounded text-sm font-mono;
+}
+
+/* Links */
+a {
+  @apply transition-colors duration-150;
+}
+
+/* Focus visible */
+*:focus-visible {
+  @apply outline-none ring-2 ring-zinc-700 ring-offset-2 ring-offset-black rounded;
+}
+
+/* Disabled states */
+:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Loading states */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Banksy quote style */
+.banksy-quote {
+  font-family: 'Courier New', monospace;
+  font-style: italic;
+  border-left: 4px solid white;
+  padding-left: 1rem;
+  margin-left: 1rem;
+}
+
+/* Sticker effect */
+.sticker {
+  border: 3px solid white;
+  box-shadow: 4px 4px 0px rgba(255,255,255,0.2);
+  transform: rotate(-2deg);
+}
+
+/* Spray can cursor for interactive elements */
+button:hover,
+.clickable:hover {
+  cursor: url('/cursor.svg') 16 16, pointer;
+}
+
+/* Grid pattern background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Glitch effect for errors */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.glitch {
+  animation: glitch 0.3s infinite;
 }

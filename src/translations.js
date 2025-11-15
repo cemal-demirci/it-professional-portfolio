@@ -25,7 +25,19 @@ export const translations = {
       searchHint: 'to search tools',
       license: 'MIT License',
       poweredBy: 'Powered by Cemal AI',
-      techStack: 'Redis Cloud (Frankfurt) • Vercel Edge'
+      techStack: 'Redis Cloud (Frankfurt) • Vercel Edge',
+      sarcasm: [
+        '© 2025 Cemal Demirci • Built with ☕ caffeine, 💻 code, and 😤 mild frustration',
+        '© 2025 Cemal Demirci • No AI was harmed in making this website (they enjoyed it)',
+        '© 2025 Cemal Demirci • Runs on coffee, deploys on prayers, scales with hope',
+        '© 2025 Cemal Demirci • Warning: May contain traces of sarcasm and dad jokes',
+        '© 2025 Cemal Demirci • 100% hand-coded, 0% ChatGPT copy-paste (okay maybe 2%)',
+        '© 2025 Cemal Demirci • More secure than your ex\'s new password',
+        '© 2025 Cemal Demirci • Powered by spite, optimized by stubbornness',
+        '© 2025 Cemal Demirci • Your data is safe. My sanity? Not so much.',
+        '© 2025 Cemal Demirci • Made with ❤️ and a dangerous amount of Red Bull',
+        '© 2025 Cemal Demirci • Ctrl+C, Ctrl+V? More like Ctrl+Chaos, Ctrl+Victory'
+      ]
     },
 
     // Home Page
@@ -208,6 +220,7 @@ export const translations = {
         'security-tools': 'Security Tools',
         'text-tools': 'Text Tools',
         'design-tools': 'Design Tools',
+        'games': "Cemal's Arcade",
         'network-tools': 'Network Tools',
         'utility-tools': 'Utility Tools',
         'advanced-tools': 'Advanced Tools',
@@ -256,6 +269,9 @@ export const translations = {
         'Color Picker': 'Color Picker',
         'Gradient Generator': 'Gradient Generator',
         'CSS Generator': 'CSS Generator',
+        'Code Snake': 'Code Snake',
+        'IT 2048': 'IT 2048',
+        'Code Blackjack': 'Code Blackjack',
         'URL Encoder/Decoder': 'URL Encoder/Decoder',
         'IP Lookup': 'IP Lookup',
         'DNS Lookup': 'DNS Lookup',
@@ -323,6 +339,9 @@ export const translations = {
         'Color Picker': 'Pick colors and get codes',
         'Gradient Generator': 'Create CSS gradients',
         'CSS Generator': 'Generate CSS code',
+        'Code Snake': 'Classic snake game with IT theme! ☕🔋',
+        'IT 2048': 'Merge code blocks to reach 2048! 🎯',
+        'Code Blackjack': 'Beat the dealer and win gold! 🃏',
         'URL Encoder/Decoder': 'Encode/decode URLs',
         'IP Lookup': 'Get IP address information',
         'DNS Lookup': 'Perform DNS queries',
@@ -862,7 +881,19 @@ export const translations = {
       searchHint: 'ile araçlarda ara',
       license: 'MIT Lisansı',
       poweredBy: 'Cemal AI tarafından desteklenmektedir',
-      techStack: 'Redis Cloud (Frankfurt) • Vercel Edge'
+      techStack: 'Redis Cloud (Frankfurt) • Vercel Edge',
+      sarcasm: [
+        '© 2025 Cemal Demirci • ☕ Kahve, 💻 kod ve 😤 hafif sinir krizi ile yapıldı',
+        '© 2025 Cemal Demirci • Hiçbir AI zarar görmedi (aksine eğlendiler)',
+        '© 2025 Cemal Demirci • Kahveyle çalışır, duayla deploy olur, umutla scale eder',
+        '© 2025 Cemal Demirci • Uyarı: İçinde aşırı sarkazm ve baba esprileri bulunabilir',
+        '© 2025 Cemal Demirci • %100 elle kodlandı, %0 ChatGPT kopyala-yapıştır (tamam belki %2)',
+        '© 2025 Cemal Demirci • Eski sevgilinin yeni şifresinden daha güvenli',
+        '© 2025 Cemal Demirci • İnatla çalışır, dik kafalılıkla optimize edilir',
+        '© 2025 Cemal Demirci • Verileriniz güvende. Aklım? Pek değil.',
+        '© 2025 Cemal Demirci • ❤️ sevgiyle ve tehlikeli miktarda Red Bull ile yapıldı',
+        '© 2025 Cemal Demirci • Bug değil feature. Feature değil sanat eseri.'
+      ]
     },
 
     // Home Page
@@ -1045,6 +1076,7 @@ export const translations = {
         'security-tools': 'Güvenlik Araçları',
         'text-tools': 'Metin Araçları',
         'design-tools': 'Tasarım Araçları',
+        'games': 'Cemal Arcade',
         'network-tools': 'Ağ Araçları',
         'utility-tools': 'Yardımcı Araçlar',
         'advanced-tools': 'Gelişmiş Araçlar',
@@ -1093,6 +1125,9 @@ export const translations = {
         'Color Picker': 'Renk Seçici',
         'Gradient Generator': 'Gradient Oluşturucu',
         'CSS Generator': 'CSS Oluşturucu',
+        'Code Snake': 'Code Snake',
+        'IT 2048': 'IT 2048',
+        'Code Blackjack': 'Code Blackjack',
         'URL Encoder/Decoder': 'URL Kodlayıcı/Çözücü',
         'IP Lookup': 'IP Sorgulama',
         'DNS Lookup': 'DNS Sorgulama',
@@ -1160,6 +1195,9 @@ export const translations = {
         'Color Picker': 'Renk seçin ve kodları alın',
         'Gradient Generator': 'CSS gradientleri oluşturun',
         'CSS Generator': 'CSS kodu oluşturun',
+        'Code Snake': 'IT temalı klasik yılan oyunu! ☕🔋',
+        'IT 2048': 'Kod bloklarını birleştir ve 2048\'e ulaş! 🎯',
+        'Code Blackjack': 'Krupiyeleri yen ve altın kazan! 🃏',
         'URL Encoder/Decoder': 'URL\'leri kodlayın/çözün',
         'IP Lookup': 'IP adresi bilgilerini alın',
         'DNS Lookup': 'DNS sorguları yapın',

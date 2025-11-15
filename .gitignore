@@ -38,9 +38,6 @@ dist-ssr
 [0-9]*.png
 
 # NSFW/Replicate Features (private - not for GitHub)
-api/generate-nsfw-image.js
-api/generate-nsfw-video.js
-api/face-swap.js
-api/gender-swap.js
-src/services/replicateService.js
-src/pages/Alev.jsx
+# These files are deployed to Vercel but not pushed to GitHub
+# To deploy: npx vercel --prod
+# To push to GitHub: DO NOT push these files manually

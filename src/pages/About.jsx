@@ -521,7 +521,7 @@ const About = () => {
           <div className="bg-gray-900 rounded-2xl p-6 max-h-[70vh] overflow-y-auto">
             <p className="text-white font-mono text-sm leading-relaxed break-words">
               {repeatedMessage.map((msg, index) => (
-                <span key={index} className={`inline-block mr-2 ${index % 7 === 0 ? 'text-red-400' : index % 7 === 1 ? 'text-orange-400' : index % 7 === 2 ? 'text-yellow-400' : index % 7 === 3 ? 'text-green-400' : index % 7 === 4 ? 'text-blue-400' : index % 7 === 5 ? 'text-purple-400' : 'text-pink-400'}`}>
+                <span key={index} className={`inline-block mr-2 ${index % 7 === 0 ? 'text-red-400' : index % 7 === 1 ? 'text-orange-400' : index % 7 === 2 ? 'text-yellow-400' : index % 7 === 3 ? 'text-green-400' : index % 7 === 4 ? 'text-gray-400' : index % 7 === 5 ? 'text-purple-400' : 'text-pink-400'}`}>
                   {msg}
                 </span>
               ))}
@@ -548,19 +548,19 @@ const About = () => {
       </div>
       {/* Animated Background Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-zinc-800/3 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-zinc-700/3 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-zinc-600/3 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Header Section */}
       <div className={`text-center space-y-4 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
         <div className="relative w-32 h-32 mx-auto group">
-          {/* Rotating Gradient Glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-400 rounded-full blur-md animate-gradient-rotate opacity-75 group-hover:opacity-100 transition-all"></div>
+          {/* Minimal Glow */}
+          <div className="absolute inset-0 bg-white rounded-full blur-md opacity-20 group-hover:opacity-30 transition-all"></div>
 
           {/* Profile Photo Container */}
-          <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-lg animate-pulse-slow border-4 border-white/10 backdrop-blur-xl">
+          <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-zinc-800">
             <img
               src="/profile.jpg"
               alt="Cemal Demirci"
@@ -568,14 +568,14 @@ const About = () => {
             />
           </div>
         </div>
-        <h1 className="text-4xl font-bold animate-fade-in" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-          <span className="inline-block hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">Cemal</span>{' '}
-          <span className="inline-block hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent" style={{ animationDelay: '100ms' }}>Demirci</span>
+        <h1 className="text-4xl font-black animate-fade-in stencil-text">
+          <span className="inline-block hover:scale-110 transition-transform duration-300">Cemal</span>{' '}
+          <span className="inline-block hover:scale-110 transition-transform duration-300" style={{ animationDelay: '100ms' }}>Demirci</span>
         </h1>
-        <p className="text-xl font-semibold bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-[length:200%_auto] animate-gradient bg-clip-text text-transparent" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <p className="text-xl font-semibold text-white">
           {t(language, 'about.position')}
         </p>
-        <p className="text-lg text-blue-100/70" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <p className="text-lg text-gray-400">
           {t(language, 'about.jobTitle')}
         </p>
 
@@ -583,42 +583,42 @@ const About = () => {
         <div className="flex justify-center gap-4 pt-4">
           <a
             href="mailto:me@cemal.online"
-            className="group relative p-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1 shadow-lg"
+            className="group relative p-3 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-150"
             aria-label="Email"
           >
-            <Mail className="w-5 h-5 text-white group-hover:text-blue-300 transition-all" />
+            <Mail className="w-5 h-5 text-white transition-all" />
           </a>
           <a
             href="https://github.com/cemal-demirci"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative p-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1 shadow-lg"
+            className="group relative p-3 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-150"
             aria-label="GitHub"
           >
-            <Github className="w-5 h-5 text-white group-hover:text-blue-300 transition-all" />
+            <Github className="w-5 h-5 text-white transition-all" />
           </a>
           <a
             href="https://www.linkedin.com/in/cemaldemirci/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative p-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1 shadow-lg"
+            className="group relative p-3 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-150"
             aria-label="LinkedIn"
           >
-            <Linkedin className="w-5 h-5 text-white group-hover:text-blue-300 transition-all" />
+            <Linkedin className="w-5 h-5 text-white transition-all" />
           </a>
         </div>
       </div>
 
       {/* About Section */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-blue-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-2xl font-bold mb-4 flex items-center gap-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-          <Briefcase className="w-6 h-6 text-blue-400" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-lg p-8 hover:border-zinc-700 transition-all duration-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '100ms' }}>
+        <h2 className="relative text-2xl font-black mb-4 flex items-center gap-2 text-white">
+          <Briefcase className="w-6 h-6 text-gray-400" />
           <span>
             {t(language, 'about.aboutMe')}
           </span>
         </h2>
-        <div className="space-y-4 text-blue-50/80">
-          <p className="text-lg font-semibold text-blue-300">
+        <div className="space-y-4 text-gray-300">
+          <p className="text-lg font-semibold text-white">
             💼 {t(language, 'about.hero.intro')}
           </p>
           <p>
@@ -633,24 +633,24 @@ const About = () => {
           <p>
             {t(language, 'about.hero.description4')}
           </p>
-          <p className="italic text-blue-200">
+          <p className="italic text-gray-400">
             {t(language, 'about.hero.description5')}
           </p>
-          <p className="text-blue-300 font-semibold">
+          <p className="text-white font-semibold">
             🚀 {t(language, 'about.hero.cta')}
           </p>
         </div>
       </div>
 
       {/* Professional Services Section */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-blue-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '150ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-          <Sparkles className="w-8 h-8 text-blue-400 animate-pulse" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-lg p-8 hover:border-zinc-700 transition-all duration-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '150ms' }}>
+        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 text-white">
+          <Sparkles className="w-8 h-8 text-gray-400" />
           <span>
             {t(language, 'about.services.title')}
           </span>
         </h2>
-        <p className="relative text-blue-100/70 mb-8 text-lg">
+        <p className="relative text-gray-400 mb-8 text-lg">
           {t(language, 'about.services.subtitle')}
         </p>
 
@@ -658,9 +658,9 @@ const About = () => {
           {professionalServices.map((serviceGroup, index) => (
             <div
               key={index}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300"
+              className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-zinc-700 transition-all duration-200"
             >
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-white">
                 <span className="text-2xl">{serviceGroup.category.split(' ')[0]}</span>
                 <span>
                   {serviceGroup.category.substring(serviceGroup.category.indexOf(' ') + 1)}
@@ -668,8 +668,8 @@ const About = () => {
               </h3>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {serviceGroup.services.map((service, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-blue-100/70 group/item hover:text-blue-200 transition-all">
-                    <span className="text-blue-400 mt-1 text-lg">✓</span>
+                  <li key={idx} className="flex items-start gap-3 text-gray-300 group/item hover:text-white transition-all">
+                    <span className="text-gray-400 mt-1 text-lg">✓</span>
                     <span className="text-sm">{service}</span>
                   </li>
                 ))}
@@ -678,7 +678,7 @@ const About = () => {
           ))}
         </div>
 
-        <div className="relative mt-8 p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+        <div className="relative mt-8 p-6 bg-zinc-900 border border-zinc-800 rounded-lg">
           <p className="text-center text-lg text-white font-semibold">
             💡 {t(language, 'about.services.cta')}
           </p>
@@ -686,187 +686,187 @@ const About = () => {
       </div>
 
       {/* Worked With Section */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-indigo-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '165ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 bg-gradient-to-r from-white via-indigo-50 to-purple-100 bg-clip-text text-transparent">
-          <Building2 className="w-8 h-8 text-indigo-400 animate-pulse" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-lg p-8 hover:border-zinc-700 transition-all duration-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '165ms' }}>
+        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 text-white">
+          <Building2 className="w-8 h-8 text-gray-400" />
           <span>
             {t(language, 'about.workedWith.title')}
           </span>
         </h2>
-        <p className="relative text-blue-100/70 mb-8 text-lg italic">
+        <p className="relative text-gray-400 mb-8 text-lg italic">
           {t(language, 'about.workedWith.subtitle')}
         </p>
 
         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white/5 backdrop-blur-xl border-l-4 border-blue-500 rounded-xl p-6 hover:bg-white/10 transition-all">
+          <div className="bg-zinc-900 border-l-4 border-white rounded-lg p-6 hover:border-gray-300 transition-all">
             <h3 className="text-xl font-bold text-white mb-2">{t(language, 'about.workedWith.zeroDensity.title')}</h3>
-            <p className="text-blue-100/70 text-sm">{t(language, 'about.workedWith.zeroDensity.description')}</p>
+            <p className="text-gray-300 text-sm">{t(language, 'about.workedWith.zeroDensity.description')}</p>
           </div>
-          <div className="bg-white/5 backdrop-blur-xl border-l-4 border-indigo-500 rounded-xl p-6 hover:bg-white/10 transition-all">
+          <div className="bg-zinc-900 border-l-4 border-gray-300 rounded-lg p-6 hover:border-white transition-all">
             <h3 className="text-xl font-bold text-white mb-2">{t(language, 'about.workedWith.iso42001.title')}</h3>
-            <p className="text-blue-100/70 text-sm">{t(language, 'about.workedWith.iso42001.description')}</p>
+            <p className="text-gray-300 text-sm">{t(language, 'about.workedWith.iso42001.description')}</p>
           </div>
-          <div className="bg-white/5 backdrop-blur-xl border-l-4 border-purple-500 rounded-xl p-6 hover:bg-white/10 transition-all">
+          <div className="bg-zinc-900 border-l-4 border-gray-400 rounded-lg p-6 hover:border-white transition-all">
             <h3 className="text-xl font-bold text-white mb-2">{t(language, 'about.workedWith.acunmedya.title')}</h3>
-            <p className="text-blue-100/70 text-sm">{t(language, 'about.workedWith.acunmedya.description')}</p>
+            <p className="text-gray-300 text-sm">{t(language, 'about.workedWith.acunmedya.description')}</p>
           </div>
-          <div className="bg-white/5 backdrop-blur-xl border-l-4 border-pink-500 rounded-xl p-6 hover:bg-white/10 transition-all">
+          <div className="bg-zinc-900 border-l-4 border-gray-500 rounded-lg p-6 hover:border-white transition-all">
             <h3 className="text-xl font-bold text-white mb-2">{t(language, 'about.workedWith.openSource.title')}</h3>
-            <p className="text-blue-100/70 text-sm">{t(language, 'about.workedWith.openSource.description')}</p>
+            <p className="text-gray-300 text-sm">{t(language, 'about.workedWith.openSource.description')}</p>
           </div>
         </div>
       </div>
 
       {/* AI Demos Section */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-blue-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '180ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-          <Sparkles className="w-8 h-8 text-blue-400 animate-pulse" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg hover:border-zinc-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '180ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 text-white">
+          <Sparkles className="w-8 h-8 text-gray-400 animate-pulse" />
           <span>
             {t(language, 'about.demos.title')}
           </span>
         </h2>
-        <p className="relative text-blue-100/70 mb-8 text-lg">
+        <p className="relative text-gray-300 mb-8 text-lg">
           {t(language, 'about.demos.subtitle')}
         </p>
 
         <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Link
             to="/tools/ai-powershell-analyzer"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">💻</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.powershell.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.powershell.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.powershell.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.powershell.desc')}</p>
               </div>
             </div>
           </Link>
 
           <Link
             to="/tools/ai-log-analyzer"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">📊</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.log.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.log.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.log.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.log.desc')}</p>
               </div>
             </div>
           </Link>
 
           <Link
             to="/tools/ai-security-advisor"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">🔒</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.security.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.security.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.security.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.security.desc')}</p>
               </div>
             </div>
           </Link>
 
           <Link
             to="/tools/ai-network-troubleshooter"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">🌐</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.network.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.network.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.network.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.network.desc')}</p>
               </div>
             </div>
           </Link>
 
           <Link
             to="/tools/ai-script-generator"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">⚡</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.script.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.script.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.script.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.script.desc')}</p>
               </div>
             </div>
           </Link>
 
           <Link
             to="/tools/ai-gpo-analyzer"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">🎯</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.gpo.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.gpo.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.gpo.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.gpo.desc')}</p>
               </div>
             </div>
           </Link>
 
           <Link
             to="/tools/proxmox-assistant"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">🖥️</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.proxmox.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.proxmox.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.proxmox.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.proxmox.desc')}</p>
               </div>
             </div>
           </Link>
 
           <Link
             to="/tools/proxmox-troubleshooter"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">🔧</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.proxmoxTrouble.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.proxmoxTrouble.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.proxmoxTrouble.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.proxmoxTrouble.desc')}</p>
               </div>
             </div>
           </Link>
 
           <Link
             to="/tools/macos-assistant"
-            className="group/demo p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+            className="group/demo p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">🍎</span>
               </div>
               <div>
-                <h3 className="text-white font-bold mb-1 group-hover/demo:text-blue-300 transition-all">{t(language, 'about.demos.tools.macos.name')}</h3>
-                <p className="text-blue-100/60 text-sm">{t(language, 'about.demos.tools.macos.desc')}</p>
+                <h3 className="text-white font-bold mb-1 group-hover/demo:text-white transition-all">{t(language, 'about.demos.tools.macos.name')}</h3>
+                <p className="text-gray-400 text-sm">{t(language, 'about.demos.tools.macos.desc')}</p>
               </div>
             </div>
           </Link>
         </div>
 
-        <div className="relative mt-8 p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+        <div className="relative mt-8 p-6 bg-zinc-900 border border-zinc-800 rounded-2xl">
           <p className="text-center text-lg text-white font-semibold">
             🤖 {t(language, 'about.demos.footer')}
           </p>
@@ -874,17 +874,17 @@ const About = () => {
       </div>
 
       {/* Premium AI Bots Section */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-indigo-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '190ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-          <Sparkles className="w-8 h-8 text-indigo-400 animate-pulse" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-zinc-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '190ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <h2 className="relative text-3xl font-black mb-2 flex items-center gap-3 text-white">
+          <Sparkles className="w-8 h-8 text-gray-400 animate-pulse" />
           <span>
             {t(language, 'about.bots.title')}
           </span>
-          <span className="px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-full shadow-lg">
+          <span className="px-3 py-1 bg-white text-white text-xs font-bold rounded-full text-black">
             {t(language, 'about.bots.demo')}
           </span>
         </h2>
-        <p className="relative text-blue-100/70 mb-8 text-lg">
+        <p className="relative text-gray-300 mb-8 text-lg">
           {t(language, 'about.bots.subtitle')}
         </p>
 
@@ -892,23 +892,23 @@ const About = () => {
           {/* Professor Posh - English Teacher Bot */}
           <div
             onClick={() => setActiveBot(premiumBots.englishTeacher)}
-            className="group/bot p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg cursor-pointer"
+            className="group/bot p-6 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg cursor-pointer"
           >
             <div className="flex flex-col items-center text-center gap-3">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
                 <span className="text-white text-3xl">{premiumBots.englishTeacher.emoji}</span>
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-blue-300 transition-all">
+                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-white transition-all">
                   {premiumBots.englishTeacher.name[language]}
                 </h3>
-                <p className="text-blue-200/80 text-xs mb-2 italic">
+                <p className="text-gray-300 text-xs mb-2 italic">
                   {premiumBots.englishTeacher.tagline[language]}
                 </p>
-                <p className="text-blue-100/60 text-sm mb-3">
+                <p className="text-gray-400 text-sm mb-3">
                   {premiumBots.englishTeacher.title[language]}
                 </p>
-                <span className="inline-block px-3 py-1 bg-white/5 backdrop-blur-xl border border-white/10 text-blue-300 text-xs font-bold rounded-full">
+                <span className="inline-block px-3 py-1 bg-zinc-900 border border-zinc-800 text-white text-xs font-bold rounded-full">
                   {t(language, 'about.bots.tryNow')}
                 </span>
               </div>
@@ -918,23 +918,23 @@ const About = () => {
           {/* Saul Goodman AI - Legal Consultant Bot */}
           <div
             onClick={() => setActiveBot(premiumBots.legalConsultant)}
-            className="group/bot p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg cursor-pointer"
+            className="group/bot p-6 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg cursor-pointer"
           >
             <div className="flex flex-col items-center text-center gap-3">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
                 <span className="text-white text-3xl">{premiumBots.legalConsultant.emoji}</span>
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-blue-300 transition-all">
+                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-white transition-all">
                   {premiumBots.legalConsultant.name[language]}
                 </h3>
-                <p className="text-blue-200/80 text-xs mb-2 italic">
+                <p className="text-gray-300 text-xs mb-2 italic">
                   {premiumBots.legalConsultant.tagline[language]}
                 </p>
-                <p className="text-blue-100/60 text-sm mb-3">
+                <p className="text-gray-400 text-sm mb-3">
                   {premiumBots.legalConsultant.title[language]}
                 </p>
-                <span className="inline-block px-3 py-1 bg-white/5 backdrop-blur-xl border border-white/10 text-blue-300 text-xs font-bold rounded-full">
+                <span className="inline-block px-3 py-1 bg-zinc-900 border border-zinc-800 text-white text-xs font-bold rounded-full">
                   {t(language, 'about.bots.tryNow')}
                 </span>
               </div>
@@ -944,23 +944,23 @@ const About = () => {
           {/* Gordon HealthyAI - Dietitian Bot */}
           <div
             onClick={() => setActiveBot(premiumBots.dietitian)}
-            className="group/bot p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg cursor-pointer"
+            className="group/bot p-6 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg cursor-pointer"
           >
             <div className="flex flex-col items-center text-center gap-3">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
                 <span className="text-white text-3xl">{premiumBots.dietitian.emoji}</span>
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-blue-300 transition-all">
+                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-white transition-all">
                   {premiumBots.dietitian.name[language]}
                 </h3>
-                <p className="text-blue-200/80 text-xs mb-2 italic">
+                <p className="text-gray-300 text-xs mb-2 italic">
                   {premiumBots.dietitian.tagline[language]}
                 </p>
-                <p className="text-blue-100/60 text-sm mb-3">
+                <p className="text-gray-400 text-sm mb-3">
                   {premiumBots.dietitian.title[language]}
                 </p>
-                <span className="inline-block px-3 py-1 bg-white/5 backdrop-blur-xl border border-white/10 text-blue-300 text-xs font-bold rounded-full">
+                <span className="inline-block px-3 py-1 bg-zinc-900 border border-zinc-800 text-white text-xs font-bold rounded-full">
                   {t(language, 'about.bots.tryNow')}
                 </span>
               </div>
@@ -970,23 +970,23 @@ const About = () => {
           {/* Sheldon Numbers - Math Teacher Bot */}
           <div
             onClick={() => setActiveBot(premiumBots.mathTeacher)}
-            className="group/bot p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg cursor-pointer"
+            className="group/bot p-6 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg cursor-pointer"
           >
             <div className="flex flex-col items-center text-center gap-3">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
                 <span className="text-white text-3xl">{premiumBots.mathTeacher.emoji}</span>
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-blue-300 transition-all">
+                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-white transition-all">
                   {premiumBots.mathTeacher.name[language]}
                 </h3>
-                <p className="text-blue-200/80 text-xs mb-2 italic">
+                <p className="text-gray-300 text-xs mb-2 italic">
                   {premiumBots.mathTeacher.tagline[language]}
                 </p>
-                <p className="text-blue-100/60 text-sm mb-3">
+                <p className="text-gray-400 text-sm mb-3">
                   {premiumBots.mathTeacher.title[language]}
                 </p>
-                <span className="inline-block px-3 py-1 bg-white/5 backdrop-blur-xl border border-white/10 text-blue-300 text-xs font-bold rounded-full">
+                <span className="inline-block px-3 py-1 bg-zinc-900 border border-zinc-800 text-white text-xs font-bold rounded-full">
                   {t(language, 'about.bots.tryNow')}
                 </span>
               </div>
@@ -996,23 +996,23 @@ const About = () => {
           {/* Dr. Freud AI - Psychology Bot */}
           <div
             onClick={() => setActiveBot(premiumBots.psychology)}
-            className="group/bot p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg cursor-pointer"
+            className="group/bot p-6 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg cursor-pointer"
           >
             <div className="flex flex-col items-center text-center gap-3">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
                 <span className="text-white text-3xl">{premiumBots.psychology.emoji}</span>
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-blue-300 transition-all">
+                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-white transition-all">
                   {premiumBots.psychology.name[language]}
                 </h3>
-                <p className="text-blue-200/80 text-xs mb-2 italic">
+                <p className="text-gray-300 text-xs mb-2 italic">
                   {premiumBots.psychology.tagline[language]}
                 </p>
-                <p className="text-blue-100/60 text-sm mb-3">
+                <p className="text-gray-400 text-sm mb-3">
                   {premiumBots.psychology.title[language]}
                 </p>
-                <span className="inline-block px-3 py-1 bg-white/5 backdrop-blur-xl border border-white/10 text-blue-300 text-xs font-bold rounded-full">
+                <span className="inline-block px-3 py-1 bg-zinc-900 border border-zinc-800 text-white text-xs font-bold rounded-full">
                   {t(language, 'about.bots.tryNow')}
                 </span>
               </div>
@@ -1022,23 +1022,23 @@ const About = () => {
           {/* Harvey Specter AI - Career Consultant Bot */}
           <div
             onClick={() => setActiveBot(premiumBots.career)}
-            className="group/bot p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-lg cursor-pointer"
+            className="group/bot p-6 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300 shadow-lg cursor-pointer"
           >
             <div className="flex flex-col items-center text-center gap-3">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
                 <span className="text-white text-3xl">{premiumBots.career.emoji}</span>
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-blue-300 transition-all">
+                <h3 className="text-white font-bold text-lg mb-1 group-hover/bot:text-white transition-all">
                   {premiumBots.career.name[language]}
                 </h3>
-                <p className="text-blue-200/80 text-xs mb-2 italic">
+                <p className="text-gray-300 text-xs mb-2 italic">
                   {premiumBots.career.tagline[language]}
                 </p>
-                <p className="text-blue-100/60 text-sm mb-3">
+                <p className="text-gray-400 text-sm mb-3">
                   {premiumBots.career.title[language]}
                 </p>
-                <span className="inline-block px-3 py-1 bg-white/5 backdrop-blur-xl border border-white/10 text-blue-300 text-xs font-bold rounded-full">
+                <span className="inline-block px-3 py-1 bg-zinc-900 border border-zinc-800 text-white text-xs font-bold rounded-full">
                   {t(language, 'about.bots.tryNow')}
                 </span>
               </div>
@@ -1046,11 +1046,11 @@ const About = () => {
           </div>
         </div>
 
-        <div className="relative mt-8 p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+        <div className="relative mt-8 p-6 bg-zinc-900 border border-zinc-800 rounded-2xl">
           <p className="text-center text-lg text-white font-semibold">
             ✨ {t(language, 'about.bots.active')}
             <br />
-            <span className="text-sm text-blue-100/60 mt-2 block">
+            <span className="text-sm text-gray-400 mt-2 block">
               {t(language, 'about.bots.freeQuota')}
             </span>
           </p>
@@ -1060,7 +1060,7 @@ const About = () => {
         <div className="text-center mt-8">
           <Link
             to="/ai-bots"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-white text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105"
           >
             <Sparkles className="w-6 h-6" />
             <span>{t(language, 'about.bots.viewAll')}</span>
@@ -1069,9 +1069,9 @@ const About = () => {
       </div>
 
       {/* Experience Section */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-blue-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-2xl font-bold mb-6 flex items-center gap-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-          <Briefcase className="w-6 h-6 text-blue-400" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg hover:border-zinc-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <h2 className="relative text-2xl font-bold mb-6 flex items-center gap-2 text-white">
+          <Briefcase className="w-6 h-6 text-gray-400" />
           <span>
             {t(language, 'about.experience')}
           </span>
@@ -1080,13 +1080,13 @@ const About = () => {
           {experiences.map((exp, index) => (
             <div key={index} className="group relative border-l-4 border-blue-500 pl-6 transition-all duration-300 hover:border-indigo-400 hover:pl-8 rounded-r-lg p-2 -ml-2">
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-blue-500 rounded-full -translate-x-1/2 group-hover:scale-150 transition-all"></div>
-              <h3 className="text-xl font-semibold text-white group-hover:text-blue-300 transition-all">{exp.title} • {exp.company}</h3>
-              <p className="text-sm text-blue-100/60 mb-3">{exp.period}</p>
-              <p className="text-blue-100/70 mb-3">{exp.description}</p>
+              <h3 className="text-xl font-semibold text-white group-hover:text-white transition-all">{exp.title} • {exp.company}</h3>
+              <p className="text-sm text-gray-400 mb-3">{exp.period}</p>
+              <p className="text-gray-300 mb-3">{exp.description}</p>
               <ul className="space-y-2">
                 {exp.highlights.map((highlight, idx) => (
-                  <li key={idx} className="text-sm text-blue-100/60 flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">▸</span>
+                  <li key={idx} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-gray-400 mt-1">▸</span>
                     <span>{highlight}</span>
                   </li>
                 ))}
@@ -1097,9 +1097,9 @@ const About = () => {
       </div>
 
       {/* Certifications Section */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-blue-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '300ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-2xl font-bold mb-6 flex items-center gap-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-          <Award className="w-6 h-6 text-blue-400" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg hover:border-zinc-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '300ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <h2 className="relative text-2xl font-bold mb-6 flex items-center gap-2 text-white">
+          <Award className="w-6 h-6 text-gray-400" />
           <span>
             {t(language, 'about.certifications')}
           </span>
@@ -1108,19 +1108,19 @@ const About = () => {
           {certifications.map((cert, index) => (
             <div
               key={index}
-              className="group relative p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300"
+              className="group relative p-4 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 transition-all duration-300"
             >
               <h3 className="font-semibold text-white mb-1">{cert.name}</h3>
-              <p className="text-sm text-blue-200">{cert.issuer}</p>
+              <p className="text-sm text-gray-300">{cert.issuer}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Skills Section */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-blue-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-2xl font-bold mb-6 flex items-center gap-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-          <GraduationCap className="w-6 h-6 text-blue-400" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg hover:border-zinc-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <h2 className="relative text-2xl font-bold mb-6 flex items-center gap-2 text-white">
+          <GraduationCap className="w-6 h-6 text-gray-400" />
           <span>
             {t(language, 'about.skillsAndTech')}
           </span>
@@ -1129,7 +1129,7 @@ const About = () => {
           {skills.map((skill, index) => (
             <span
               key={index}
-              className="px-4 py-2 bg-white/5 backdrop-blur-xl border border-white/10 text-blue-200 rounded-full font-medium hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 cursor-default"
+              className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-gray-300 rounded-full font-medium hover:border-zinc-700 transition-all duration-300 cursor-default"
             >
               {skill}
             </span>
@@ -1138,21 +1138,21 @@ const About = () => {
       </div>
 
       {/* Contact Form */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg hover:bg-white/10 hover:border-blue-500/50 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '450ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-2xl font-bold mb-2 flex items-center gap-2 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
-          <Mail className="w-6 h-6 text-blue-400" />
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-lg hover:border-zinc-700 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '450ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <h2 className="relative text-2xl font-bold mb-2 flex items-center gap-2 text-white">
+          <Mail className="w-6 h-6 text-gray-400" />
           <span>
             {t(language, 'about.contactForm')}
           </span>
         </h2>
-        <p className="relative text-sm text-blue-100/70 mb-6 italic">
+        <p className="relative text-sm text-gray-300 mb-6 italic">
           {t(language, 'about.contactFormDesc')}
         </p>
 
         {formSubmitted && (
           <div className="mb-6 p-4 bg-white/5 backdrop-blur-xl border border-blue-500/50 rounded-xl flex items-center gap-3">
-            <CheckCircle className="w-6 h-6 text-blue-400" />
-            <p className="text-blue-200 font-semibold">
+            <CheckCircle className="w-6 h-6 text-gray-400" />
+            <p className="text-gray-300 font-semibold">
               {t(language, 'about.messageSent')}
             </p>
           </div>
@@ -1204,7 +1204,7 @@ const About = () => {
 
           <button
             type="submit"
-            className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+            className="w-full px-6 py-3 bg-white text-white rounded-xl font-semibold shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
           >
             <Send className="w-5 h-5" />
             <span>
@@ -1215,17 +1215,17 @@ const About = () => {
       </div>
 
       {/* CV Download */}
-      <div className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 text-center shadow-lg hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '500ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-        <h2 className="relative text-2xl font-bold mb-3 bg-gradient-to-r from-white via-blue-50 to-indigo-100 bg-clip-text text-transparent">
+      <div className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 text-center shadow-lg hover:border-zinc-700 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '500ms', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+        <h2 className="relative text-2xl font-bold mb-3 text-white">
           {t(language, 'about.downloadResume')}
         </h2>
-        <p className="relative mb-6 text-blue-100/70">
+        <p className="relative mb-6 text-gray-300">
           {t(language, 'about.downloadCV')}
         </p>
         <a
           href="/Cemal-Demirci-CV.pdf"
           download
-          className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105"
+          className="inline-flex items-center px-6 py-3 bg-white text-white rounded-xl font-semibold shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105"
         >
           <Download className="w-5 h-5 mr-2" />
           {t(language, 'about.downloadCVButton')}

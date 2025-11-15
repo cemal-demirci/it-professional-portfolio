@@ -394,6 +394,38 @@ export const unlockAchievement = (achievementId) => {
   return null
 }
 
+// Save achievement (for custom achievements like game achievements)
+export const saveAchievement = (achievementId, description) => {
+  const passport = loadPassport()
+  if (!passport) return null
+
+  // Initialize achievements array if doesn't exist
+  if (!passport.achievements) {
+    passport.achievements = []
+  }
+
+  // Don't add duplicate achievements
+  if (!passport.achievements.includes(achievementId)) {
+    passport.achievements.push(achievementId)
+
+    // Store custom achievement details
+    if (!passport.customAchievements) {
+      passport.customAchievements = {}
+    }
+
+    passport.customAchievements[achievementId] = {
+      id: achievementId,
+      description: description,
+      unlockedAt: new Date().toISOString()
+    }
+
+    savePassport(passport)
+    return true
+  }
+
+  return false
+}
+
 // Check and unlock achievements
 export const checkAchievements = () => {
   const passport = loadPassport()

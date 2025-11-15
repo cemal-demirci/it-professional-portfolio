@@ -114,6 +114,9 @@ import ProxmoxTroubleshooter from './tools/ai/ProxmoxTroubleshooter'
 // macOS Tools
 import MacOsAssistant from './tools/macos/MacOsAssistant'
 
+// Games
+import Blackjack from './tools/games/Blackjack'
+
 // Junior IT Pages
 import JuniorIT from './pages/JuniorIT'
 import ITGlossary from './pages/ITGlossary'
@@ -130,6 +133,7 @@ import AIBots from './pages/AIBots'
 import UltraVIPAI from './pages/UltraVIPAI'
 import VoiceChamber from './pages/VoiceChamber'
 import Alev from './pages/Alev'
+import GenderSwap from './pages/GenderSwap'
 
 // App Content - No blocking here, let individual pages handle rainbow mode
 function AppContent() {
@@ -156,6 +160,9 @@ function AppContent() {
 
           {/* Secret Alev - Personal AI Companion */}
           <Route path="/alev" element={<Alev />} />
+
+          {/* Gender Swap Camera */}
+          <Route path="/gender-swap" element={<GenderSwap />} />
 
           {/* File Share */}
           <Route path="/fileshare" element={<FileShare />} />
@@ -265,6 +272,9 @@ function AppContent() {
 
           {/* macOS Tools */}
           <Route path="/tools/macos-assistant" element={<MacOsAssistant />} />
+
+          {/* Games */}
+          <Route path="/game/blackjack" element={<Blackjack />} />
 
           {/* 404 Catch-all - MUST BE LAST */}
           <Route path="*" element={<NotFound />} />

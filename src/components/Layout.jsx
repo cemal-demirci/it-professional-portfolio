@@ -103,12 +103,12 @@ const Layout = ({ children }) => {
     <div className={`min-h-screen relative overflow-hidden ${
       rainbowMode
         ? 'bg-black'
-        : 'bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900'
+        : 'bg-black'
     }`}>
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-800/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-zinc-700/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
 
       {/* Rainbow Mode Fabulous Message */}
@@ -124,15 +124,15 @@ const Layout = ({ children }) => {
         {/* Command Palette */}
         <CommandPalette />
 
-        {/* Glassmorphism Header */}
-        <header className="bg-gray-900/40 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 shadow-2xl">
+        {/* Minimal Header */}
+        <header className="bg-zinc-900/90 backdrop-blur-xl border-b border-zinc-800 sticky top-0 z-50">
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex items-center">
                 <Link to="/" className="flex items-center space-x-3 group">
                   {siteSettings.showNavLogo && (
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      <span className="text-white font-bold text-xl">{siteSettings.logoText}</span>
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center group-hover:bg-gray-200 transition-all duration-300">
+                      <span className="text-black font-bold text-xl">{siteSettings.logoText}</span>
                     </div>
                   )}
                   <span className="text-xl font-black text-white tracking-tight">{siteSettings.siteName}</span>
@@ -145,10 +145,10 @@ const Layout = ({ children }) => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
                       isActive(item.href)
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-105'
-                        : 'text-gray-300 hover:bg-white/10 hover:text-white hover:scale-105'
+                        ? 'bg-white text-black'
+                        : 'text-gray-300 hover:bg-zinc-800 hover:text-white'
                     }`}
                   >
                     {rainbowMode ? getFabulousName(item.name) : item.name}
@@ -158,14 +158,14 @@ const Layout = ({ children }) => {
                 {/* AI Requests Indicator */}
                 <Link
                   to="/settings"
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ml-2 shadow-lg hover:scale-105 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 ml-2 border ${
                     isUnlimited
-                      ? 'bg-purple-600/90 text-white hover:bg-purple-500'
+                      ? 'bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700'
                       : remainingRequests > 5
-                        ? 'bg-green-600/90 text-white hover:bg-green-500'
+                        ? 'bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700'
                         : remainingRequests > 0
-                          ? 'bg-yellow-600/90 text-white hover:bg-yellow-500'
-                          : 'bg-red-600/90 text-white hover:bg-red-500'
+                          ? 'bg-zinc-800 text-gray-300 border-zinc-700 hover:bg-zinc-700'
+                          : 'bg-zinc-900 text-gray-500 border-zinc-800 hover:bg-zinc-800'
                   }`}
                   title={t(language, 'credits.manage')}
                 >
@@ -191,7 +191,7 @@ const Layout = ({ children }) => {
                 {/* Gold Balance Indicator */}
                 <Link
                   to="/settings"
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 shadow-lg hover:scale-105 bg-gradient-to-r from-amber-600/90 to-yellow-600/90 text-white hover:from-amber-500 hover:to-yellow-500"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 bg-zinc-800 border border-zinc-700 text-white hover:bg-zinc-700"
                   title={language === 'tr' ? 'Gold Bakiyesi' : 'Gold Balance'}
                 >
                   {goldBalance === Infinity ? (
@@ -210,7 +210,7 @@ const Layout = ({ children }) => {
                 {/* Digital Passport Button */}
                 <button
                   onClick={() => setPassportOpen(true)}
-                  className="p-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-all duration-300 hover:scale-105"
+                  className="p-2 rounded-lg text-gray-300 hover:bg-zinc-800 hover:text-white transition-all duration-150"
                   title="Digital Passport"
                 >
                   <UserCircle className="w-5 h-5" />
@@ -222,15 +222,7 @@ const Layout = ({ children }) => {
                 {/* AI Requests Indicator - Mobile */}
                 <Link
                   to="/settings"
-                  className={`flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 shadow-lg ${
-                    isUnlimited
-                      ? 'bg-purple-600/90 text-white'
-                      : remainingRequests > 5
-                        ? 'bg-green-600/90 text-white'
-                        : remainingRequests > 0
-                          ? 'bg-yellow-600/90 text-white'
-                          : 'bg-red-600/90 text-white'
-                  }`}
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 bg-zinc-800 border border-zinc-700 text-white"
                   title="AI Requests"
                 >
                   {isUnlimited ? (
@@ -252,7 +244,7 @@ const Layout = ({ children }) => {
                 {/* Gold Balance Indicator - Mobile */}
                 <Link
                   to="/settings"
-                  className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 shadow-lg bg-gradient-to-r from-amber-600/90 to-yellow-600/90 text-white"
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 bg-zinc-800 border border-zinc-700 text-white"
                   title="Gold"
                 >
                   {goldBalance === Infinity ? (
@@ -271,7 +263,7 @@ const Layout = ({ children }) => {
                 {/* Digital Passport Button - Mobile */}
                 <button
                   onClick={() => setPassportOpen(true)}
-                  className="p-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-all"
+                  className="p-2 rounded-lg text-gray-300 hover:bg-zinc-800 hover:text-white transition-all"
                   title="Digital Passport"
                 >
                   <UserCircle className="w-5 h-5" />
@@ -279,7 +271,7 @@ const Layout = ({ children }) => {
 
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-all"
+                  className="p-2 rounded-lg text-gray-300 hover:bg-zinc-800 hover:text-white transition-all"
                 >
                   {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </button>
@@ -289,17 +281,17 @@ const Layout = ({ children }) => {
 
           {/* Mobile Navigation */}
           {mobileMenuOpen && (
-            <div className="md:hidden border-t border-white/10 bg-gray-900/60 backdrop-blur-xl">
+            <div className="md:hidden border-t border-zinc-800 bg-zinc-900/95 backdrop-blur-xl">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-4 py-3 rounded-xl text-base font-bold transition-all ${
+                    className={`block px-4 py-3 rounded-lg text-base font-medium transition-all ${
                       isActive(item.href)
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                        : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                        ? 'bg-white text-black'
+                        : 'text-gray-300 hover:bg-zinc-800 hover:text-white'
                     }`}
                   >
                     {rainbowMode ? getFabulousName(item.name) : item.name}
@@ -307,19 +299,11 @@ const Layout = ({ children }) => {
                 ))}
 
                 {/* AI Requests Info - Mobile Menu */}
-                <div className="border-t border-white/10 mt-2 pt-2">
+                <div className="border-t border-zinc-800 mt-2 pt-2">
                   <Link
                     to="/settings"
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between px-4 py-4 rounded-xl text-sm font-bold transition-all shadow-lg ${
-                      isUnlimited
-                        ? 'bg-purple-600/90 text-white'
-                        : remainingRequests > 5
-                          ? 'bg-green-600/90 text-white'
-                          : remainingRequests > 0
-                            ? 'bg-yellow-600/90 text-white'
-                            : 'bg-red-600/90 text-white'
-                    }`}
+                    className="flex items-center justify-between px-4 py-4 rounded-lg text-sm font-medium transition-all bg-zinc-800 border border-zinc-700 text-white"
                   >
                     <div className="flex items-center gap-2">
                       {isUnlimited ? (
@@ -349,18 +333,18 @@ const Layout = ({ children }) => {
           {children}
         </main>
 
-        {/* Modern Footer */}
-        <footer className="bg-gray-900/40 backdrop-blur-xl border-t border-white/10 mt-auto shadow-2xl">
+        {/* Minimal Footer */}
+        <footer className="bg-zinc-900/90 backdrop-blur-xl border-t border-zinc-800 mt-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="text-center space-y-3">
               <div className="flex justify-center items-center gap-2 text-gray-400 text-sm">
-                <kbd className="px-2 py-1 bg-white/5 border border-white/10 rounded text-xs font-bold text-gray-300">⌘ K</kbd>
+                <kbd className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded text-xs font-medium text-gray-300">⌘ K</kbd>
                 <span>{language === 'tr' ? 'veya' : 'or'}</span>
-                <kbd className="px-2 py-1 bg-white/5 border border-white/10 rounded text-xs font-bold text-gray-300">Ctrl K</kbd>
+                <kbd className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded text-xs font-medium text-gray-300">Ctrl K</kbd>
                 <span>{t(language, 'footer.searchHint')}</span>
               </div>
-              <p className="text-gray-500 text-xs font-medium">
-                &copy; {new Date().getFullYear()} Cemal Demirci • {t(language, 'footer.license')} • {t(language, 'footer.poweredBy')}
+              <p className="text-gray-500 text-xs font-medium hover:text-gray-400 transition-colors">
+                {t(language, 'footer.sarcasm')?.[Math.floor(Math.random() * t(language, 'footer.sarcasm').length)] || `© ${new Date().getFullYear()} Cemal Demirci • ${t(language, 'footer.license')} • ${t(language, 'footer.poweredBy')}`}
               </p>
             </div>
             <div className="text-center mt-4">
