@@ -380,69 +380,63 @@ const Home = () => {
                 {language === 'en' ? 'Wall of Shame' : 'Utanç Duvarı'}
               </h2>
               <p className="text-gray-500">
-                {language === 'en' ? 'Corporate tools you probably hate (but keep using)' : 'Muhtemelen nefret ettiğin (ama kullanmaya devam ettiğin) kurumsal araçlar'}
+                {language === 'en' ? 'Corporate tools you hate' : 'Nefret ettiğin kurumsal araçlar'}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 {
                   name: 'Google Analytics',
-                  shame: language === 'en' ? 'Tracks your visitors, then sells the data' : 'Ziyaretçilerini izler, sonra verisini satar',
-                  icon: '🕵️',
-                  price: language === 'en' ? 'Free (you\'re the product)' : 'Bedava (sen ürünsün)'
+                  shame: language === 'en' ? 'Tracks your visitors, sells the data' : 'Ziyaretçileri izler, veriyi satar',
+                  icon: '🕵️'
                 },
                 {
                   name: 'Adobe Creative Cloud',
-                  shame: language === 'en' ? 'Mortgage your kidney for Photoshop' : 'Photoshop için böbreğini ipotek et',
-                  icon: '💸',
-                  price: '$54.99/mo'
+                  shame: language === 'en' ? 'Mortgage your kidney for Photoshop' : 'Photoshop için böbreğini rehin ver',
+                  icon: '💸'
                 },
                 {
                   name: 'Zoom',
-                  shame: language === 'en' ? 'Your boss watches you, we watch you too' : 'Patron seni gözetlerken biz de seni gözetliyoruz',
-                  icon: '👁️',
-                  price: language === 'en' ? 'Free (with data mining)' : 'Bedava (veri madenciliği ile)'
+                  shame: language === 'en' ? 'Your boss watches, we watch too' : 'Patron izler, biz de izleriz',
+                  icon: '👁️'
                 },
                 {
                   name: 'Microsoft 365',
-                  shame: language === 'en' ? 'Subscription hell since 2011' : '2011\'den beri abonelik cehennemi',
-                  icon: '🔥',
-                  price: '$12.50/mo'
+                  shame: language === 'en' ? 'Subscription hell since 2011' : '2011\'den beri abonelik çukuru',
+                  icon: '🔥'
                 },
                 {
                   name: 'Slack',
-                  shame: language === 'en' ? 'Pay to get distracted 24/7' : 'Dikkatinin dağılması için para öde',
-                  icon: '💬',
-                  price: '$7.25/mo'
+                  shame: language === 'en' ? 'Pay to get distracted 24/7' : 'Dikkat dağınıklığı için ödeme yap',
+                  icon: '💬'
                 },
                 {
                   name: 'Salesforce',
-                  shame: language === 'en' ? 'Complicated AF, expensive AF' : 'Karmaşık AF, pahalı AF',
-                  icon: '🤮',
-                  price: language === 'en' ? 'Call for quote (lol)' : 'Teklif için ara (lol)'
+                  shame: language === 'en' ? 'Complicated, expensive' : 'Karmaşık, pahalı',
+                  icon: '🤮'
                 }
               ].map((tool, idx) => (
                 <div
                   key={idx}
-                  className="bg-zinc-900 border-2 border-red-900/50 rounded-lg p-6 hover:border-red-700 transition-all relative"
+                  className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 hover:border-zinc-700 transition-all"
                 >
-                  <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-black px-2 py-1 rounded transform rotate-12">
-                    {language === 'en' ? 'SHAME' : 'UTANÇ'}
+                  <div className="flex items-start gap-3">
+                    <div className="text-3xl flex-shrink-0">{tool.icon}</div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-bold text-white mb-1">{tool.name}</h3>
+                      <p className="text-gray-500 text-xs">{tool.shame}</p>
+                    </div>
                   </div>
-                  <div className="text-4xl mb-4">{tool.icon}</div>
-                  <h3 className="text-xl font-bold text-white mb-2">{tool.name}</h3>
-                  <p className="text-red-400 text-sm mb-3 italic">"{tool.shame}"</p>
-                  <p className="text-gray-500 text-xs line-through">{tool.price}</p>
                 </div>
               ))}
             </div>
 
-            <div className="text-center mt-12">
-              <p className="text-gray-500 italic">
+            <div className="text-center mt-8">
+              <p className="text-gray-600 text-sm">
                 {language === 'en'
-                  ? 'Meanwhile, everything here is free and respects your privacy. Just saying.'
-                  : 'Bu arada buradaki her şey bedava ve gizliliğine saygı duyuyor. Yalnızca söylüyorum.'}
+                  ? 'Everything here is free and private'
+                  : 'Burada her şey bedava ve gizli'}
               </p>
             </div>
           </div>
