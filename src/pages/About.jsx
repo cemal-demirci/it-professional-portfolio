@@ -880,7 +880,7 @@ const About = () => {
           <span>
             {t(language, 'about.bots.title')}
           </span>
-          <span className="px-3 py-1 bg-white text-white text-xs font-bold rounded-full text-black">
+          <span className="px-3 py-1 bg-black text-white border-2 border-white text-white text-xs font-bold rounded-full">
             {t(language, 'about.bots.demo')}
           </span>
         </h2>
