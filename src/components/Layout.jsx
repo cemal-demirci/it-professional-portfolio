@@ -332,6 +332,13 @@ const Layout = ({ children }) => {
         {/* Minimal Footer */}
         <footer className="bg-zinc-900/90 backdrop-blur-xl border-t border-zinc-800 mt-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            {/* Banksy Quote in Footer */}
+            {!rainbowMode && (
+              <div className="mb-6">
+                <BanksyQuote />
+              </div>
+            )}
+
             <div className="text-center space-y-3">
               <div className="flex justify-center items-center gap-2 text-gray-400 text-sm">
                 <kbd className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded text-xs font-medium text-gray-300">⌘ K</kbd>
@@ -359,9 +366,6 @@ const Layout = ({ children }) => {
 
         {/* GDPR Cookie Consent */}
         <CookieConsent />
-
-        {/* Rotating Banksy Quote */}
-        {!rainbowMode && <BanksyQuote />}
       </div>
     </div>
   )

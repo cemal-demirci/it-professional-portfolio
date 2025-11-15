@@ -45,33 +45,33 @@ const BanksyQuote = () => {
   }, [language, quotes])
 
   return (
-    <div className="fixed bottom-6 left-6 right-6 md:left-auto md:right-6 md:max-w-md z-40 pointer-events-none">
+    <div className="max-w-4xl mx-auto">
       <div
-        className={`bg-zinc-900/95 backdrop-blur-xl border-2 border-zinc-800 rounded-lg p-4 shadow-2xl transition-all duration-500 ${
+        className={`bg-zinc-800/50 backdrop-blur-xl border border-zinc-700 rounded-lg p-6 transition-all duration-500 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-4">
           {/* Spray paint icon */}
-          <div className="text-2xl flex-shrink-0">🎨</div>
+          <div className="text-3xl flex-shrink-0">🎨</div>
 
           <div className="flex-1 min-w-0">
-            <blockquote className="text-sm text-gray-300 italic leading-relaxed mb-2 banksy-quote">
+            <blockquote className="text-base md:text-lg text-gray-200 italic leading-relaxed mb-3 banksy-quote">
               "{quotes[language][currentQuoteIndex]}"
             </blockquote>
-            <p className="text-xs text-gray-600 font-mono">— Banksy</p>
+            <p className="text-sm text-gray-500 font-mono">— Banksy</p>
           </div>
         </div>
 
         {/* Progress dots */}
-        <div className="flex gap-1 mt-3 justify-center">
+        <div className="flex gap-1.5 mt-4 justify-center">
           {quotes[language].map((_, idx) => (
             <div
               key={idx}
-              className={`h-1 rounded-full transition-all duration-300 ${
+              className={`h-1.5 rounded-full transition-all duration-300 ${
                 idx === currentQuoteIndex
-                  ? 'w-6 bg-white'
-                  : 'w-1 bg-zinc-700'
+                  ? 'w-8 bg-white'
+                  : 'w-1.5 bg-zinc-600'
               }`}
             />
           ))}
