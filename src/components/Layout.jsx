@@ -11,6 +11,8 @@ import { getRemainingRequests, LIMITS } from '../services/geminiService'
 import { useRainbow, getFabulousName, getFabulousMessage } from '../contexts/RainbowContext'
 import { getUserGoldBalance } from '../utils/digitalPassport'
 import BanksyQuote from './BanksyQuote'
+import GradientMesh from './GradientMesh'
+import ParticleSystem from './ParticleSystem'
 
 const Layout = ({ children }) => {
   const { rainbowMode } = useRainbow()
@@ -106,11 +108,21 @@ const Layout = ({ children }) => {
         ? 'bg-zinc-950'
         : 'bg-zinc-950'
     }`}>
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-800/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-zinc-700/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-      </div>
+      {/* Premium Background Effects */}
+      {!rainbowMode && (
+        <>
+          <GradientMesh />
+          <ParticleSystem />
+        </>
+      )}
+
+      {/* Animated Background - Rainbow Mode Only */}
+      {rainbowMode && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-800/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-zinc-700/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        </div>
+      )}
 
       {/* Rainbow Mode Fabulous Message */}
       {rainbowMode && fabulousMsg && (

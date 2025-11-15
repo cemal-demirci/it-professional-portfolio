@@ -22,22 +22,38 @@
     letter-spacing: -0.01em;
   }
 
-  /* Scrollbar - Minimal */
+  /* Premium Custom Scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
   }
 
   ::-webkit-scrollbar-track {
     @apply bg-zinc-950;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-800 rounded-full;
+    @apply bg-gradient-to-b from-zinc-700 to-zinc-800;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: all 0.3s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-700;
+    @apply bg-gradient-to-b from-zinc-600 to-zinc-700;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    @apply bg-gradient-to-b from-white to-gray-300;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(39, 39, 42) rgb(9, 9, 11);
   }
 
   /* Selection */
