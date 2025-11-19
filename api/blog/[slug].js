@@ -113,9 +113,12 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Blog API error:', error)
+    console.error('Error stack:', error.stack)
+    console.error('Error message:', error.message)
     return res.status(500).json({
       success: false,
-      error: 'Internal server error'
+      error: 'Internal server error',
+      details: error.message
     })
   }
 }
