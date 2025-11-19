@@ -89,6 +89,7 @@ const Layout = ({ children }) => {
   const navigation = [
     { name: t(language, 'nav.home'), href: '/' },
     { name: t(language, 'nav.tools'), href: '/tools' },
+    { name: t(language, 'nav.blog'), href: '/blog' },
     { name: t(language, 'nav.aiBots'), href: '/ai-bots' },
     { name: t(language, 'nav.fileShare'), href: '/fileshare' },
     { name: t(language, 'nav.juniorIT'), href: '/junior-it' },

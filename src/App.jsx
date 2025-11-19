@@ -135,6 +135,10 @@ import VoiceChamber from './pages/VoiceChamber'
 import Alev from './pages/Alev'
 import GenderSwap from './pages/GenderSwap'
 
+// Blog
+import Blog from './pages/Blog'
+import BlogPost from './pages/BlogPost'
+
 // App Content - No blocking here, let individual pages handle rainbow mode
 function AppContent() {
   return (
@@ -150,6 +154,10 @@ function AppContent() {
           {/* Junior IT Pages */}
           <Route path="/junior-it" element={<JuniorIT />} />
           <Route path="/junior-it/glossary" element={<ITGlossary />} />
+
+          {/* Blog */}
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
 
           {/* AI Bots */}
           <Route path="/ai-bots" element={<AIBots />} />

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Shield, Save, LogOut, Eye, EyeOff, Settings, User, Palette, Lock, BarChart3, Globe, Image, Upload, Check, X, FileText, Plus, Trash2, Download, Layout, FileEdit, Key, Cpu, Zap, Brain, Sliders, Mail, Inbox, Sparkles, Rocket } from 'lucide-react'
+import { Shield, Save, LogOut, Eye, EyeOff, Settings, User, Palette, Lock, BarChart3, Globe, Image, Upload, Check, X, FileText, Plus, Trash2, Download, Layout, FileEdit, Key, Cpu, Zap, Brain, Sliders, Mail, Inbox, Sparkles, Rocket, BookOpen, Edit, Trash } from 'lucide-react'
 import storage from '../utils/storage'
+import BlogManagement from '../components/BlogManagement'
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -469,6 +470,7 @@ const Admin = () => {
 
   const tabs = [
     { id: 'site', name: 'Site Settings', icon: Globe },
+    { id: 'blog', name: 'Blog Management', icon: BookOpen },
     { id: 'inbox', name: 'Inbox', icon: Inbox, badge: contactMessages.length },
     { id: 'content', name: 'Content', icon: FileEdit },
     { id: 'profile', name: 'Profile', icon: User },
@@ -602,6 +604,10 @@ const Admin = () => {
 
         {/* Tab Content */}
         <div className="p-6">
+          {activeTab === 'blog' && (
+            <BlogManagement />
+          )}
+
           {activeTab === 'site' && (
             <div className="space-y-6">
               <h3 className="text-xl font-semibold text-white flex items-center gap-2">
