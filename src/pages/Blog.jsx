@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Clock, Tag, User, Search, ArrowRight } from 'lucide-react'
+import { Calendar, Clock, Tag, User, Search, ArrowRight, RefreshCw } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 
 const Blog = () => {
@@ -9,22 +9,44 @@ const Blog = () => {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [lastUpdate, setLastUpdate] = useState(Date.now())
 
   useEffect(() => {
     fetchPosts()
+
+    // Auto-refresh every 10 seconds for new posts
+    const interval = setInterval(() => {
+      fetchPosts(true) // silent refresh (no loading state)
+    }, 10000)
+
+    return () => clearInterval(interval)
   }, [])
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (silent = false) => {
     try {
+      if (!silent) {
+        setLoading(true)
+      }
+
       const response = await fetch('/api/blog')
       const data = await response.json()
+
       if (data.success) {
-        setPosts(data.posts || [])
+        const newPosts = data.posts || []
+
+        // Check if there are new posts
+        if (silent && newPosts.length !== posts.length) {
+          setLastUpdate(Date.now())
+        }
+
+        setPosts(newPosts)
       }
     } catch (error) {
       console.error('Failed to fetch posts:', error)
     } finally {
-      setLoading(false)
+      if (!silent) {
+        setLoading(false)
+      }
     }
   }
 
@@ -69,13 +91,28 @@ const Blog = () => {
     <div className="min-h-screen py-12">
       {/* Hero Section */}
       <div className="mb-16">
-        <h1 className="text-4xl md:text-6xl font-black text-white mb-4">
-          {language === 'tr' ? 'Blog' : 'Blog'}
-        </h1>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-4xl md:text-6xl font-black text-white">
+            {language === 'tr' ? 'Blog' : 'Blog'}
+          </h1>
+          <button
+            onClick={() => fetchPosts()}
+            className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg hover:border-zinc-700 transition-all text-gray-400 hover:text-white"
+            title={language === 'tr' ? 'Yenile' : 'Refresh'}
+          >
+            <RefreshCw className="w-4 h-4" />
+            <span className="text-sm">{language === 'tr' ? 'Yenile' : 'Refresh'}</span>
+          </button>
+        </div>
         <p className="text-xl text-gray-400 max-w-3xl">
           {language === 'tr'
             ? 'Teknoloji, güvenlik, yapay zeka ve hayat üzerine düşünceler.'
             : 'Thoughts on technology, security, AI, and life.'}
+        </p>
+        <p className="text-xs text-gray-600 mt-2">
+          {language === 'tr'
+            ? '⚡ Otomatik güncelleme: Her 10 saniyede bir yeni yazılar kontrol edilir'
+            : '⚡ Auto-refresh: Checks for new posts every 10 seconds'}
         </p>
       </div>
 

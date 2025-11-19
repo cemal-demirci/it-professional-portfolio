@@ -19,7 +19,16 @@ const BlogManagement = () => {
 
   useEffect(() => {
     fetchPosts()
-  }, [])
+
+    // Auto-refresh every 5 seconds in admin
+    const interval = setInterval(() => {
+      if (!showEditor) {
+        fetchPosts()
+      }
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [showEditor])
 
   const fetchPosts = async () => {
     try {
